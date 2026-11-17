@@ -1,4 +1,4 @@
-export const LANGUAGE_KEY = 'artico.explanation-language.v1'
+export const LANGUAGE_KEY = 'sou.english.explanation-language.v1'
 export const DEFAULT_LANGUAGE = 'ja'
 export const languages = [
   { id: 'ja', label: '日本語' },

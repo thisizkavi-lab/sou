@@ -661,7 +661,7 @@ test('Humor chapter numbering preserves existing source lessons and local progre
   assert.equal(migrateLegacyLessonPath('/lesson/34/study'),'/lesson/35/study')
   assert.equal(migrateLegacyLessonPath('/lesson/96/practice'),'/lesson/97/practice')
   assert.equal(migrateLegacyLessonPath('/foundation/letters/study'),'/foundation/letters/study')
-  const storage = new Map([['artico.web.learning.v1',JSON.stringify({
+  const storage = new Map([['sou.english.learning.v1',JSON.stringify({
     ...emptyLearning,last:'/lesson/36/study',lastPractice:'/lesson/34/practice',
     positions:{'/lesson/35/study':142},responses:{'application-humor-0':'My funny reply'},
     saved:['ch34-line4'],
@@ -676,7 +676,7 @@ test('Humor chapter numbering preserves existing source lessons and local progre
   assert.equal(result.positions['/lesson/36/study'],142)
   assert.equal(result.responses['application-humor-0'],'My funny reply')
   assert.deepEqual(result.saved,['ch34-line4'])
-  assert.equal(storage.get('artico.web.chapter34-inserted.v1'),'1')
+  assert.equal(storage.get('sou.english.chapter34-inserted.v1'),'1')
   assert.deepEqual(loadLearning(store),result)
   const fresh = new Map()
   const newStorage = {
@@ -684,8 +684,8 @@ test('Humor chapter numbering preserves existing source lessons and local progre
     setItem:(key,value)=>fresh.set(key,value),
   }
   assert.equal(loadLearning(newStorage).last,null)
-  assert.equal(fresh.get('artico.web.chapter34-inserted.v1'),'1')
-  fresh.set('artico.web.learning.v1',JSON.stringify({...emptyLearning,last:'/lesson/34/study'}))
+  assert.equal(fresh.get('sou.english.chapter34-inserted.v1'),'1')
+  fresh.set('sou.english.learning.v1',JSON.stringify({...emptyLearning,last:'/lesson/34/study'}))
   assert.equal(loadLearning(newStorage).last,'/lesson/34/study')
 })
 

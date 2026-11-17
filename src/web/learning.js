@@ -1,8 +1,8 @@
 import { sanitizePracticeSets } from './phrasePractice.js'
 import { migrateLegacyLessonPath, sourceChapterId } from './chapterNumbers.js'
 
-export const STORAGE_KEY = 'artico.web.learning.v1'
-const RENUMBER_MARKER = 'artico.web.chapter34-inserted.v1'
+export const STORAGE_KEY = 'sou.english.learning.v1'
+const RENUMBER_MARKER = 'sou.english.chapter34-inserted.v1'
 export const emptyLearning = {
   version: 1,
   last: null,

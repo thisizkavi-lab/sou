@@ -171,7 +171,7 @@ test('The Other Half of English overview and source chapters render as a visual 
 
 test('Application directories preserve course access with minimal navigation', { timeout:45000 }, async () => {
   const originalWindow = globalThis.window
-  const storage = new Map([['artico.explanation-language.v1', 'en']])
+  const storage = new Map([['sou.english.explanation-language.v1', 'en']])
   globalThis.window = { localStorage:{ getItem:key => storage.get(key) ?? null, setItem:(key,value) => storage.set(key,value) } }
   let vite
   try {

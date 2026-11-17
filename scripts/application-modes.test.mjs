@@ -18,7 +18,7 @@ before(async () => {
   ;({ parseRoute } = await vite.ssrLoadModule('/src/web/learning.js'))
   ;({ applicationPath, applicationMode } = await vite.ssrLoadModule('/src/web/applicationNavigation.js'))
 })
-beforeEach(() => { memory.clear(); memory.set('artico.explanation-language.v1','en') })
+beforeEach(() => { memory.clear(); memory.set('sou.english.explanation-language.v1','en') })
 after(async () => { await vite?.close(); if (originalWindow === undefined) delete globalThis.window; else globalThis.window = originalWindow })
 
 function html(element) {
