@@ -1,0 +1,92 @@
+export const learningStages = [
+  {
+    id: 'orientation',
+    title: 'Orientation',
+    ja: 'はじめに',
+    tone: 'lilac',
+    description: "Understand how you'll learn.",
+    support: '学ぶ理由と、練習の進め方を考える。',
+    topics: ['Your reason to learn', 'How Study & Practice work'],
+    lessonIds: ['orientation', 'how-it-works'],
+    count: '2 lessons',
+    overview: '/courses?orientation',
+    start: '/foundation/orientation/study',
+    action: 'Explore orientation',
+  },
+  {
+    id: 'foundation',
+    title: 'Level Zero',
+    ja: 'レベルゼロ',
+    tone: 'yellow',
+    description: 'Get a feel for the sounds.',
+    support: '文字を知り、耳で聞き、口を動かす。',
+    topics: ['The alphabet · writing', 'Sounds · tongue twisters'],
+    lessonIds: ['letters', 'write', 'sounds', 'tongue-intro'],
+    count: '4 lessons',
+    overview: '/courses?foundation',
+    start: '/foundation/letters/study',
+    action: 'Explore Level Zero',
+  },
+  {
+    id: 'social',
+    title: 'Social Fluency',
+    ja: '日常のやりとり',
+    tone: 'green',
+    description: 'Bring it into a conversation.',
+    support: '場面を学び、声にして、自分の言葉で試す。',
+    topics: ['Everyday conversations', 'Study · shadowing · scenarios'],
+    lessonIds: [],
+    count: '97 chapters',
+    overview: '/courses?social',
+    start: '/lesson/01/study',
+    action: 'Explore conversations',
+  },
+]
+
+export const applicationStage = { id:'application', title:'Application', ja:'実践', overview:'/courses?application', start:'/courses?application', lessonIds:[] }
+
+export function getLearningStage(path) {
+  if (/^\/application\//.test(path ?? '')) return applicationStage
+  if (/^\/lesson\//.test(path ?? '')) return learningStages[2]
+  const id = path?.match(/^\/foundation\/([^/?]+)/)?.[1]
+  return learningStages.find((stage) => stage.lessonIds.includes(id === 'lr' ? 'tongue-intro' : id))
+}
+
+export function getFoundationNavigation(id) {
+  const stage = getLearningStage(`/foundation/${id}/study`)
+  if (!stage) return null
+  const steps = learningStages.flatMap((item) => item.lessonIds)
+  const position = steps.indexOf(id)
+  return {
+    stage,
+    index: stage.lessonIds.indexOf(id),
+    previous: position > 0 ? `/foundation/${steps[position - 1]}/study` : '/home',
+    next:
+      position < steps.length - 1
+        ? `/foundation/${steps[position + 1]}/study`
+        : learningStages[2].start,
+  }
+}
+
+export function getLessonNavigation({ page, id }) {
+  if (page === 'foundation') {
+    const navigation = getFoundationNavigation(id)
+    if (!navigation) return null
+    return {
+      previous: navigation.previous,
+      next: navigation.next,
+      practice: `/foundation/${id}/practice`,
+    }
+  }
+  if (page !== 'lesson' || !/^(?:0[1-9]|[1-8]\d|9[0-7])$/.test(id)) return null
+  const chapter = Number(id)
+  const chapterPath = (number) => `/lesson/${String(number).padStart(2, '0')}/study`
+  const foundationIds = learningStages.flatMap((stage) => stage.lessonIds)
+  return {
+    previous: chapter === 1
+      ? `/foundation/${foundationIds.at(-1)}/study`
+      : chapterPath(chapter - 1),
+    next: chapter === 97 ? '/lesson/98/study' : chapterPath(chapter + 1),
+    practice: `/lesson/${id}/practice`,
+  }
+}

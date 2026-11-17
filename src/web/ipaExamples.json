@@ -1,0 +1,190 @@
+{
+  "p": [
+    "[p]it",
+    "li[p]"
+  ],
+  "b": [
+    "[b]it",
+    "tu[b]"
+  ],
+  "t": [
+    "[t]ip",
+    "si[t]"
+  ],
+  "d": [
+    "[d]ig",
+    "sa[d]"
+  ],
+  "k": [
+    "[c]up",
+    "s[k]y",
+    "[c]li[ck]"
+  ],
+  "g": [
+    "[g]uy",
+    "ba[g]"
+  ],
+  "m": [
+    "[m]y",
+    "ja[m]"
+  ],
+  "n": [
+    "[n]ot",
+    "ra[n]"
+  ],
+  "ŋ": [
+    "si[ng]",
+    "fi[ng]er",
+    "li[n]k"
+  ],
+  "tʃ": [
+    "[ch]eck",
+    "et[ch]"
+  ],
+  "dʒ": [
+    "[j]ust",
+    "[g]iant",
+    "[j]u[dg]e",
+    "a[g]e"
+  ],
+  "f": [
+    "[f]ish",
+    "cu[ff]"
+  ],
+  "v": [
+    "[v]owel",
+    "lea[v]e"
+  ],
+  "θ": [
+    "[th]igh",
+    "brea[th]"
+  ],
+  "ð": [
+    "[th]y",
+    "fa[th]er",
+    "brea[th]e"
+  ],
+  "s": [
+    "[s]ip",
+    "ma[ss]"
+  ],
+  "z": [
+    "[z]ip",
+    "ja[zz]"
+  ],
+  "ʃ": [
+    "[sh]op",
+    "wi[sh]"
+  ],
+  "ʒ": [
+    "[g]enre",
+    "plea[s]ure",
+    "bei[g]e"
+  ],
+  "h": [
+    "[h]ouse",
+    "a[h]ead"
+  ],
+  "w": [
+    "[w]it",
+    "s[w]ap"
+  ],
+  "j": [
+    "[y]es",
+    "[y]oung"
+  ],
+  "ɹ": [
+    "[r]ip",
+    "wate[r]",
+    "w[r]ite"
+  ],
+  "l": [
+    "[l]ap",
+    "pu[ll]"
+  ],
+  "i": [
+    "f[ee]t",
+    "s[ea]t",
+    "m[e]",
+    "happ[y]"
+  ],
+  "ɪ": [
+    "s[i]t",
+    "g[y]m"
+  ],
+  "eɪ": [
+    "l[a]te",
+    "br[ea]k",
+    "s[ay]"
+  ],
+  "ɛ": [
+    "l[e]t",
+    "b[e]st"
+  ],
+  "æ": [
+    "c[a]t",
+    "m[a]d"
+  ],
+  "ʌ": [
+    "b[u]t",
+    "tr[u]st",
+    "[u]nder"
+  ],
+  "ə": [
+    "comm[a]",
+    "b[a]zaar",
+    "th[e]"
+  ],
+  "u": [
+    "g[oo]se",
+    "r[u]de",
+    "cr[ue]l"
+  ],
+  "ʊ": [
+    "f[oo]t",
+    "t[oo]k"
+  ],
+  "oʊ": [
+    "b[oa]t",
+    "[o]we",
+    "n[o]"
+  ],
+  "ɔ": [
+    "fr[o]g",
+    "b[ou]ght",
+    "l[au]nch"
+  ],
+  "ɑ": [
+    "n[o]t",
+    "f[a]ther"
+  ],
+  "aɪ": [
+    "b[uy]",
+    "[ai]sle",
+    "[i]sle"
+  ],
+  "aʊ": [
+    "c[ow]",
+    "m[ou]th"
+  ],
+  "ɔɪ": [
+    "s[oi]l",
+    "b[oy]"
+  ],
+  "x": [
+    "lo[ch]",
+    "[ch]allah"
+  ],
+  "ʔ": [
+    "uh-oh",
+    "a’a"
+  ],
+  "ɝ": [
+    "b[ir]d",
+    "w[or]k"
+  ],
+  "ɚ": [
+    "teach[er]",
+    "lett[er]"
+  ]
+}

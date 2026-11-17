@@ -1,0 +1,485 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { readFileSync, existsSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import designs from '../src/course/chapter-designs.js'
+import { chapterPhraseIllustrations } from '../src/web/chapterPhraseIllustrations.js'
+import { sectionPhraseIds, sectionPhraseArtwork } from '../src/web/phraseSceneData.js'
+import { addPhraseBank } from './phrase-bank.mjs'
+import { parseLesson } from './lesson-parser.mjs'
+import { introductionAliases, introductionById, introductionSections } from '../src/course/introductions.js'
+import { foundationReading, twisterGuidance } from '../src/course/foundations-en.js'
+import { allTwisters } from '../src/data.js'
+
+const root = new URL('../', import.meta.url)
+const catalog = JSON.parse(readFileSync(new URL('src/course/catalog.json', root), 'utf8'))
+const readLesson = (id) =>
+  JSON.parse(readFileSync(new URL(`src/course/lessons/${id}.json`, root), 'utf8'))
+const words = (text) =>
+  text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
+const runs = (values) => values.map((value) => value.text).join('')
+function blockText(block) {
+  if (block.turns)
+    return block.turns.map((turn) => `${turn.speaker}: ${runs(turn.runs)}`).join('\n')
+  if (block.header)
+    return [block.header, ...block.rows].map((row) => row.map(runs).join(' ')).join('\n')
+  if (block.paragraphs) return block.paragraphs.map(runs).join('\n')
+  if (block.items)
+    return block.items.map((item) => `${item.number ?? ''} ${runs(item.runs)}`).join('\n')
+  return runs(block.runs)
+}
+test('Chapters 06–10 have one distinct illustration for every Study section', () => {
+  const pngDimensions = {
+    '06': [[1821, 864], [1774, 887], [1796, 876], [1536, 1024]],
+    '07': [[1536, 1024], [1536, 1024], [1536, 1024]],
+    '08': [[1774, 887], [1792, 877], [1774, 887], [1774, 887]],
+    '09': [1774, 887],
+    '10': [1400, 840],
+  }
+  for (const id of ['06', '07', '08', '09', '10']) {
+    const model = readLesson(id)
+    const illustrations = chapterPhraseIllustrations[id]
+    assert.equal(illustrations.length, model.study.length, `Chapter ${id}: one illustration per section`)
+    if (id === '06') {
+      assert.equal(new Set(illustrations.map((item) => item.file)).size, 4, 'Chapter 06 section scenes are all unique')
+      assert.ok(illustrations.every((item) => item.file.endsWith('.png')), 'Chapter 06 uses dedicated PNGs')
+      assert.ok(illustrations.every((item) => item.fallbackFile === null), 'Chapter 06 never falls back to conversation art')
+    }
+    if (id === '07') {
+      assert.equal(new Set(illustrations.map((item) => item.file)).size, 3, 'Chapter 07 section scenes are all unique')
+      assert.ok(illustrations.every((item) => item.file.endsWith('.png')), 'Chapter 07 uses the supplied PNG illustrations')
+      assert.ok(illustrations.every((item) => item.fallbackFile === null), 'Chapter 07 never falls back to generic conversation art')
+    }
+    for (const [index, illustration] of illustrations.entries()) {
+      const path = new URL(`public/assets/course/${illustration.file}`, root)
+      assert.ok(existsSync(path), illustration.file)
+      if (['06', '07', '08', '09', '10'].includes(id)) {
+        const png = readFileSync(path)
+        const [width, height] = ['06', '07', '08'].includes(id) ? pngDimensions[id][index] : pngDimensions[id]
+        assert.deepEqual([...png.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], `${illustration.file}: PNG signature`)
+        assert.equal(png.readUInt32BE(16), width, `${illustration.file}: image width`)
+        assert.equal(png.readUInt32BE(20), height, `${illustration.file}: image height`)
+        if (png[25] === 3) {
+          let offset = 8
+          let hasTransparency = false
+          while (offset < png.length) {
+            const length = png.readUInt32BE(offset)
+            const type = png.toString('ascii', offset + 4, offset + 8)
+            if (type === 'tRNS') hasTransparency = true
+            offset += length + 12
+          }
+          assert.ok(hasTransparency, `${illustration.file}: indexed PNG carries alpha transparency`)
+        } else {
+          assert.equal(png[25], 6, `${illustration.file}: RGBA image with transparency`)
+        }
+      } else {
+        const source = readFileSync(path, 'utf8')
+        assert.match(source, /viewBox="0 0 1774 887"/, `${illustration.file}: wide vector canvas`)
+        assert.ok(source.includes('<desc'), `${illustration.file}: accessible scene description`)
+      }
+    }
+  }
+  const renderer = readFileSync(new URL('../src/web/LessonExperience.jsx', import.meta.url), 'utf8')
+  const board = renderer.slice(renderer.indexOf('function PhraseSceneBoard'), renderer.indexOf('const chapter05PhraseIllustrations'))
+  assert.ok(board.includes('ar-unified-phrase-stage'), 'all later chapters use one full-width illustration stage')
+  assert.ok(board.includes('ar-unified-phrase-pills'), 'all later chapters use the shared pill set')
+  assert.ok(board.includes('PhraseAudio'), 'each expression keeps its own audio control')
+  const practiceArt = renderer.slice(renderer.indexOf('const sceneArtBySection'), renderer.indexOf('const shown', renderer.indexOf('const sceneArtBySection')))
+  assert.match(practiceArt, /chapterId === '06' \? undefined/, 'Chapter 06 phrase cards do not borrow conversation scenes')
+  const phraseSceneData = readFileSync(new URL('../src/web/phraseSceneData.js', import.meta.url), 'utf8')
+  assert.match(phraseSceneData, /hasOwnProperty\.call\(curated, 'fallbackFile'\)/, 'explicitly disabled scene fallbacks remain disabled')
+})
+test('all 96 chapters preserve every source block, not only the opening dialogue', () => {
+  assert.equal(Object.keys(designs).length, 96)
+  for (const chapter of catalog) {
+    const source = readFileSync(new URL(`src/course/chapters/${chapter.filename}`, root), 'utf8')
+    const model = readLesson(chapter.id)
+    assert.equal(model.sourceHash, createHash('sha256').update(source).digest('hex'), chapter.id)
+    assert.ok(model.goal.length > 30, `${chapter.id}: meaningful goal`)
+    assert.ok(model.study.length, `${chapter.id}: Study content`)
+    assert.ok(model.practice.length, `${chapter.id}: Practice content`)
+    const lines = source.split('\n')
+    for (const section of [...model.study, ...model.practice])
+      for (const block of section.blocks) {
+        const original = lines.slice(block.span[0], block.span[1] + 1).join('\n')
+        assert.equal(
+          words(blockText(block)),
+          words(original),
+          `${chapter.id} ${block.id}: source text was lost or changed`,
+        )
+      }
+    const covered = new Set(model.coveredLines)
+    lines.forEach((line, index) => {
+      if (line.trim()) assert.ok(covered.has(index), `${chapter.id}: omitted source line ${index}`)
+    })
+  }
+})
+test('every scene uses its actual cast and every referenced illustration exists', () => {
+  let conversations = 0
+  const image = (file) => assert.ok(existsSync(new URL(`public/assets/course/${file}`, root)), file)
+  for (const chapter of catalog) {
+    const model = readLesson(chapter.id)
+    image(model.hero)
+    model.vocabulary.forEach((item) => {
+      image(item.art)
+      assert.ok(item.ja)
+      assert.ok(item.en)
+      assert.ok(
+        model.rehearsal.some((line) => line.id === item.id),
+        `${chapter.id}: saved word must be available in practice`,
+      )
+    })
+    for (const section of model.study)
+      for (const block of section.blocks)
+        if (block.type === 'conversation') {
+          conversations++
+          assert.deepEqual(block.people, [
+            ...new Set(block.turns.map((turn) => turn.person ?? turn.speaker)),
+          ])
+          assert.ok(
+            block.people.length >= 2 && block.people.length <= 4,
+            `${chapter.id}: cast cannot be truncated`,
+          )
+          image(block.art)
+          block.turns.forEach((turn) => {
+            image(turn.portrait)
+            assert.ok(turn.en)
+          })
+        }
+  }
+  assert.ok(conversations > 300)
+})
+test('vocabulary chapters rehearse a usable subset and introduction practice includes all three contexts', () => {
+  for (const id of ['14', '20', '26', '45', '56', '65', '72', '80', '88']) {
+    const model = readLesson(id)
+    assert.ok(model.vocabulary.length >= 4)
+    assert.ok(model.rehearsal.length >= 4)
+    assert.ok(model.note)
+  }
+  const introduction = readLesson('02')
+  const speakers = introduction.rehearsal.map((line) => line.speaker)
+  assert.ok(speakers.includes('Satoshi'))
+  assert.ok(speakers.includes('Daniel'))
+  assert.ok(speakers.includes('Sam'))
+  assert.equal(introduction.rehearsalAliases.friend, 7)
+  assert.ok(readLesson('53').rehearsal.some((line) => line.section === 'Connected model'))
+})
+
+test('every shared practice item has exactly one Study anchor and a valid illustration', () => {
+  for (const chapter of catalog) {
+    const model = readLesson(chapter.id)
+    const bank = model.phraseBank
+    const ids = bank.map((item) => item.id)
+    assert.equal(new Set(ids).size, ids.length, `${chapter.id}: duplicate IDs`)
+    for (const item of model.rehearsal)
+      assert.ok(
+        ids.includes(item.id) ||
+          (chapter.id === '02' && introductionById[introductionAliases[item.id]]),
+        `${chapter.id}: legacy practice item ${item.id} missing`,
+      )
+    const anchors = model.study.flatMap((section) =>
+      section.blocks.flatMap((block) => block.phraseIds),
+    )
+    anchors.push(...bank.filter((item) => item.section === 'words').map((item) => item.id))
+    assert.deepEqual([...anchors].sort(), [...ids].sort(), `${chapter.id}: Study/Practice coverage`)
+    for (const item of bank) {
+      assert.ok(item.en && item.context, `${chapter.id}: context missing`)
+      assert.ok(
+        item.section === 'words' || model.study.some((section) => section.id === item.section),
+      )
+      if (item.art)
+        assert.ok(existsSync(new URL(`public/assets/course/${item.art}`, root)), item.art)
+      if (item.portrait)
+        assert.ok(existsSync(new URL(`public/assets/course/${item.portrait}`, root)), item.portrait)
+    }
+    for (const section of model.study)
+      for (const block of section.blocks)
+        if (block.type === 'conversation')
+          assert.deepEqual(
+            block.phraseIds,
+            block.turns.map((turn) => turn.id),
+            `${chapter.id}: every speaker turn remains present`,
+          )
+  }
+})
+
+test('Chapter 05 uses the unified illustrated pill board without chat-style phrase bubbles', () => {
+  const source = readFileSync(new URL('../src/web/LessonExperience.jsx', import.meta.url), 'utf8')
+  const start = source.indexOf('function Chapter05PhraseStudySection')
+  const end = source.indexOf('function ChapterPhraseConversation', start)
+  assert.ok(start >= 0 && end > start, 'Chapter 05 renderer exists')
+  const component = source.slice(start, end)
+  assert.ok(component.includes('<PhraseSceneBoard'), 'shared illustration and phrase board is used')
+  assert.ok(component.includes('preferredIds={phraseIds}'), 'phrase order comes from the Chapter 05 teaching table')
+  assert.ok(!component.includes('ar-phrase-bubble-row'), 'no alternating chat layout for phrase cards')
+  const board = source.slice(source.indexOf('function PhraseSceneBoard'), source.indexOf('const chapter05PhraseIllustrations'))
+  assert.ok(board.includes('ar-unified-phrase-image'))
+  assert.ok(board.includes('ar-unified-phrase-pill'))
+  assert.ok(board.includes('PhraseAudio'))
+  for (const file of [
+    'ch05-01-likes-dislikes.png',
+    'ch05-02-asking-opinions.png',
+    'ch05-03-choosing-options.png',
+    'ch05-04-strong-reactions.png',
+  ]) assert.ok(source.includes(file), file)
+})
+
+test('Chapter 04 presents phrase bubbles, phrase/example/meaning tables, and short conversations', () => {
+  const model = readLesson('04')
+  assert.equal(model.title, "When Something Isn't Clear")
+  assert.deepEqual(model.study.map((section) => section.title), [
+    "You didn't catch something",
+    "You heard it, but don't understand",
+    "You need a different explanation",
+  ])
+  assert.equal(model.vocabulary.length, 0)
+  assert.equal(model.study.length, 3)
+  for (const section of model.study) {
+    const tables = section.blocks.filter((block) => block.type === 'table')
+    const conversations = section.blocks.filter((block) => block.type === 'conversation')
+    assert.equal(tables.length, 1, section.title)
+    assert.equal(conversations.length, 1, section.title)
+    assert.deepEqual(tables[0].header.map(runs), ['Phrase', 'Example in use', 'What it means'])
+    assert.ok(tables[0].rows.length >= 3 && tables[0].rows.length <= 4)
+    assert.ok(tables[0].phraseCells.every((row) => row[0]), 'each row has a phrase bubble')
+    assert.ok(tables[0].rows.every((row) => row[1].some((run) => run.emphasis)), 'target phrase is highlighted in every example')
+    assert.ok(conversations[0].turns.length <= 4, 'example conversation stays short')
+    assert.ok(conversations[0].turns.some((turn) => turn.runs.some((run) => run.emphasis)), 'target expression is highlighted in the example conversation')
+  }
+  assert.equal(model.study.flatMap((section) => section.blocks).filter((block) => block.type === 'list').length, 0)
+})
+
+test('Chapter 05 presents likes, opinions, choices, and strong reactions with phrase/example/meaning tables', () => {
+  const model = readLesson('05')
+  assert.equal(model.title, 'Opinions and Preferences')
+  assert.deepEqual(model.study.map((section) => section.title), [
+    'Say what you like and dislike',
+    'Ask for and give an opinion',
+    'Choose between options',
+    'Optional: Strong reactions',
+  ])
+  assert.equal(model.vocabulary.length, 0)
+  assert.equal(model.study.length, 4)
+  for (const section of model.study) {
+    const tables = section.blocks.filter((block) => block.type === 'table')
+    const conversations = section.blocks.filter((block) => block.type === 'conversation')
+    assert.equal(tables.length, 1, section.title)
+    assert.equal(conversations.length, 1, section.title)
+    assert.deepEqual(tables[0].header.map(runs), ['Phrase', 'Example in use', 'What it means'])
+    assert.ok(tables[0].rows.length >= 2 && tables[0].rows.length <= 9)
+    assert.ok(tables[0].phraseCells.every((row) => row[0]), 'each row has a phrase bubble')
+    assert.ok(tables[0].rows.every((row) => row[1].some((run) => run.emphasis)), 'target expression is highlighted in every example')
+    assert.ok(conversations[0].turns.length >= 2 && conversations[0].turns.length <= 4, 'example conversation stays short')
+    assert.ok(conversations[0].turns.some((turn) => turn.runs.some((run) => run.emphasis)), 'target expression is highlighted in the example conversation')
+  }
+  assert.equal(model.study.flatMap((section) => section.blocks).filter((block) => block.type === 'list').length, 0)
+  assert.equal(model.study[0].blocks.filter((block) => block.type === 'explanation').length, 2)
+  assert.equal(model.study[1].blocks.filter((block) => block.type === 'explanation').length, 2)
+  assert.equal(model.study[2].blocks.filter((block) => block.type === 'explanation').length, 2)
+})
+
+test('a Study subsection about practice keeps its teaching examples in Study', () => {
+  const source = readFileSync(new URL('src/course/chapters/40-returning-goods.md', root), 'utf8')
+  const lesson = parseLesson(source, '40')
+  const section = lesson.study.find(
+    (item) => item.title === 'Practice with a complete fictional policy',
+  )
+  assert.ok(section)
+  assert.equal(section.blocks.find((block) => block.type === 'conversation').turns.length, 6)
+  assert.equal(
+    lesson.study.flatMap((item) => item.blocks).filter((block) => block.type === 'conversation')
+      .length,
+    3,
+  )
+  assert.equal(
+    lesson.practice.flatMap((item) => item.blocks).filter((block) => block.type === 'conversation')
+      .length,
+    0,
+  )
+})
+
+test('phrase identities survive an unrelated preceding example and keep different contexts separate', () => {
+  const make = (extra) => ({
+    id: '01',
+    vocabulary: [],
+    study: [
+      {
+        id: 's1',
+        title: 'Greeting',
+        blocks: [
+          ...extra,
+          { type: 'explanation', runs: [{ text: 'Say ' }, { text: 'Hello.', emphasis: true }] },
+        ],
+      },
+      {
+        id: 's2',
+        title: 'On the phone',
+        blocks: [
+          { type: 'explanation', runs: [{ text: 'Say ' }, { text: 'Hello.', emphasis: true }] },
+        ],
+      },
+    ],
+  })
+  const before = addPhraseBank(make([])).phraseBank
+  const after = addPhraseBank(
+    make([{ type: 'explanation', runs: [{ text: 'Try ' }, { text: 'Hi.', emphasis: true }] }]),
+  ).phraseBank
+  assert.equal(before[0].id, after.find((item) => item.en === 'Hello.' && item.section === 's1').id)
+  assert.notEqual(before[0].id, before[1].id)
+})
+
+test('all foundation topics and existing pronunciation recordings remain available in English', () => {
+  assert.equal(Object.keys(foundationReading).length, 6)
+  assert.deepEqual(
+    foundationReading.orientation.sections.map(({ id }) => id),
+    ['orientation-language', 'orientation-english', 'orientation-answer'],
+  )
+  assert.deepEqual(
+    foundationReading['how-it-works'].sections.map(({ id }) => id),
+    ['how-philosophy', 'how-start-line', 'how-two-by-two', 'how-chapter-loop'],
+  )
+  assert.deepEqual(
+    foundationReading.letters.sections.map(({ id }) => id),
+    ['letters-start', 'letters-board', 'letters-try'],
+  )
+  assert.equal(foundationReading.letters.sections[2].video[0], 'MgmIHtp-ZQM')
+  assert.equal(foundationReading.letters.sections[2].items.length, 3)
+  assert.equal(foundationReading.hear, undefined)
+  assert.doesNotMatch(JSON.stringify(foundationReading), /[\u3040-\u30ff\u4e00-\u9fff]/)
+  for (const item of allTwisters) {
+    assert.equal(twisterGuidance[item.id].length, 2)
+    assert.ok(existsSync(new URL(`public/audio/${item.id}.wav`, root)))
+    for (let i = 0; i < item.buildSteps.length - 1; i++)
+      assert.ok(existsSync(new URL(`public/audio/segments/${item.id}-${i + 1}.wav`, root)))
+  }
+})
+
+test('Chapter 02 begins with an everyday exchange and teaches additional phrases in context', () => {
+  const phraseShelf = readFileSync(new URL('src/web/GreetingsReferenceStudy.jsx', root), 'utf8')
+  const experience = readFileSync(new URL('src/web/LessonExperience.jsx', root), 'utf8')
+  const styles = readFileSync(new URL('src/web/introductions.css', root), 'utf8')
+  assert.match(phraseShelf, /export function PhraseShelf/)
+  assert.match(experience, /Chapter02PhraseTable/)
+  assert.match(experience, /Chapter02Expression/)
+  assert.match(experience, /SituationalPhrases/)
+  assert.match(experience, /ar-ch02-situation-table/)
+  assert.match(experience, /<PhraseAudio item={item}/)
+  assert.match(experience, /conversation \? \(lessonId === '02'/)
+  assert.match(experience, /ar-ch02-spoken-line/)
+  assert.match(styles, /ar-ch02-expression \.ip-audio/)
+  assert.match(experience, /scope="rowgroup"/)
+  assert.match(experience, /scope="col"/)
+  // The last turn is expressed as two genuine reply branches, not repeated above them.
+  assert.match(experience, /block\.replyAlternatives\?\.choices\.some/)
+  assert.match(experience, /ar-ch02-branch-choices/)
+  assert.match(experience, /ar-ch02-branch-fork/)
+  assert.match(experience, /data-phrase-id=\{item\.id\}/)
+  assert.match(styles, /max-width: 320px/)
+  assert.match(styles, /ar-ch02-branch-choice/)
+  assert.match(styles, /ar-ch02-study \.ip-scene-setting img/)
+  assert.doesNotMatch(styles, /max-width: 130px/)
+  assert.match(styles, /ar-ch02-table-scroll/)
+  assert.match(styles, /ar-ch02-english/)
+
+  const images = (filename) => existsSync(new URL(`public/assets/course/${filename}`, root))
+  const blocks = introductionSections.flatMap((section) => section.blocks)
+  const phraseBlocks = blocks.filter((block) => block.type === 'phrases')
+  const conversations = blocks.filter((block) => block.type === 'conversation')
+  const situations = blocks.filter((block) => block.type === 'situations')
+  const [introduce, work, connect] = introductionSections
+
+  assert.deepEqual(introductionSections.map((section) => section.id), ['introduce', 'work', 'connect'])
+  assert.equal(introduce.title, 'Introduce yourself')
+  assert.equal(work.title, 'Meet someone at work')
+  assert.equal(connect.title, 'Introduce two people')
+  assert.equal(phraseBlocks.length, 7)
+  assert.equal(conversations.length, 4)
+  assert.equal(situations.length, 1)
+  assert.equal(introduce.blocks[1].type, 'conversation')
+  assert.equal(introduce.blocks[1].title, 'A natural first introduction')
+  assert.deepEqual(introduce.blocks[1].phrases, ['ch02-p27', 'ch02-p2', 'ch02-p3'])
+  assert.equal(introduce.blocks[2].title, 'Other ways to begin')
+  assert.deepEqual(introduce.blocks[2].phrases, ['ch02-p4', 'ch02-p38'])
+  assert.equal(introduce.blocks[3].type, 'situations')
+  assert.equal(introduce.blocks[3].examples.length, 4)
+  assert.deepEqual(introduce.blocks[3].examples[0].phrases, ['ch02-p1', 'ch02-p29', 'ch02-p6'])
+  assert.deepEqual(introduce.blocks[3].examples[3].phrases, ['ch02-p25', 'ch02-p26'])
+  assert.equal(work.blocks.filter((block) => block.type === 'phrases').length, 4)
+  const workplaceConversation = conversations.find((block) => block.title === 'Meeting the project team')
+  assert.deepEqual(workplaceConversation.phrases, ['ch02-p39', 'ch02-p40', 'ch02-p41', 'ch02-p42', 'ch02-p43'])
+  assert.deepEqual(work.blocks[2].phrases, ['ch02-p15', 'ch02-p33', 'ch02-p37', 'ch02-p13'])
+  assert.deepEqual(work.blocks[3].phrases, ['ch02-p11', 'ch02-p14', 'ch02-p7', 'ch02-p8'])
+  assert.deepEqual(work.blocks[4].phrases, ['ch02-p44', 'ch02-p45', 'ch02-p46', 'ch02-p32'])
+  assert.deepEqual(work.blocks[5].phrases, ['ch02-p12', 'ch02-p31', 'ch02-p16'])
+  assert.equal(connect.blocks.filter((block) => block.type === 'conversation').length, 2)
+  const meetingInPerson = connect.blocks.find((block) => block.title === 'Meeting in person')
+  assert.deepEqual(meetingInPerson.phrases, ['ch02-p47', 'ch02-p24', 'ch02-p48', 'ch02-p49', 'ch02-p50'])
+  assert.match(meetingInPerson.note.text, /put a face to the name/i)
+  assert.match(meetingInPerson.note.text, /looking forward to this/)
+
+  const first = introduce.blocks[1]
+  assert.equal(first.replyAlternatives.title, 'Other natural replies')
+  assert.equal(first.replyAlternatives.promptId, 'ch02-p30')
+  assert.deepEqual(first.replyAlternatives.choices.map((choice) => choice.id), ['ch02-p3', 'ch02-p5'])
+  assert.ok(blocks.every((block) => !block.collapsed))
+  assert.ok(!blocks.some((block) => ['words', 'vocabulary'].includes(block.type)))
+
+  for (const block of phraseBlocks)
+    if (block.sceneArt) assert.ok(images(block.sceneArt), block.sceneArt)
+  for (const block of conversations) assert.ok(images(block.art), block.art)
+
+  const displayed = new Set(blocks.flatMap((block) => [
+    ...(block.phrases ?? []),
+    ...(block.examples ?? []).flatMap((example) => example.phrases),
+    ...(block.replyAlternatives?.choices ?? []).map((choice) => choice.id),
+    ...(block.replyAlternatives?.promptId ? [block.replyAlternatives.promptId] : []),
+  ]))
+  const spoken = Object.values(introductionById).filter((item) => item.section !== 'words').map((item) => item.id)
+  assert.deepEqual([...displayed].sort(), spoken.sort(), 'Every target phrase remains in Study')
+
+  const turns = conversations.flatMap((block) => block.phrases.map((id) => introductionById[id]))
+  assert.ok(turns.every((item) => item.speaker && item.portrait?.startsWith('portrait-ch02-')))
+  for (const item of turns) {
+    assert.ok(images(item.portrait), item.portrait)
+    const portrait = readFileSync(new URL(`public/assets/course/${item.portrait}`, root), 'utf8')
+    assert.ok(portrait.includes(`<title>${item.speaker}</title>`))
+  }
+})
+
+test('all Chapters 04–96 can render the shared phrase board without inventing artwork', () => {
+  let boards = 0
+  let placeholders = 0
+  for (let number = 4; number <= 96; number++) {
+    const id = String(number).padStart(2, '0')
+    const lesson = readLesson(id)
+    const byId = Object.fromEntries(lesson.phraseBank.map((phrase) => [phrase.id, phrase]))
+    let chapterBoards = 0
+    for (const [index, sourceSection] of lesson.study.entries()) {
+      const section = {
+        id: sourceSection.id,
+        title: sourceSection.title,
+        blocks: sourceSection.blocks.map((block) => block.type === 'conversation'
+          ? block : { type: 'source', source: block }),
+      }
+      const ids = sectionPhraseIds(section, byId)
+      assert.equal(ids.length, new Set(ids).size, `${id} section ${index}: duplicated pill`)
+      assert(ids.every((phraseId) => byId[phraseId] && !/-line\d+$/.test(phraseId)),
+        `${id} section ${index}: missing phrase or conversation turn in board`)
+      if (!ids.length) continue
+      const illustration = sectionPhraseArtwork(section, index, id)
+      if (illustration) {
+        assert.ok(illustration.file, `${id} section ${index}: illustration has no file`)
+      } else {
+        placeholders++
+      }
+      chapterBoards++
+      boards++
+    }
+    assert(chapterBoards > 0, `Chapter ${id} needs a visible phrase board`)
+  }
+  assert(boards >= 93)
+  assert(placeholders > 0, 'lessons without illustration must use placeholder')
+})

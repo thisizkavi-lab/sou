@@ -1,0 +1,228 @@
+/* Alphabet Practice: keep the existing Artico lesson shell.
+   Card, question, answer panel and navigation share one centered column. */
+.rf-practice.rf-letter-check {
+  width: min(100%, 600px);
+  max-width: 600px;
+  margin-inline: auto;
+  padding: 22px 0 10px;
+}
+.rf-letter-check-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0 0 11px;
+}
+.rf-letter-check-topline .ip-kicker { margin: 0; }
+.rf-letter-check-count {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ip-muted, var(--muted));
+}
+.rf-letter-check-progress {
+  width: 100%;
+  height: 3px;
+  border-radius: 99px;
+  overflow: hidden;
+  background: var(--ip-border, var(--line));
+  margin: 0 0 22px;
+}
+.rf-letter-check-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--ip-blue, var(--forest));
+  transition: width .2s ease;
+}
+.rf-letter-check-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.rf-letter-check-card {
+  width: 100%;
+  height: clamp(230px, 29vw, 295px);
+  min-height: 230px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--ip-border, #dce3e3);
+  border-radius: 18px;
+  background: var(--surface, #fffefb);
+  box-shadow: 0 7px 22px rgb(33 59 53 / 4%);
+}
+.rf-letter-check-letter {
+  display: block;
+  font: 750 clamp(120px, 15vw, 174px)/1 Arial, Helvetica, sans-serif;
+  letter-spacing: -.055em;
+  color: #346bd1;
+  background: linear-gradient(160deg, #74a0ed 0%, #2a68d5 57%, #1d4da6 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 2px rgb(45 88 164 / 14%));
+  user-select: none;
+}
+.rf-letter-check-card.is-audio {
+  background: var(--surface, #fffefb);
+}
+.rf-letter-check-listen {
+  min-width: 164px;
+  min-height: 140px;
+  padding: 18px 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--ip-blue, #275cd0);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.rf-letter-check-listen svg {
+  width: 76px;
+  height: 76px;
+  padding: 21px;
+  border: 1px solid rgb(47 94 174 / 14%);
+  border-radius: 50%;
+  background: var(--ip-blue-soft, #eaf0fd);
+}
+.rf-letter-check-listen:hover svg,
+.rf-letter-check-listen:focus-visible svg { background: #dce9fb; }
+.rf-letter-check-listen:focus-visible {
+  outline: 3px solid var(--ip-blue, #275cd0);
+  outline-offset: 2px;
+}
+.rf-letter-check-question {
+  width: 100%;
+  margin: 23px 0 15px;
+  padding-inline: 8px;
+  text-align: center;
+  font-size: clamp(18px, 2vw, 21px);
+  line-height: 1.5;
+  font-weight: 650;
+  letter-spacing: -.01em;
+}
+.rf-letter-check-question:focus { outline: none; }
+
+/* Clear answer area: one quiet group, three individually boxed options. */
+.rf-letter-check-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 11px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--ip-border, #d8e0dd);
+  border-radius: 17px;
+  background: #f3f5f3;
+}
+.rf-letter-check-choice {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 96px;
+  padding: 8px 4px;
+  border: 2px solid #bbc8c8;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink, #253c38);
+  font: 700 clamp(38px, 4.3vw, 50px)/1.1 Arial, Helvetica, sans-serif;
+  box-shadow: 0 2px 3px rgb(33 59 53 / 3%);
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.rf-letter-check-choice:hover:not(:disabled) {
+  background: #edf2fa;
+  border-color: var(--ip-blue, #275cd0);
+  box-shadow: 0 0 0 1px var(--ip-blue, #275cd0);
+}
+.rf-letter-check-choice:focus-visible {
+  outline: 3px solid var(--ip-blue, #275cd0);
+  outline-offset: 2px;
+}
+.rf-letter-check-choice:disabled { cursor: default; opacity: .65; }
+.rf-letter-check-choice.is-match {
+  opacity: 1;
+  border-color: #3c795e;
+  background: #e9f3ec;
+  color: #24563e;
+  font-weight: 750;
+}
+.rf-letter-check-choice.is-missed {
+  opacity: 1;
+  border-color: #b88165;
+  background: #faf0e8;
+  color: #7e482d;
+}
+.rf-letter-check-feedback {
+  min-height: 52px;
+  margin: 9px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rf-letter-check-feedback p {
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.rf-letter-check-pair {
+  color: var(--ip-muted, var(--muted));
+  white-space: nowrap;
+}
+.rf-letter-check-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 7px 0 0;
+}
+.rf-letter-check-nav > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-width: 136px;
+  min-height: 48px;
+}
+.rf-letter-check-nav button:disabled { opacity: .4; cursor: default; }
+.rf-letter-check-end {
+  margin: 20px auto 0;
+  padding: 36px 0 24px;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.rf-letter-check-end h2 { font-size: 25px; font-weight: 650; }
+.rf-letter-check-end h2:focus { outline: none; }
+.rf-letter-check-end p { font-size: 15px; line-height: 1.7; }
+.rf-letter-check-end strong { display: inline-block; }
+.rf-letter-check-end .ip-secondary { margin-top: 12px; }
+@media (max-width: 600px) {
+  .rf-practice.rf-letter-check { padding-top: 17px; }
+  .rf-letter-check-progress { margin-bottom: 17px; }
+  .rf-letter-check-card { height: 240px; min-height: 0; border-radius: 16px; }
+  .rf-letter-check-letter { font-size: 142px; }
+  .rf-letter-check-question { margin: 21px 0 14px; font-size: 18px; }
+  .rf-letter-check-choices { gap: 8px; padding: 9px; border-radius: 14px; }
+  .rf-letter-check-choice { min-height: 79px; font-size: clamp(32px, 9vw, 42px); border-radius: 10px; }
+  .rf-letter-check-feedback { min-height: 46px; }
+  .rf-letter-check-nav > button { min-width: 112px; min-height: 45px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rf-letter-check-choice, .rf-letter-check-progress > span { transition: none; }
+}

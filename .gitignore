@@ -1,0 +1,32 @@
+# Dependencies and package-manager state
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Operating-system and editor noise
+.DS_Store
+*.swp
+*.swo
+
+# Local tool state
+.codex/
+.tools/
+work/vocab-art/raw/
+work/vocab-art/.sources/
+work/vocab-art/upstream/
+work/vocab-art/review/
+work/ielts-study/review/
+
+# Generated build-time artwork
+public/vocabulary-symbols/mulberry/
+public/vocabulary-symbols/openmoji/
+public/vocabulary-symbols/original/
+public/vocabulary-ai/ch03/
+reports/vocabulary-illustration-library-build.json

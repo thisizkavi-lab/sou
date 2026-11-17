@@ -1,0 +1,176 @@
+import './readable-course.css'
+import { useLanguage } from './Language'
+import ReferencePhraseShelf from './ReferencePhraseShelf'
+import { chapter04JapaneseFor } from './chapter04Japanese'
+import { chapter05JapaneseFor } from './chapter05Japanese'
+import { emphasizeNoteRuns } from './studyTextPresentation'
+const plain = (runs) => runs.map((run) => run.text).join('')
+export function RichText({ runs = [] }) {
+  return runs.map((run, index) =>
+    run.emphasis ? (
+      <strong key={index} lang={/[a-z]/i.test(run.text) && !/[\u3040-\u30ff\u3400-\u9fff]/.test(run.text) ? 'en' : undefined}>{run.text}</strong>
+    ) : run.italic ? (
+      <em key={index}>{run.text}</em>
+    ) : run.href && /^https:\/\//.test(run.href) ? (
+      <a key={index} href={run.href} target="_blank" rel="noreferrer">
+        {run.text}
+      </a>
+    ) : (
+      <span key={index}>{run.text}</span>
+    ),
+  )
+}
+
+export function SourceContent({ block, audioProps, focusedId, examples = true, phraseAnchors = [] }) {
+  const { t, language } = useLanguage()
+  const chapter04 = /^(?:ja-)?04-(?:study|practice)-|^ch04-/.test(block.id || '')
+  const chapter05 = /^(?:ja-)?05-(?:study|practice)-|^ch05-/.test(block.id || '')
+  const translate = language === 'ja'
+    ? (chapter04 ? chapter04JapaneseFor : chapter05 ? chapter05JapaneseFor : null)
+    : null
+  const exampleGlossForText = (text) => translate ? translate(text) : ''
+  const exampleGloss = (runs) => exampleGlossForText(plain(runs))
+  let content
+  const phraseTable =
+    examples &&
+    block.type === 'table' &&
+    block.phraseIds?.length > 0 &&
+    block.phraseCells?.every((row) => row.some((id) => id && block.phraseIds.includes(id)))
+  if (phraseTable)
+    content = (
+      <>
+        <p className="ip-kicker">{block.header.map(plain).join(' · ')}</p>
+        <ReferencePhraseShelf ids={block.phraseIds} byId={audioProps.byId} audioProps={audioProps} focusedId={focusedId} title={block.header.map(plain).join(' · ')} />
+        <details className="ar-reference-source-table">
+          <summary>{language === 'ja' ? '元の表を表示' : 'View the full reference table'}</summary>
+          <div className="rc-table" role="region" aria-label={block.header.map(plain).join(' / ')} tabIndex={0}>
+            <table>
+              <thead><tr>{block.header.map((cell, i) => <th scope="col" key={i}><RichText runs={cell} /></th>)}</tr></thead>
+              <tbody>{block.rows.map((row, i) => <tr key={i}>{row.map((cell,j) => {
+                const gloss = exampleGloss(cell)
+                return j === 0
+                  ? <th scope="row" key={j}><RichText runs={cell} />{gloss && <small className="ar-translation-inline" lang="ja">{gloss}</small>}</th>
+                  : <td key={j}><RichText runs={cell} />{gloss && <small className="ar-translation-inline" lang="ja">{gloss}</small>}</td>
+              })}</tr>)}</tbody>
+            </table>
+          </div>
+        </details>
+      </>
+    )
+  else if (block.type === 'explanation' && block.teachingNote)
+    content = (
+      <aside className="ar-teaching-note" aria-label={block.teachingNote}>
+        <span className="ar-teaching-note-title">{language === 'ja' ? 'メモ' : 'Note'}</span>
+        <p className="ar-teaching-note-copy"><RichText runs={emphasizeNoteRuns(block.runs, audioProps?.byId)} /></p>
+      </aside>
+    )
+  else if (block.type === 'table')
+    content = (
+      <div
+        className="rc-table"
+        role="region"
+        aria-label={block.header.map(plain).join(' / ')}
+        tabIndex={0}
+      >
+        <table>
+          <thead>
+            <tr>
+              {block.header.map((cell, i) => (
+                <th scope="col" key={i}>
+                  <RichText runs={cell} />
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {block.rows.map((row, i) => (
+              <tr key={i}>
+                {row.map((cell, j) => {
+                  const phraseId = block.phraseCells?.[i]?.[j]
+                  const gloss = (language === 'ja' && phraseId ? audioProps?.byId?.[phraseId]?.ja : '') || exampleGloss(cell)
+                  return j === 0 ? (
+                    <th scope="row" key={j}>
+                      <RichText runs={cell} />
+                      {gloss && <small className="ar-translation-inline" lang="ja">{gloss}</small>}
+                    </th>
+                  ) : (
+                    <td key={j}>
+                      <RichText runs={cell} />
+                      {gloss && <small className="ar-translation-inline" lang="ja">{gloss}</small>}
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  else if (block.type === 'conversation')
+    content = (
+      <div className="rc-sample-conversation">
+        {block.turns.map((turn) => (
+          <p key={turn.id}>
+            <span className="ip-speaker">{turn.speaker}</span>
+            <br />
+            {turn.en}
+            {language === 'ja' && (turn.ja || exampleGlossForText(turn.en)) && (
+              <small className="ar-translation-inline" lang="ja">{turn.ja || exampleGlossForText(turn.en)}</small>
+            )}
+          </p>
+        ))}
+      </div>
+    )
+  else if (block.items) {
+    const List = block.ordered ? 'ol' : 'ul'
+    content = (
+      <List className="rc-list">
+        {block.items.map((item, i) => (
+          <li key={i}>
+            <RichText runs={item.runs} />
+            {exampleGloss(item.runs) && <small className="ar-translation-inline" lang="ja">{exampleGloss(item.runs)}</small>}
+          </li>
+        ))}
+      </List>
+    )
+  } else if (block.paragraphs)
+    content = (
+      <div className={`rc-example ${block.type === 'email' ? 'rc-email' : ''}`}>
+        {block.type === 'email' && <span className="ip-kicker">{t("EXAMPLE EMAIL")}</span>}
+        {block.paragraphs.map((runs, i) => (
+          <p key={i}>
+            <RichText runs={runs} />
+          </p>
+        ))}
+      </div>
+    )
+  else if (block.type === 'answerHeading')
+    content = (
+      <h3 className="ip-small-heading">
+        <RichText runs={block.runs} />
+      </h3>
+    )
+  else if (!examples && block.runs?.length === 1 && block.runs[0].emphasis && /[a-z]/i.test(block.runs[0].text) && !/[\u3040-\u30ff\u3400-\u9fff]/.test(block.runs[0].text))
+    content = <article className="ip-phrase"><p className="ip-phrase-text" lang="en">{block.runs[0].text}</p></article>
+  else if (block.runs?.length === 1 && block.runs[0].emphasis && !/[.!?]/.test(block.runs[0].text))
+    content = (
+      <h3 className="ip-small-heading">
+        <RichText runs={block.runs} />
+      </h3>
+    )
+  else
+    content = block.runs?.length ? (
+      <p className="ip-prose">
+        <RichText runs={block.runs} />
+      </p>
+    ) : null
+  return (
+    <div className={`rc-source${block.presentation === 'expression-meaning' ? ' ar-expression-meaning-source' : ''}`} data-source-block={block.id}>
+      {phraseAnchors.map((id) => <span className="ar-study-anchor" key={id} id={`study-${id}`} data-phrase-id={id} tabIndex={-1} />)}
+      {content}
+      {examples && !phraseTable && block.phraseIds?.length > 0 && (
+        <ReferencePhraseShelf ids={block.phraseIds} byId={audioProps.byId} audioProps={audioProps} focusedId={focusedId} />
+      )}
+    </div>
+  )
+}

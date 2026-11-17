@@ -1,0 +1,135 @@
+/* Keep the chapter intact; make the next speaking action easy to find. */
+.ip-starter, .ip-complete {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.ip-starter h2, .ip-complete h2 { margin: 8px 0 10px; font-size: 28px; line-height: 1.25; }
+.ip-starter > p:not(.ip-kicker), .ip-complete > p:not(.ip-kicker) { max-width: 62ch; line-height: 1.65; color: var(--muted); }
+.ip-starter-preview { display: grid; gap: 0; list-style: none; padding: 0; margin: 22px 0; border-top: 1px solid var(--line); }
+.ip-starter-preview li { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 19px; line-height: 1.5; text-wrap: pretty; }
+.ip-starter-preview li { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ip-starter .ip-resume-set { margin: 18px 0 0; width: auto; border: 0; padding: 8px 0; background: none; }
+.ip-custom-choice { margin-top: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.ip-custom-choice > summary { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; cursor: pointer; list-style: none; font-weight: 650; }
+.ip-custom-choice > summary::-webkit-details-marker { display: none; }
+.ip-custom-choice > summary small { display: block; margin-top: 5px; font-size: 13px; line-height: 1.5; font-weight: 400; color: var(--muted); }
+.ip-custom-choice[open] > summary > svg { transform: rotate(180deg); }
+.ip-custom-bank { padding: 0 24px 4px; }
+.ip-custom-bank .ip-selection-tools { padding-top: 12px; }
+.ip-complete { text-align: center; }
+.ip-complete > p { margin-inline: auto; }
+.ip-complete > .ip-primary { margin: 22px auto 0; }
+.ip-complete-icon { display: inline-flex; padding: 12px; color: var(--brand); background: var(--surface-strong); border-radius: 50%; margin-bottom: 16px; }
+.ip-complete-actions { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: center; margin: 18px 0; }
+.ip-word-alternatives { list-style: none; margin: 0; padding: 0; width: 100%; }
+.ip-word-alternatives li { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 8px 0; }
+.ip-word-alternatives li + li { border-top: 1px solid var(--line); }
+.ip-word-alternatives .ip-phrase-text { margin: 0; }
+.ip-phrase-copy:has(.ip-word-alternatives) { width: 100%; }
+.ip-custom-bank :is(input, a, button), #ip-situations { scroll-margin-block: 100px 130px; }
+.aw-viewport { scroll-padding-block: 100px calc(var(--practice-bar-height, 0px) + 32px); }
+.ip-session-nav button:disabled { opacity: .45; cursor: default; }
+.ip-context, .ip-check-copy .ip-context { font-size: 14px; line-height: 1.6; }
+.ip-scenario-body > .ip-sample { margin: 0 0 20px; }
+.ip-selection-bar { isolation: isolate; box-shadow: 0 -6px 18px rgb(38 59 59 / 5%); }
+
+@media (max-width: 600px) {
+  .ip-starter, .ip-complete { padding: 20px 18px; }
+  .ip-starter h2, .ip-complete h2 { font-size: 24px; }
+  .ip-starter-preview li { font-size: 18px; }
+  .ip-custom-choice > summary { padding: 18px 14px; }
+  .ip-custom-bank { padding-inline: 12px; }
+  .ip-check-copy .ip-context, .ip-context { font-size: 13px; line-height: 1.6; }
+  .ip-row-actions a, .ip-row-actions .ip-audio { width: 40px; height: 40px; }
+  .ip-filters { flex-wrap: wrap; }
+  .ip-filters button { min-height: 40px; font-size: 12px; }
+  .ip-selection-actions { flex-wrap: wrap; font-size: 13px; gap: 8px 12px; }
+  .ip-selection-actions button { min-height: 36px; font-size: 13px; }
+  .ip-selection-bar { flex-direction: column; align-items: stretch; gap: 10px; padding: 12px; bottom: 8px; }
+  .ip-selection-bar > div > span { font-size: 12px; max-width: none; }
+  .ip-selection-bar .ip-primary { justify-content: center; font-size: 14px; min-height: 44px; white-space: normal; }
+  .ip-session-nav { gap: 10px; }
+  .ip-session-nav > a { font-size: 13px; }
+}
+
+/* Compact practice picker: phrases stay legible while most choices fit at a glance. */
+.ip-picker-intro { margin: 0 0 14px; }
+.ip-picker-heading { display: flex; align-items: baseline; gap: 12px; }
+.ip-picker-number { flex: 0 0 auto; font-size: 13px; font-weight: 650; font-variant-numeric: tabular-nums; color: #738181; }
+
+.ip-picker-intro h2 { margin: 5px 0; font-size: clamp(22px, 2.5vw, 28px); letter-spacing: -.025em; line-height: 1.25; }
+.ip-picker-intro > p:not(.ip-kicker) { color: var(--ip-muted); font-size: 14px; line-height: 1.5; }
+.ip-picker-intro .ip-resume-set { margin-top: 9px; display: inline-flex; gap: 8px; align-items: center; color: var(--ip-blue); }
+.ip-card-picker { padding: 0; }
+.ip-card-picker .ip-selection-tools { padding: 0 0 12px; gap: 8px 12px; }
+.ip-card-picker .ip-selection-actions { gap: 4px 14px; }
+.ip-card-picker .ip-selection-actions button { min-height: 30px; }
+.ip-card-sections { display: grid; gap: 18px; }
+.ip-card-section { min-width: 0; }
+.ip-card-section .ip-list-heading { padding: 0 0 7px; }
+.ip-card-section .ip-list-heading h3 { font-size: 14px; color: #28413e; }
+.ip-card-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; }
+.ip-select-card { position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid #dfe5e5; border-radius: 11px; background: white; transition: border-color .15s, box-shadow .15s, background-color .15s; }
+.ip-select-card:hover { border-color: #9fb6d9; }
+.ip-select-card.is-selected { border-color: #7298df; box-shadow: 0 0 0 1px #7298df; background: #fcfdff; }
+.ip-select-card:focus-within { outline: 2px solid #285bcc; outline-offset: 2px; }
+.ip-card-select { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; cursor: pointer; padding: 7px 9px 3px; gap: 5px; }
+.ip-card-checkbox { appearance: none; position: absolute; z-index: 2; top: 13px; right: 15px; width: 24px; height: 24px; margin: 0; flex: 0 0 auto; border: 1.5px solid #91a0a7; border-radius: 6px; background: #fff; cursor: pointer; box-shadow: 0 1px 5px #132d2d15; }
+.ip-card-checkbox:checked { background: #285bcc; border-color: #285bcc; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m4 10 4 4 8-8' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E"); }
+.ip-card-visual { width: 100%; height: 54px; min-height: 54px; border-radius: 7px; background: #eef2ed; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #678074; }
+.ip-card-section:nth-child(4n + 2) .ip-card-visual { background: #eef1f7; }
+.ip-card-section:nth-child(4n + 3) .ip-card-visual { background: #f5eee6; }
+.ip-card-section:nth-child(4n + 4) .ip-card-visual { background: #f2edef; }
+.ip-card-visual img { width: 100%; height: 54px; object-fit: contain; }
+.ip-card-visual .curriculum-icon { max-width: 38px; max-height: 38px; }
+.ip-card-phrase { color: #2a3c3b; font-size: 14px; line-height: 1.34; font-weight: 650; letter-spacing: -.012em; text-wrap: pretty; overflow-wrap: anywhere; }
+.ip-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 4px; padding: 0 5px 5px 9px; margin-top: auto; min-height: 34px; }
+.ip-card-footer-spacer { flex: 1; }
+.ip-card-footer .ip-rating-label { margin: 0; font-size: 10px; }
+.ip-card-actions { display: flex; align-items: center; gap: 0; margin-left: auto; }
+.ip-card-actions .ip-audio { width: 32px; height: 32px; }
+.ip-card-actions > a { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 7px; color: #71828b; }
+.ip-card-actions > a:hover { background: #edf3ff; color: #285bcc; }
+.ip-card-picker .ip-selection-bar { margin-top: 15px; }
+@media (max-width: 1050px) {
+  .ip-card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .ip-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 540px) {
+  .ip-picker-intro { margin-bottom: 12px; }
+  .ip-card-picker { padding: 0; }
+  .ip-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .ip-card-select { padding: 7px 7px 4px; gap: 5px; }
+  .ip-card-checkbox { top: 12px; right: 14px; }
+  .ip-card-visual, .ip-card-visual img { height: 48px; min-height: 48px; }
+  .ip-card-phrase { font-size: 13px; }
+  .ip-card-footer { padding: 0 4px 4px 7px; }
+  .ip-card-footer .ip-rating-label { font-size: 10px; }
+  .ip-card-picker .ip-selection-bar { margin-top: 12px; }
+}
+@media (max-width: 330px) {
+  .ip-card-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Chapter 01 Japanese practice labels stay subordinate to English. */
+.ip-page .ip-card-translation {
+  display: block;
+  margin-top: 3px;
+  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #66758b;
+}
+.ip-page .ip-focus-translation {
+  margin: 7px 0 0;
+  color: #66758b;
+  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.55;
+}

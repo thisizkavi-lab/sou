@@ -1,0 +1,199 @@
+.aw-app.is-english-pilot,
+.aw-landing {
+  --paper: #fbfaf7;
+  --surface: #ffffff;
+  --ink: #263b3b;
+  --muted: #657273;
+  --line: #e2e6e5;
+  --brand: #285bcc;
+  --surface-strong: #eaf0fc;
+}
+.is-english-pilot .aw-sidebar {
+  width: 204px;
+  flex-basis: 204px;
+  padding: 26px 20px;
+  gap: 22px;
+}
+.is-english-pilot .aw-topbar {
+  height: 60px;
+  flex-basis: 60px;
+  border-bottom: 1px solid var(--line);
+}
+/* Language and profile controls keep their right alignment without the
+   removed storage-status label. */
+.is-english-pilot .aw-topbar > .aw-language {
+  margin-left: auto;
+}
+.is-english-pilot .aw-topbar > .aw-icon-button {
+  margin-left: 0;
+}
+.is-english-pilot .aw-tagline,
+.is-english-pilot .aw-destinations a,
+.is-english-pilot .aw-course-status,
+.is-english-pilot .aw-sync strong,
+.is-english-pilot .aw-sync span,
+.is-english-pilot .aw-topbar p,
+.is-english-pilot .aw-topbar > span,
+.is-english-pilot .aw-mobile-nav a {
+  font-family: inherit;
+}
+.is-english-pilot .aw-destinations .is-active {
+  color: var(--brand);
+}
+.is-english-pilot .aw-my-course {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.is-english-pilot .aw-course-name {
+  font-size: 16px;
+  line-height: 1.4;
+}
+.is-english-pilot .aw-sync {
+  gap: 12px;
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  .is-english-pilot .aw-sidebar {
+    width: 88px;
+    flex-basis: 88px;
+    padding: 23px 10px;
+    align-items: center;
+  }
+  .is-english-pilot .aw-wordmark {
+    font-size: 23px;
+  }
+  .is-english-pilot .aw-destinations {
+    width: 100%;
+  }
+  .is-english-pilot .aw-destinations a {
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 4px;
+    font-size: 11px;
+  }
+  .is-english-pilot .aw-destinations .aw-icon {
+    margin-right: 0;
+  }
+  .is-english-pilot .aw-tagline,
+  .is-english-pilot .aw-sidebar > .aw-divider,
+  .is-english-pilot .aw-my-course,
+  .is-english-pilot .aw-course-name,
+  .is-english-pilot .aw-course-status,
+  .is-english-pilot .aw-sync strong,
+  .is-english-pilot .aw-sync span {
+    display: none;
+  }
+  .is-english-pilot .aw-sync {
+    padding: 12px;
+  }
+}
+@media (max-width: 760px) {
+  .is-english-pilot .aw-sidebar {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .is-english-pilot .aw-topbar {
+    height: 50px;
+    flex-basis: 50px;
+    padding: 0 18px;
+  }
+  .is-english-pilot .aw-topbar p {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 760px) {
+  .is-english-pilot .aw-mobile-nav { display: flex; flex: 0 0 auto; justify-content: space-around; gap: 8px; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--paper); }
+  .is-english-pilot .aw-mobile-nav a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 48px; min-width: 76px; border-radius: 12px; padding: 8px 16px; font-size: 12px; line-height: 16px; }
+  .is-english-pilot .aw-mobile-nav a.is-active { background: var(--surface-strong); }
+}
+
+/* Guest profile: account status, existing language control and optional partner link. */
+.is-english-pilot .aw-profile-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.is-english-pilot .aw-profile-avatar {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #edf2f1;
+}
+.is-english-pilot .aw-profile-account strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 650;
+}
+.is-english-pilot .aw-profile-account p,
+.is-english-pilot .aw-profile-connect-section p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 3px 0 0;
+}
+.is-english-pilot .aw-profile-divider {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 22px 0;
+}
+.is-english-pilot .aw-profile-simple .aw-language-profile { margin: 0; }
+.is-english-pilot .aw-profile-simple .aw-language-profile small {
+  font-size: 12px;
+  line-height: 1.7;
+}
+.is-english-pilot .aw-profile-connect-section h3 {
+  font-size: 14px;
+  font-weight: 650;
+  margin: 0;
+}
+.is-english-pilot .aw-profile-connect-section p { margin-top: 9px; }
+.is-english-pilot .aw-profile-connect-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 13px;
+  padding: 13px 14px;
+  border: 1px solid #d9e3f0;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+}
+.is-english-pilot .aw-profile-connect-link:hover { background: #f4f7fd; }
+.is-english-pilot .aw-profile-simple + .aw-button-outline {
+  margin-top: 24px;
+  background: #fff;
+  color: var(--brand);
+  border: 1px solid #d9e3f0;
+}
+
+.is-english-pilot .sou-wordmark {
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: normal;
+}
+
+@media (min-width: 761px) and (max-width: 1100px) {
+  .is-english-pilot .sou-wordmark {
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .is-english-pilot .aw-mobile-nav a {
+    flex: 1;
+    min-width: 0;
+    padding-inline: 3px;
+    text-align: center;
+  }
+}

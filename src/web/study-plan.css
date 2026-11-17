@@ -1,0 +1,79 @@
+/* One useful Orientation tool: choose a routine, see the actual arithmetic, begin. */
+.rf-plan { width:min(100%,860px); margin:15px 0 20px; color:#2d433a; }
+.rf-plan-head { margin-bottom:26px; }
+.rf-plan-eyebrow { font-size:11px; font-weight:750; letter-spacing:.13em; color:#6e9180; margin:0 0 12px; }
+.rf-plan-head h2 { font-weight:570; font-size:clamp(28px,3.8vw,38px); line-height:1.4; letter-spacing:-.03em; margin:0 0 11px; }
+.rf-plan-head > p:last-child { font-size:14px; line-height:1.8; color:#6c7e72; max-width:58ch; }
+.rf-plan-inputs { display:grid; gap:25px; }
+.rf-plan-field { min-width:0; }
+.rf-plan-field h3 { font-size:14px; font-weight:700; color:#42624f; margin:0 0 12px; }
+.rf-plan-options { display:flex; flex-wrap:wrap; gap:9px; }
+.rf-plan-choice { font:inherit; border:1px solid #d8e2d8; background:#fffefc;
+  border-radius:10px; min-height:44px; padding:10px 17px; font-size:13px;
+  color:#5b7162; text-align:center; cursor:pointer; transition:border-color .15s,background-color .15s; }
+.rf-plan-choice:hover { border-color:#93b4a0; background:#f5f8f3; }
+.rf-plan-choice.is-active { color:#305943; border-color:#7da38c; background:#edf4ed; font-weight:750; }
+.rf-plan-choice:focus-visible,.rf-plan-actions :is(button,a):focus-visible {
+  outline:3px solid #8bae96; outline-offset:3px;
+}
+.rf-plan-result { margin-top:30px; padding:28px 28px 20px; border-radius:14px; background:#f3f7f2; }
+.rf-plan-split { display:flex; align-items:center; gap:23px; margin:3px 0 19px; }
+.rf-plan-split > div { display:flex; flex-direction:column; gap:5px; }
+.rf-plan-split strong { font-size:clamp(35px,5vw,53px); font-weight:560; letter-spacing:-.05em; color:#294e3b; line-height:1.15; }
+.rf-plan-split strong small { font-size:14px; font-weight:500; letter-spacing:0; }
+.rf-plan-split div > span { font-size:12px; color:#748577; }
+.rf-plan-plus { font-size:23px; color:#a0b6a5; padding:0 6px; }
+.rf-plan-bar { height:7px; background:#75a58a; border-radius:9px; overflow:hidden; }
+.rf-plan-bar span { height:100%; display:block; background:#bbcdbd; transition:width .18s; }
+.rf-plan-totals { display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap; font-size:12px; color:#637768; margin-top:17px; }
+.rf-plan-totals strong { color:#375642; font-weight:750; }
+.rf-plan-milestones { margin-top:30px; }
+.rf-plan-milestones > h3 { font-size:15px; font-weight:700; margin:0 0 14px; color:#344e3c; }
+.rf-plan-milestone { display:grid; grid-template-columns:72px minmax(0,1fr); align-items:center; gap:16px;
+  padding:17px 0; border-bottom:1px solid #e1e7e1; }
+.rf-plan-milestone:first-of-type { border-top:1px solid #e1e7e1; }
+.rf-plan-week { display:flex; flex-direction:column; line-height:1.2; color:#668d74; }
+.rf-plan-week strong { font-family:Georgia,serif; font-size:28px; font-weight:500; }
+.rf-plan-week span { font-size:11px; }
+.rf-plan-milestone > div:last-child { display:flex; flex-direction:column; gap:5px; }
+.rf-plan-milestone > div:last-child > strong { font-size:15px; font-weight:600; line-height:1.6; color:#2e4638; }
+.rf-plan-milestone > div:last-child > span { font-size:12px; color:#8b9a8e; }
+.rf-plan-caveat { max-width:77ch; font-size:11px; line-height:1.85; margin-top:15px; color:#829285; }
+.rf-plan-actions { display:flex; justify-content:flex-start; margin-top:24px; }
+.rf-plan-start { display:inline-flex; justify-content:center; align-items:center;
+  min-height:49px; padding:12px 23px; font:inherit; font-size:13px; font-weight:700;
+  border:1px solid #365c48; border-radius:10px; background:#365c48;
+  color:#fff; cursor:pointer; }
+.rf-plan-start:hover { background:#284b38; }
+.rf-plan-outlook { max-width:790px; }
+.rf-plan-outlook h2 { max-width:660px; font-size:clamp(29px,4vw,40px); font-weight:550;
+  letter-spacing:-.035em; line-height:1.45; margin:8px 0 21px; }
+.rf-plan-outlook-target { font-size:clamp(24px,3.7vw,36px); font-weight:600;
+  letter-spacing:-.02em; color:#355c46; line-height:1.55; margin:0 0 23px; }
+.rf-plan-example { margin:0 0 27px; padding-left:17px; border-left:3px solid #a9c1af; }
+.rf-plan-example > span { display:block; font-size:12px; font-weight:700; color:#738d7a; margin:0 0 5px; }
+.rf-plan-example p { color:#3f5949; font-size:15px; line-height:1.75; margin:0; }
+.rf-plan-outlook .rf-plan-result { margin-top:0; }
+.rf-plan-effort { max-width:68ch; font-size:15px; font-weight:600; line-height:1.85;
+  color:#3c6049; margin:26px 0 14px; }
+.rf-plan-edit { margin-top:20px; padding:12px 16px; background:#fff; color:#365e48;
+  border:1px solid #b8cdbd; border-radius:9px; cursor:pointer; font:inherit;
+  font-size:13px; font-weight:650; }
+.rf-plan-edit:hover { background:#f4f8f3; }
+.rf-plan-edit:focus-visible { outline:3px solid #8bae96; outline-offset:3px; }
+@media(max-width:680px) {
+  .rf-plan { margin:7px 0 15px; }
+  .rf-plan-head { margin-bottom:22px; }
+  .rf-plan-options { gap:7px; }
+  .rf-plan-choice { padding:9px 13px; }
+  .rf-plan-result { padding:21px 16px; margin-top:24px; }
+  .rf-plan-split { gap:13px; }
+  .rf-plan-plus { padding:0; }
+  .rf-plan-milestone { grid-template-columns:53px minmax(0,1fr); gap:13px; }
+  .rf-plan-actions { align-items:stretch; }
+  .rf-plan-actions button { width:100%; }
+  .rf-plan-outlook-target { margin-bottom:18px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .rf-plan-bar span,.rf-plan-choice { transition:none; }
+}

@@ -1,0 +1,211 @@
+/* Artico Orientation — quiet, step-by-step discovery with illustrated personas */
+.rf-profile { width: min(100%, 840px); padding: 18px 0 36px; color: var(--ink); }
+.rf-profile-header { display:flex;justify-content:space-between;align-items:center;gap:20px; }
+.rf-profile-eyebrow { font-size:11px;letter-spacing:.13em;font-weight:750;color:#648878; }
+.rf-profile-skip { font-size:12px;color:#89958d;text-underline-offset:3px; }
+.rf-profile-progress { display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:31px 0 40px; }
+.rf-profile-progress span { height:3px;border-radius:4px;background:#e0e7e1; }
+.rf-profile-progress span.is-current { background:#55836a; }
+.rf-profile-count { font-size:11px;font-weight:700;letter-spacing:.09em;color:#85a08b;margin:0 0 8px; }
+.rf-profile-question { font-size:clamp(27px,4vw,41px);font-weight:550;line-height:1.35;letter-spacing:-.045em;outline:none; }
+.rf-profile-instruction { color:#7c8b80;font-size:13px;line-height:1.6;margin:11px 0 24px; }
+.rf-profile-options { display:grid;grid-template-columns:1fr;gap:10px;width:min(100%,650px); }
+.rf-profile-option { font:inherit;display:flex;align-items:center;justify-content:space-between;gap:20px;text-align:left;
+  min-height:72px;padding:16px 22px;border:1px solid #dfe7df;border-radius:14px;
+  background:#fffefc;color:#31493c;font-size:16px;line-height:1.45;
+  cursor:pointer;transition:background-color .16s,border-color .16s,transform .16s; }
+.rf-profile-option:hover:not(:disabled) { border-color:#9dbba7;background:#f4f8f3;transform:translateY(-1px); }
+.rf-profile-option.is-selected { border-color:#609271;background:#eef5ed; }
+.rf-profile-option:disabled { opacity:.35;cursor:default; }
+.rf-profile-radio { display:grid;place-items:center;flex:0 0 26px;width:26px;height:26px;
+  border:1.5px solid #ccd9cf;border-radius:50%;color:white;font-size:13px; }
+.is-selected .rf-profile-radio { border-color:#477a58;background:#477a58; }
+.rf-profile-actions { display:flex;justify-content:space-between;gap:15px;align-items:center;margin-top:25px;width:min(100%,650px); }
+.rf-profile-actions button { font:inherit;font-size:13px;cursor:pointer; }
+.rf-profile-back { padding:12px 5px;border:0;background:none;color:#718579; }
+.rf-profile-back:disabled { opacity:.25;cursor:default; }
+.rf-profile-next { padding:13px 25px;border-radius:10px;background:#365e48;border:0;color:white;font-weight:700; }
+.rf-profile-next:disabled { opacity:.32;cursor:default; }
+.rf-profile button:focus-visible,.rf-profile a:focus-visible { outline:3px solid #80a68f;outline-offset:3px; }
+
+/* A full-bleed PNG person, not a boxed lesson illustration. */
+.rf-persona > h2 { font-size:clamp(27px,3.5vw,41px);font-weight:550;letter-spacing:-.04em;margin:12px 0 25px;outline:none; }
+.rf-persona-hero { display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;
+  gap:clamp(18px,4vw,47px);min-height:295px; }
+.rf-persona-illustration { display:grid;place-items:center;min-height:295px;align-self:stretch;color:#617f70; }
+.rf-persona-illustration img { display:block;width:min(100%,315px);max-height:320px;object-fit:contain;filter:drop-shadow(0 10px 12px #203e2410); }
+.rf-persona-intro { align-self:center;padding:9px 0; }
+.rf-persona-hint { font-size:10px;color:#86a18d;font-weight:750;letter-spacing:.09em; }
+.rf-persona-intro h3 { font-family:'Newsreader',Georgia,serif;font-size:clamp(35px,5vw,57px);font-weight:500;line-height:1.08;
+  letter-spacing:-.035em;margin:12px 0 10px;color:#2a4937; }
+.rf-persona-name { font-size:15px;color:#607967;margin:0 0 13px; }
+.rf-persona-situation { font-size:14px;line-height:1.8;color:#657469;margin:0 0 20px; }
+.rf-persona-phrase { border-left:2px solid #a7c6af;padding-left:15px;display:grid;gap:7px; }
+.rf-persona-phrase small { color:#82998b;font-weight:750;font-size:10px;letter-spacing:.09em; }
+.rf-persona-phrase strong { font-size:clamp(17px,2.8vw,24px);font-weight:550;line-height:1.4;color:#3a5b45; }
+.rf-persona-why { border-top:1px solid #e1e8e0;border-bottom:1px solid #e1e8e0;padding:21px 0;margin:24px 0 25px; }
+.rf-persona-why > span { display:block;font-size:12px;color:#6a8b76;font-weight:700; }
+.rf-persona-why p { font-size:clamp(17px,2.5vw,21px);line-height:1.7;color:#364f41;margin:6px 0 0; }
+.rf-persona-collection h4 { font-size:13px;color:#657a6c;font-weight:650;margin:0 0 12px; }
+/* Every persona choice owns a fixed-height, clipped image slot. The portrait
+   cannot affect the card's height or paint over its label or neighboring cards. */
+.rf-persona-collection { max-width:100%; min-width:0; }
+.rf-persona-strip {
+  display:grid; grid-template-columns:repeat(5,minmax(0,1fr));
+  align-items:stretch; gap:10px; max-width:100%; min-width:0;
+}
+.rf-persona-option {
+  font:inherit; box-sizing:border-box; min-width:0; max-width:100%; width:100%;
+  cursor:pointer; border:1px solid #e2e9e2; background:#fffefc;
+  border-radius:13px; padding:10px 8px 14px;
+  display:grid; grid-template-rows:126px minmax(0,1fr);
+  align-items:start; justify-items:center; gap:9px;
+  overflow:hidden; color:#546d5b;
+}
+.rf-persona-option.is-selected { background:#edf4ec;border-color:#80a88a;color:#315641; }
+.rf-persona-option:hover { background:#f5f8f3; }
+.rf-persona-mini {
+  position:relative; display:block; box-sizing:border-box;
+  width:100%; height:126px; max-height:126px; min-height:126px;
+  max-width:100%; overflow:hidden; isolation:isolate; color:#668875;
+}
+.rf-persona-mini > img {
+  position:absolute; inset:0; display:block;
+  width:100% !important; height:100% !important;
+  max-width:100% !important; max-height:100% !important;
+  object-fit:contain !important; object-position:center bottom;
+}
+.rf-persona-label {
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  width:100%; min-width:0; max-width:100%; min-height:50px;
+  line-height:1.4; text-align:center;
+}
+.rf-persona-label strong {
+  display:block; width:100%; font-size:12px; line-height:1.35;
+  font-weight:700; overflow-wrap:normal; word-break:normal;
+}
+.rf-persona-label small {
+  display:block; width:100%; font-size:10px; font-weight:400;
+  line-height:1.5; color:#778e7d; overflow-wrap:anywhere;
+}
+@media(max-width:680px) {
+  .rf-profile { padding:8px 0 28px; }
+  .rf-profile-progress { margin:22px 0 28px; }
+  .rf-profile-option { min-height:66px;padding:13px 16px;font-size:15px; }
+  .rf-persona-hero { display:flex;flex-direction:column;gap:6px;align-items:stretch; }
+  .rf-persona-illustration { min-height:0;max-height:235px; }
+  .rf-persona-illustration img { max-height:235px;max-width:270px; }
+  .rf-persona-intro { text-align:center; }
+  .rf-persona-intro h3 { margin:6px 0; }
+  .rf-persona-name { margin-bottom:8px; }
+  .rf-persona-situation { margin-bottom:13px; }
+  .rf-persona-phrase { text-align:left;max-width:360px;margin:0 auto; }
+  .rf-persona-why { margin:18px 0; }
+  .rf-persona-strip {
+    display:flex; gap:9px; overflow-x:auto; overscroll-behavior-x:contain;
+    scroll-snap-type:x mandatory; padding-bottom:12px;
+  }
+  .rf-persona-option {
+    flex:0 0 142px; max-width:142px; width:142px;
+    grid-template-rows:122px minmax(0,1fr);
+    scroll-snap-align:start;
+  }
+  .rf-persona-mini { height:122px; min-height:122px; max-height:122px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .rf-profile-option { transition:none; }
+  .rf-profile-option:hover:not(:disabled) { transform:none; }
+}
+
+/* Persona names are fixed identities; preferred speaking tone appears separately. */
+.rf-persona-style {
+  color:#719080;
+  font-size:13px;
+  line-height:1.6;
+  margin:0 0 12px;
+}
+.rf-persona-option small {
+  color:#799082;
+  font-size:10px;
+  line-height:1.35;
+  text-align:center;
+  max-width:100%;
+}
+.rf-persona-option.is-selected small { color:#446c51; }
+/* The Team Player appears with a partner: an actual interaction, not a solo avatar. */
+.rf-persona-duo {
+  position:relative;
+  width:min(100%,340px);
+  height:300px;
+}
+.rf-persona-illustration .rf-persona-duo img {
+  position:absolute;
+  width:60%;
+  height:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+.rf-persona-illustration .rf-persona-duo img:first-child { left:0; transform:scaleX(-1); }
+.rf-persona-illustration .rf-persona-duo img:last-child { right:0; }
+@media(max-width:680px) {
+  .rf-persona-illustration .rf-persona-duo { height:225px; }
+}
+
+
+/* A brief, persona-specific celebration when the learner reveals a result.
+   It occupies no layout space and cannot intercept taps or keyboard focus. */
+.rf-persona { position:relative; }
+.rf-persona-confetti {
+  position:absolute;
+  inset:0 0 auto;
+  width:100%;
+  height:min(540px, 100%);
+  overflow:hidden;
+  pointer-events:none;
+  user-select:none;
+  z-index:4;
+}
+.rf-persona-confetti-piece {
+  position:absolute;
+  left:50%;
+  top:117px;
+  width:var(--piece-size);
+  height:var(--piece-size);
+  background:var(--piece-color);
+  opacity:0;
+  animation:rf-persona-confetti-burst var(--piece-duration) ease-out var(--piece-delay) 1 both;
+}
+.rf-persona-confetti--bubble .rf-persona-confetti-piece {
+  border:2px solid var(--piece-color);
+  background:transparent;
+  border-radius:50%;
+}
+.rf-persona-confetti--diamond .rf-persona-confetti-piece {
+  clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.rf-persona-confetti--star .rf-persona-confetti-piece {
+  clip-path:polygon(50% 0%, 62% 36%, 100% 38%, 70% 61%, 81% 100%, 50% 77%, 19% 100%, 30% 61%, 0% 38%, 38% 36%);
+}
+.rf-persona-confetti--triangle .rf-persona-confetti-piece {
+  clip-path:polygon(50% 0%, 100% 100%, 0% 100%);
+}
+.rf-persona-confetti--ribbon .rf-persona-confetti-piece {
+  width:calc(var(--piece-size) * .65);
+  height:calc(var(--piece-size) * 1.85);
+  border-radius:2px;
+}
+@keyframes rf-persona-confetti-burst {
+  0%   { opacity:0; transform:translate3d(0,0,0) scale(.3) rotate(0deg); }
+  12%  { opacity:1; }
+  30%  { opacity:1; transform:translate3d(var(--piece-dx),var(--piece-rise),0) scale(1) rotate(65deg); }
+  82%  { opacity:1; }
+  100% { opacity:0; transform:translate3d(var(--piece-dx),var(--piece-fall),0) scale(.7) rotate(var(--piece-spin)); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .rf-persona-confetti { display:none; }
+  .rf-persona-confetti-piece { animation:none; }
+}
+
+/* Allow a returning learner to revise their target instead of locking the result. */
+.rf-persona-edit { font: inherit; font-size: 13px; font-weight: 650; color: #285bcc; background: none; border: 0; padding: 4px 0; margin: 0 0 22px; cursor: pointer; text-underline-offset: 3px; }
+.rf-persona-edit:hover { text-decoration: underline; }

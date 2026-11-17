@@ -1,0 +1,722 @@
+.is-english-pilot .aw-page.aw-library-page,
+.is-english-pilot .aw-page:has(> .aw-saved-list) {
+  max-width: 1096px;
+  padding: 30px 44px 64px;
+  margin: 0 auto;
+}
+.is-english-pilot .aw-heading {
+  margin-bottom: 12px;
+}
+.is-english-pilot .aw-heading h1 {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 39px;
+  font-weight: 400;
+  line-height: 1.15;
+  margin-top: 10px;
+}
+.is-english-pilot .aw-heading .aw-eyebrow,
+.rl-kicker {
+  font-size: 11px;
+  letter-spacing: 0.095em;
+  color: var(--muted);
+  font-weight: 650;
+}
+.is-english-pilot .aw-button {
+  font-family: inherit;
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 10px 18px;
+  font-size: 14px;
+}
+.is-english-pilot .aw-button-brand {
+  color: #fff;
+  background: var(--brand);
+}
+.is-english-pilot .aw-button-outline {
+  color: var(--brand);
+  background: white;
+  border-color: #d2ddee;
+}
+.rl-intro {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 8px 0 28px;
+  line-height: 1.7;
+}
+.rl-resume {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  gap: 30px;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: white;
+}
+.rl-resume h2 {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 30px;
+  font-weight: 450;
+  margin: 12px 0;
+  line-height: 1.18;
+}
+.rl-resume > div > p:not(.rl-kicker) {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.rl-resume .aw-actions {
+  margin-top: 22px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.rl-resume img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.rl-resume-position {
+  display: block;
+  font-size: 12px;
+  color: var(--brand);
+  margin-top: 14px;
+}
+.rl-start-note {
+  background: #edf3ff;
+  padding: 26px;
+  border-radius: 12px;
+}
+.rl-start-note > span {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  color: var(--brand);
+}
+.rl-start-note > p {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 32px !important;
+  line-height: 1.2 !important;
+  color: var(--ink) !important;
+  margin: 14px 0;
+}
+.rl-start-note small {
+  color: var(--muted);
+  line-height: 1.6;
+  display: block;
+}
+.is-english-pilot .aw-local {
+  font: inherit;
+  font-size: 12px;
+  margin: 17px 0 34px;
+  gap: 8px;
+}
+.is-english-pilot .aw-local button {
+  font: inherit;
+  color: var(--brand);
+}
+.rl-study-map {
+  margin-top: 28px;
+  scroll-margin-top: 20px;
+}
+.rl-study-map header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.rl-study-map h2,
+.rl-course-heading h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 5px 0 0;
+  letter-spacing: -0.02em;
+}
+.rl-study-map header > span {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 200px;
+  text-align: right;
+}
+.rl-study-map ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.rl-study-map li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: start;
+  gap: 20px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.rl-stage-number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d8e0e4;
+  background: white;
+  color: var(--muted);
+  border-radius: 50%;
+  font-size: 12px;
+}
+.rl-study-map li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 64px;
+  bottom: -19px;
+  left: 17px;
+  border-left: 1px solid #d8e0e4;
+}
+.rl-study-map .is-current .rl-stage-number {
+  background: #edf3ff;
+  color: var(--brand);
+  border-color: #bbcdec;
+}
+.rl-stage-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.rl-stage-title h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+.rl-stage-title small {
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  color: var(--brand);
+}
+.rl-study-map li p {
+  font-size: 15px;
+  margin: 5px 0;
+}
+.rl-topics {
+  font-size: 12px;
+  color: var(--muted);
+}
+.rl-study-map li > a {
+  text-align: right;
+  display: grid;
+  gap: 12px;
+  padding: 6px 0;
+}
+.rl-study-map li > a span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.rl-study-map li > a strong {
+  font-size: 13px;
+  color: var(--brand);
+  font-weight: 600;
+}
+.rl-map-note {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.rl-history {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  padding-top: 28px;
+  color: var(--muted);
+}
+.rl-history strong {
+  color: var(--brand);
+  font-weight: 600;
+}
+.rl-stage-tabs {
+  display: flex;
+  gap: 5px;
+  border-bottom: 1px solid var(--line);
+  margin: 12px 0 28px;
+  overflow-x: auto;
+}
+.rl-stage-tabs a {
+  white-space: nowrap;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  border-bottom: 2px solid transparent;
+  font-size: 14px;
+  color: var(--muted);
+}
+.rl-stage-tabs a span {
+  font-size: 11px;
+  opacity: 0.75;
+}
+.rl-stage-tabs .curriculum-icon { flex: 0 0 auto; }
+.rl-stage-tabs a[aria-current] {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.rl-course-heading {
+  margin-bottom: 24px;
+}
+.rl-course-title { display: flex; align-items: center; gap: 11px; }
+.rl-course-title .curriculum-icon { flex: 0 0 auto; color: #33507e; }
+.rl-course-heading p {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.rl-search {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 20px 0 28px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.rl-search input {
+  background: white;
+  border: 1px solid #cbd6e7;
+  padding: 12px 16px;
+  border-radius: 10px;
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+}
+.rl-catalog {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 28px;
+}
+.rl-catalog aside {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-self: start;
+}
+.rl-catalog aside button {
+  font: inherit;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 13px;
+  padding: 14px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.rl-catalog aside button span {
+  font-size: 11px;
+  min-width: 35px;
+}
+.rl-catalog aside button .curriculum-icon { flex: 0 0 auto; color: #5c6e8c; }
+.rl-catalog aside button .rl-group-name { min-width: 0; font-size: 13px; flex: 1; line-height: 1.35; }
+.rl-catalog aside button .rl-group-range { flex: 0 0 35px; }
+.rl-catalog aside button[aria-pressed='true'] {
+  background: #edf3ff;
+  color: var(--brand);
+}
+.rl-chapter-list {
+  min-width: 0;
+}
+.rl-list-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.rl-chapter-list > a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 8px;
+  min-height: 80px;
+  border-top: 1px solid var(--line);
+}
+.rl-chapter-list > a > .rl-lesson-copy { flex: 1; min-width: 0; }
+/* Course rows now contain only number, icon, title, and arrow.
+   Keep the rest of the learning/progress list styles unchanged. */
+.rl-course-lessons > a {
+  padding: 14px 8px;
+  min-height: 62px;
+}
+.rl-course-lessons .rl-lesson-copy strong {
+  line-height: 1.45;
+}
+
+.rl-chapter-list .rl-topic-icon { flex: 0 0 auto; color: #53637e; }
+.rl-chapter-list > a:hover .rl-topic-icon, .rl-chapter-list > a.is-current .rl-topic-icon { color: var(--brand); }
+.rl-stage-number .curriculum-icon { flex: 0 0 auto; color: #345180; }
+.rl-chapter-list > a > strong {
+  flex: 1;
+}
+.rl-chapter-list strong {
+  display: block;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.35;
+}
+.rl-chapter-list small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 5px;
+}
+.rl-number {
+  font-size: 12px;
+  color: var(--muted);
+  width: 23px;
+  flex-shrink: 0;
+}
+.rl-chapter-list > a.is-current strong,
+.rl-chapter-list > a.is-current small {
+  color: var(--brand);
+}
+.rl-chapter-list > a:hover {
+  background: #f1f4f6;
+}
+.rl-empty {
+  padding: 24px;
+  color: var(--muted);
+}
+@media (max-width: 900px) {
+  .rl-resume {
+    grid-template-columns: 1fr;
+  }
+  .rl-resume > img,
+  .rl-start-note {
+    display: none;
+  }
+  .rl-catalog {
+    grid-template-columns: 1fr;
+  }
+  .rl-catalog aside {
+    flex-direction: row;
+    overflow: auto;
+  }
+  .rl-catalog aside button {
+    white-space: nowrap;
+  }
+}
+@media (max-width: 600px) {
+  .is-english-pilot .aw-page.aw-library-page {
+    padding: 24px 20px 48px;
+  }
+  .is-english-pilot .aw-heading h1 {
+    font-size: 32px;
+  }
+  .rl-resume {
+    padding: 22px;
+  }
+  .rl-resume h2 {
+    font-size: 27px;
+  }
+  .rl-kicker span {
+    display: block;
+    margin-top: 5px;
+  }
+  .rl-study-map header {
+    display: block;
+  }
+  .rl-study-map header > span {
+    display: block;
+    max-width: none;
+    text-align: left;
+    margin-top: 8px;
+  }
+  .rl-study-map li {
+    grid-template-columns: 32px 1fr;
+    gap: 14px;
+  }
+  .rl-stage-number {
+    width: 30px;
+    height: 30px;
+  }
+  .rl-study-map li:not(:last-child)::after {
+    left: 14px;
+    top: 59px;
+  }
+  .rl-study-map li > a {
+    grid-column: 2;
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    padding: 0;
+  }
+  .rl-stage-tabs a {
+    padding: 12px 8px;
+    font-size: 12px;
+    gap: 5px;
+  }
+  .rl-search {
+    display: grid;
+    gap: 8px;
+  }
+  .rl-chapter-list > a {
+    gap: 13px;
+  }
+  .rl-chapter-list strong {
+    font-size: 16px;
+  }
+  .is-english-pilot .aw-local {
+    flex-wrap: wrap;
+  }
+}
+
+.is-english-pilot .aw-page.aw-library-page {
+  display: block;
+}
+.aw-progress > section,
+.aw-progress > .aw-progress-saved {
+  margin-top: 30px;
+}
+
+
+/* Quiet grayscale curriculum hierarchy; Artico blue is reserved for active steps and keyboard focus. */
+/* A branching curriculum: stages > topics > lessons. Keep the connectors
+   deliberately prominent while the leaf labels remain quiet and readable. */
+/* Keep the learning tree focused, including its title, without shrinking other Library pages. */
+.is-english-pilot .aw-page.aw-library-page.rl-vertical-page {
+  max-width:920px;
+}
+.rl-vertical-page {
+  --rl-v-ink:#242424;
+  --rl-v-line:#e1e1e1;
+  --rl-v-trunk:#9c9c9c;
+  --rl-v-branch:#c5c5c5;
+  --rl-v-leaf:#dedede;
+}
+.rl-vertical-page > .aw-heading { margin-bottom:21px; }
+.rl-vertical-stages { position:relative; display:grid; gap:14px; }
+.rl-vertical-stage {
+  display:grid; grid-template-columns:40px minmax(0,1fr);
+  gap:16px; align-items:start; position:relative; min-width:0;
+}
+/* Each trunk segment stops at the next node, including when a stage is open. */
+.rl-vertical-stage:not(:last-child)::after {
+  content:""; position:absolute; top:36px; bottom:-50px; left:19px;
+  width:3px; background:var(--rl-v-trunk); pointer-events:none;
+}
+.rl-vertical-stage::before {
+  content:""; position:absolute; top:35px; left:20px; width:36px;
+  height:3px; background:var(--rl-v-trunk); pointer-events:none;
+}
+.rl-vertical-step {
+  display:grid; place-items:center; width:40px; height:40px;
+  margin-top:16px;
+  position:relative; z-index:1; background:#fbfaf7;
+  border:2px solid var(--rl-v-trunk); border-radius:50%;
+  color:#555555; font-size:11px; font-weight:750;
+  font-variant-numeric:tabular-nums;
+}
+.rl-vertical-stage.is-open > .rl-vertical-step {
+  background:#285bcc; color:white; border-color:#285bcc;
+}
+.rl-vertical-shell {
+  min-width:0; border:1px solid var(--rl-v-line);
+  border-radius:13px; overflow:hidden; background:white;
+}
+.rl-vertical-stage.is-open > .rl-vertical-shell { border-color:#bcbcbc; }
+.rl-vertical-stage-button {
+  width:100%; min-height:72px; padding:14px 16px;
+  display:flex; align-items:center; gap:14px; text-align:left;
+  cursor:pointer; border:0; background:transparent;
+  color:var(--rl-v-ink); font:inherit;
+}
+.rl-vertical-stage-button:hover { background:#f7f7f7; }
+.rl-vertical-stage-button > .curriculum-icon { flex:0 0 28px; color:#555555; }
+.rl-vertical-stage-button > .curriculum-icon--level-zero { width:35px; height:26px; flex-basis:35px; }
+.rl-vertical-stage-button > .curriculum-icon--social-duo { width:37px; height:28px; flex-basis:37px; }
+.rl-vertical-stage-title {
+  flex:1; min-width:0; display:flex; flex-direction:column; gap:5px;
+}
+.rl-vertical-stage-title > strong {
+  color:#242424; font-size:22px; font-weight:750;
+  letter-spacing:-.025em; line-height:1.35;
+}
+.rl-vertical-stage-title > small {
+  font-size:12px; font-weight:500; color:#777777; line-height:1.4;
+}
+.rl-vertical-chevron {
+  flex:0 0 10px; width:10px; height:10px; display:block;
+  border-right:2px solid #888888; border-bottom:2px solid #888888;
+  transform:rotate(45deg); transition:transform .15s ease;
+  margin:0 4px 5px auto;
+}
+.rl-vertical-stage.is-open > .rl-vertical-shell > .rl-vertical-stage-button .rl-vertical-chevron,
+.rl-vertical-group.is-open > .rl-vertical-group-button .rl-vertical-chevron {
+  transform:rotate(225deg); margin-bottom:-4px;
+}
+.rl-vertical-stage-panel { border-top:1px solid #ededed; padding:7px 16px 12px; }
+.rl-vertical-stage-panel[hidden],
+.rl-vertical-lessons[hidden] { display:none; }
+
+/* An L-shaped connector at each leaf, with a continuing vertical segment
+   only if another sibling follows. The last leaf terminates cleanly. */
+.rl-vertical-lessons {
+  position:relative; min-width:0; margin-left:16px; padding-left:24px;
+}
+.rl-vertical-lesson {
+  position:relative; display:flex; align-items:center; gap:14px;
+  min-width:0; min-height:58px; padding:12px 3px;
+  border-bottom:1px solid #ededed;
+  color:#505050; text-decoration:none;
+}
+.rl-vertical-lesson::before {
+  content:""; position:absolute; top:0; left:-24px;
+  width:24px; height:50%; box-sizing:border-box;
+  border-left:3px solid var(--rl-v-leaf);
+  border-bottom:3px solid var(--rl-v-leaf);
+  border-bottom-left-radius:10px; pointer-events:none;
+}
+.rl-vertical-lesson:not(:last-child)::after {
+  content:""; position:absolute; top:50%; bottom:0; left:-24px;
+  width:3px; background:var(--rl-v-leaf); pointer-events:none;
+}
+.rl-vertical-lesson:last-child { border-bottom:0; }
+.rl-vertical-lesson:hover { color:#282828; background:#f7f7f7; }
+.rl-vertical-lesson.is-current { color:#285bcc; background:#eef3ff; }
+.rl-vertical-lesson.is-current .rl-vertical-lesson-title { font-weight:750; }
+/* A chosen lesson gets the blue emphasis; the branch geometry stays neutral. */
+.rl-vertical-lesson.is-current .rl-vertical-lesson-number,
+.rl-vertical-lesson.is-current .curriculum-icon,
+.rl-vertical-lesson.is-current .rl-vertical-arrow { color:#285bcc; }
+.rl-vertical-lesson-number {
+  flex:0 0 24px; color:#888888; font-size:11px;
+  font-variant-numeric:tabular-nums;
+}
+.rl-vertical-lesson .curriculum-icon { flex:0 0 19px; color:#777777; }
+.rl-vertical-lesson-title {
+  flex:1; min-width:0; font-size:14px; font-weight:530;
+  line-height:1.5; overflow-wrap:break-word;
+}
+.rl-vertical-arrow { font-size:22px; color:#8a8a8a; line-height:1; font-weight:300; }
+.rl-vertical-foundation::before {
+  content:""; position:absolute; left:0; top:-7px; height:7px;
+  width:3px; background:var(--rl-v-leaf);
+}
+
+/* Social Fluency: topic branches are stronger and larger than lesson leaves.
+   Search stays outside the tree so it is not mistaken for a learning step. */
+.rl-vertical-social { min-width:0; }
+.rl-vertical-search {
+  margin:10px 0 15px; padding:9px 13px;
+  border:1px solid #dedede; border-radius:9px;
+  display:flex; gap:10px; align-items:center;
+  color:#8a8a8a; background:white;
+}
+.rl-vertical-search .curriculum-icon { flex-shrink:0; }
+.rl-vertical-search input {
+  min-width:0; width:100%; border:0; outline:none;
+  color:#333333; background:transparent; font:inherit; font-size:13px;
+}
+.rl-vertical-search:focus-within { border-color:#285bcc; box-shadow:0 0 0 2px #dce7ff; }
+.rl-vertical-search input::placeholder { color:#999999; }
+.rl-vertical-group-tree { position:relative; margin-left:16px; padding-left:24px; }
+.rl-vertical-group {
+  position:relative; border-bottom:1px solid #ededed;
+}
+.rl-vertical-group:last-child { border-bottom:0; }
+.rl-vertical-group:not(:last-child)::after {
+  content:""; position:absolute; top:30px; bottom:0; left:-24px;
+  width:3px; background:var(--rl-v-branch); pointer-events:none;
+}
+.rl-vertical-group-button {
+  position:relative; min-height:60px; padding:13px 3px; width:100%;
+  display:flex; align-items:center; gap:12px;
+  border:0; background:transparent; text-align:left;
+  cursor:pointer; color:#444444; font:inherit;
+}
+.rl-vertical-group-button::before {
+  content:""; position:absolute; top:0; left:-24px;
+  width:24px; height:50%; box-sizing:border-box;
+  border-left:3px solid var(--rl-v-branch);
+  border-bottom:3px solid var(--rl-v-branch);
+  border-bottom-left-radius:10px; pointer-events:none;
+}
+.rl-vertical-group-button:hover { color:#242424; background:#f7f7f7; }
+.rl-vertical-range {
+  flex:0 0 43px; color:#777777;
+  font-size:11px; font-variant-numeric:tabular-nums;
+}
+.rl-vertical-group-button > .curriculum-icon { flex:0 0 20px; color:#666666; }
+.rl-vertical-group-title {
+  min-width:0; flex:1; font-size:17px; line-height:1.4;
+  font-weight:730; letter-spacing:-.015em; color:#333333;
+}
+.rl-vertical-group-count { font-size:11px; color:#888888; }
+.rl-vertical-group-button .rl-vertical-chevron { flex-basis:9px; width:9px; height:9px; }
+.rl-vertical-group-lessons { margin-left:16px; padding-left:24px; }
+.rl-vertical-group-lessons .rl-vertical-lesson {
+  min-height:52px; padding:9px 3px;
+}
+.rl-vertical-empty { color:#777777; font-size:13px; padding:18px 3px; }
+.rl-vertical-page button:focus-visible,
+.rl-vertical-page .rl-vertical-lesson:focus-visible {
+  outline:2px solid #285bcc; outline-offset:-2px;
+}
+@media (max-width:600px) {
+  .rl-vertical-stages { gap:11px; }
+  .rl-vertical-stage { grid-template-columns:33px minmax(0,1fr); gap:10px; }
+  .rl-vertical-stage:not(:last-child)::after { top:33px; bottom:-44px; left:15px; }
+  .rl-vertical-stage::before { left:16px; top:32px; width:27px; }
+  .rl-vertical-step { width:33px; height:33px; margin-top:16px; font-size:10px; }
+  .rl-vertical-stage-button { min-height:66px; padding:12px; gap:11px; }
+  .rl-vertical-stage-button > .curriculum-icon { width:23px; height:23px; flex-basis:23px; }
+  .rl-vertical-stage-button > .curriculum-icon--level-zero { width:31px; height:23px; flex-basis:31px; }
+  .rl-vertical-stage-button > .curriculum-icon--social-duo { width:33px; height:25px; flex-basis:33px; }
+  .rl-vertical-stage-title > strong { font-size:18px; line-height:1.32; }
+  .rl-vertical-stage-title > small { font-size:11px; }
+  .rl-vertical-stage-panel { padding:6px 10px 10px; }
+  .rl-vertical-lessons { margin-left:8px; padding-left:15px; }
+  .rl-vertical-lesson::before { left:-15px; width:15px; }
+  .rl-vertical-lesson:not(:last-child)::after { left:-15px; }
+  .rl-vertical-lesson { min-height:55px; gap:9px; padding:11px 2px; }
+  .rl-vertical-lesson-number { flex-basis:21px; }
+  .rl-vertical-lesson-title { font-size:13px; font-weight:530; }
+  .rl-vertical-group-tree { margin-left:8px; padding-left:15px; }
+  .rl-vertical-group:not(:last-child)::after { left:-15px; }
+  .rl-vertical-group-button { gap:9px; }
+  .rl-vertical-group-button::before { left:-15px; width:15px; }
+  .rl-vertical-range { flex-basis:35px; font-size:10px; }
+  .rl-vertical-group-title { font-size:15.5px; }
+  .rl-vertical-group-count { display:none; }
+  .rl-vertical-group-lessons { margin-left:8px; padding-left:15px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .rl-vertical-chevron { transition:none; }
+}
+
+/* Application is an honest preview, not a disabled/locked lesson control. */
+.rl-vertical-stage-static {
+  cursor:default;
+}
+.rl-vertical-stage-static:hover { background:transparent; }
+.rl-vertical-stage-static .rl-vertical-stage-title > small {
+  display:block; margin-top:5px; font-size:12px; font-weight:500;
+  line-height:1.5; color:#777777;
+}
+.rl-vertical-stage--future .rl-vertical-step {
+  color:#777777; border-color:#cccccc; background:#fafafa;
+}
+
+.rl-lesson-recommended {
+  display:inline-block; margin-left:10px; padding:3px 8px;
+  border-radius:6px; background:#edf2fc; color:#4669a6;
+  font-size:10px; font-weight:650; line-height:1.4; vertical-align:middle;
+  white-space:nowrap;
+}
+@media(max-width:600px) {
+  .rl-lesson-recommended { margin-left:6px; padding:2px 6px; font-size:9px; }
+}

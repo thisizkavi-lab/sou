@@ -1,0 +1,86 @@
+.ar-f14-atlas{width:100%;min-width:0;display:grid;gap:18px}
+.ar-f14-board{--ar14-light:#eceff1;border:1px solid #e0e3e6;border-top:1px solid #e0e3e6;border-radius:13px;background:#f5f6f7;padding:clamp(16px,2.2vw,28px);min-width:0}
+.ar-f14-board.ar-f14-purple{--ar14-light:#eceff1}
+.ar-f14-board.ar-f14-orange{--ar14-light:#eceff1}
+.ar-f14-board.ar-f14-green{--ar14-light:#eceff1}
+.ar-f14-board.ar-f14-red{--ar14-light:#eceff1}
+.ar-f14-board-title{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 13px;margin:0 0 20px}
+.ar-f14-board-title h2{font-size:20px;font-weight:700;line-height:1.3;font-family:inherit;letter-spacing:.025em;margin:0;color:#243449}
+.ar-f14-board-title>span{font-size:14px;line-height:1.4;color:#64758a}
+.ar-f14-word{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;padding:4px 2px;text-align:center;color:#243449}
+.ar-f14-word-art{display:grid;place-items:center;min-height:42px}
+.ar-f14-word-line{display:flex;align-items:center;justify-content:center;gap:4px;max-width:100%;min-width:0}
+.ar-f14-label{font-size:13px;line-height:1.3;font-weight:650;overflow-wrap:anywhere}
+.ar-f14-japanese{display:block;font-size:11px;line-height:1.35;color:#586d80;font-weight:500;overflow-wrap:anywhere}
+.ar-f14-sound{width:23px;height:23px;flex:0 0 23px;display:inline-grid;place-items:center;border:0;border-radius:50%;padding:0;background:transparent;color:#2992b3;cursor:pointer}
+.ar-f14-sound:hover{background:#e6f2f6;color:#176d8a}
+.ar-f14-sound:focus-visible{outline:2px solid #278ab0;outline-offset:2px}
+.ar-f14-figure{width:29px;height:43px;display:block}
+.ar-f14-tree-stage{position:relative;width:100%;max-width:1200px;height:740px;margin:0 auto}
+.ar-f14-tree-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.ar-f14-tree-lines path{fill:none;stroke:#4fb0c7;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.ar-f14-heart{fill:#e95749;font-size:24px;font-family:Arial,sans-serif;stroke:#fbfcfd;stroke-width:3;paint-order:stroke;text-anchor:middle}
+.ar-f14-tree-node{position:absolute;width:11.5%;transform:translateX(-50%);display:grid;justify-items:center;z-index:1}
+.ar-f14-tree-node .ar-f14-word{width:100%}
+.ar-f14-tree-node .ar-f14-label{font-size:12px}
+.ar-f14-tree-node .ar-f14-japanese{font-size:10px}
+.ar-f14-hint{font-size:12px;line-height:1.65;color:#687b8c;margin:12px 0 0;text-align:center}
+.ar-f14-step-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.ar-f14-step-panel{min-width:0;background:#eef0f2;border:1px solid #e1e4e7;border-radius:11px;padding:17px 15px}
+.ar-f14-step-panel h3{font-size:13px;line-height:1.4;letter-spacing:.045em;text-align:center;color:#6d5480;margin:0 0 15px}
+.ar-f14-step-panel>p{font-size:12px;line-height:1.65;color:#596f82;text-align:center;margin:13px 0 0}
+.ar-f14-mini-tree{display:flex;flex-direction:column;align-items:center;min-width:0}
+.ar-f14-mini-tree .ar-f14-word{flex:1;min-width:0}
+.ar-f14-mini-tree .ar-f14-label{font-size:12px}
+.ar-f14-mini-tree .ar-f14-japanese{font-size:10px}
+.ar-f14-mini-parents,.ar-f14-mini-children{display:flex;align-items:flex-start;justify-content:center;gap:clamp(12px,3vw,32px);width:100%}
+.ar-f14-mini-parents{align-items:center}
+.ar-f14-mini-heart{color:#e95749;font-size:22px;line-height:1}
+.ar-f14-mini-stem{height:27px;width:2px;background:#4fb0c7;display:block;position:relative}
+.ar-f14-mini-stem:after{content:"";position:absolute;left:-65px;bottom:0;width:132px;height:2px;background:#4fb0c7}
+.ar-f14-step-vocabulary{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:17px;padding-top:16px;border-top:1px solid #e1e8ed}
+.ar-f14-chip{background:#eef0f2;border:1px solid #e1e4e7;border-radius:9px;min-height:45px;padding:7px 10px;flex:0 1 auto}
+.ar-f14-chip .ar-f14-word-line{gap:5px}
+.ar-f14-chip .ar-f14-label{font-size:12px;font-weight:600}
+.ar-f14-chip .ar-f14-japanese{font-size:11px}
+.ar-f14-subnote{background:#f4f6f8;border-radius:8px;padding:10px 13px;font-size:12px;line-height:1.65;color:#566b7e;margin:13px 0 0}
+.ar-f14-vocabulary-sections{display:grid;gap:18px}
+.ar-f14-picture-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px 8px}
+.ar-f14-picture-word{width:100%;min-width:0;min-height:103px;padding:9px 4px;border-radius:9px;transition:background .15s}
+.ar-f14-picture-word:hover{background:#e9ecef}
+.ar-f14-picture-art{display:block;width:min(100%,160px);height:112px;object-fit:contain}
+.ar-f14-picture-word .ar-f14-word-art{min-height:112px;width:100%}
+.ar-f14-picture-word .ar-f14-label{font-size:13px}
+.ar-f14-picture-word .ar-f14-japanese{font-size:11px}
+.ar-f14-relationships-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.ar-f14-life-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.ar-f14-growing-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.ar-f14-error{font-size:12px;color:#b54335;margin:0}
+@media(max-width:900px){
+  .ar-f14-tree-stage{height:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px 8px}
+  .ar-f14-tree-lines{display:none}
+  .ar-f14-tree-node{position:static;transform:none;width:auto;min-width:0}
+  .ar-f14-tree-node .ar-f14-word{height:100%;justify-content:flex-start}
+  .ar-f14-relationships-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .ar-f14-life-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ar-f14-growing-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .ar-f14-board{padding:14px}
+  .ar-f14-board-title{margin-bottom:13px}
+  .ar-f14-board-title h2{font-size:17px}
+  .ar-f14-step-panels{grid-template-columns:1fr}
+  .ar-f14-picture-grid,.ar-f14-relationships-grid,.ar-f14-life-grid,.ar-f14-growing-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .ar-f14-picture-word{min-height:94px;padding:8px 3px}
+  .ar-f14-picture-icon{font-size:30px;min-height:42px}
+  .ar-f14-picture-word .ar-f14-word-art{min-height:42px}
+  .ar-f14-label{font-size:12px}
+  .ar-f14-tree-node .ar-f14-label{font-size:12px}
+  .ar-f14-tree-node .ar-f14-japanese{font-size:10px}
+  .ar-f14-sound{width:22px;height:22px;flex-basis:22px}
+}
+
+.ar-f14-step-children{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;width:100%;margin-top:13px}
+.ar-f14-step-child{display:grid;justify-items:center;min-width:0}
+.ar-f14-step-child small{font-size:10px;line-height:1.4;color:#718294;text-align:center;margin-top:3px}
+.ar-f14-step-link{font-size:10px;line-height:1.25;color:#66717c;font-weight:700;text-align:center;border-top:2px dashed #c7ccd1;padding:5px 3px 0;white-space:nowrap}

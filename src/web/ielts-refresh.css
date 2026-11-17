@@ -1,0 +1,95 @@
+
+/* IELTS presentation refresh: borrow the restrained paper, blue and annotation
+   hierarchy from Social Fluency Chapter 01. Keep existing task workspaces intact. */
+.ie-page {
+  --ie-refresh-ink: #14213d;
+  --ie-refresh-muted: #5f7089;
+  --ie-refresh-edge: #dde5ef;
+  --ie-refresh-blue: #285bcc;
+}
+.ie-page a:focus-visible, .ie-page button:focus-visible {
+  outline: 3px solid #285bcc;
+  outline-offset: 3px;
+}
+.ie-page .ie-breadcrumb {
+  margin-bottom: 12px;
+  color: #788599;
+}
+.ie-page .ie-modebar {
+  border-color: #e3e9f1;
+  margin-bottom: 24px;
+}
+.ie-page .ie-modebar > :last-child {
+  color: #66788e;
+}
+/* Practice keeps its working form controls; only directory-level styling
+   changes, so saved writing, audio, timing, and review behavior remains intact. */
+.ie-practice-home .ie-heading { margin-top: 5px; }
+.ie-practice-home .ie-directory {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+}
+.ie-practice-home .ie-branch {
+  min-width: 0;
+  min-height: 110px;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #dde6f1;
+  border-radius: 17px;
+  background: #f8faff;
+}
+.ie-practice-home .ie-branch-overview,
+.ie-practice-home .ie-branch-mock { grid-column: 1 / -1; }
+.ie-practice-home .ie-branch-reading { background: #f2f9f7; }
+.ie-practice-home .ie-branch-writing { background: #f7f3fc; }
+.ie-practice-home .ie-branch-speaking { background: #fdf7ef; }
+.ie-practice-home .ie-branch-icon {
+  background: #fff; border: 1px solid #e6ebf3;
+  border-radius: 12px;
+}
+.ie-practice-home .ie-branch-copy strong { font-size: 17px; }
+.ie-practice-home .ie-branch-copy small { display: none; }
+.ie-practice-home .ie-branch-copy > span { font-size: 12px; }
+.ie-page .ie-mock-options {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 13px;
+  margin: 24px 0;
+}
+.ie-page .ie-mock-option {
+  display: flex;
+  gap: 16px;
+  padding: 23px;
+  border: 1px solid #dfe5ee;
+  border-radius: 18px;
+  background: #f9fbfe;
+  color: var(--ie-refresh-ink);
+  text-decoration: none;
+  transition: transform .15s,border-color .15s,box-shadow .15s;
+}
+.ie-page .ie-mock-option:nth-child(2) { background: #f7f7fb; }
+.ie-page .ie-mock-option-icon { flex-shrink: 0; }
+.ie-page .ie-mock-option-copy { display: grid; gap: 8px; min-width: 0; }
+.ie-page .ie-mock-option-copy strong { font-size: 21px; font-weight: 800; }
+.ie-page .ie-mock-option-copy span { font-size: 13px; line-height: 1.55; color: #607188; }
+.ie-page .ie-mock-option-copy small { font-size: 12px; color: #71849b; }
+.ie-page .ie-mock-option-copy b { font-size: 12px; color: #285bcc; font-weight: 750; margin-top: 7px; }
+.ie-page .ie-mock-rehearsal {
+  padding: 18px 21px;
+  background: #fff5df;
+  border-radius: 14px;
+  color: #243650;
+  font-size: 13px;
+}
+.ie-page .ie-mock-rehearsal p { margin: 5px 0 7px; line-height: 1.55; }
+.ie-page .ie-mock-rehearsal a { font-weight: 700; }
+
+@media(max-width:630px) {
+  .ie-practice-home .ie-directory, .ie-page .ie-mock-options { grid-template-columns: minmax(0,1fr); }
+  .ie-page .ie-mock-option { padding: 18px; }
+  .ie-practice-home .ie-branch-overview, .ie-practice-home .ie-branch-mock { grid-column: auto; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ie-mock-option { transition: none !important; }
+}

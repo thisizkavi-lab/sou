@@ -1,0 +1,1301 @@
+.course-app .greetings-interactive-page {
+  --greetings-green: #588157;
+  --greetings-green-dark: #365d3d;
+  --greetings-green-soft: #e8f0e5;
+  --greetings-blue: #5e7c8b;
+  --greetings-amber: #d39b46;
+  --greetings-rose: #b85c65;
+}
+
+.course-app .greetings-interactive-page .greetings-reader-main {
+  max-width: 1080px;
+  container-type: inline-size;
+  container-name: greetings-reader;
+}
+
+.course-app .greetings-interactive-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding: 32px;
+  border: 3px solid #72c900;
+  border-radius: 22px;
+  background: #fff;
+  margin-bottom: 48px;
+}
+
+.course-app .greetings-interactive-hero .greetings-hero-copy h2 {
+  max-width: 680px;
+  margin-top: 8px;
+  font-size: clamp(28px, 3vw, 44px);
+  line-height: 1.25;
+}
+
+.course-app .greetings-interactive-hero .greetings-hero-copy p {
+  max-width: 720px;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.course-app .greetings-hero-svg,
+.course-app .greetings-card-svg,
+.course-app .greetings-conversation-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.course-app .greetings-hero-svg {
+  max-width: 620px;
+  border: 1px solid var(--zenith-border);
+  border-radius: var(--zenith-radius);
+}
+
+/* Introduction's hero artwork is also used as the stage background below.
+   Keep the hero copy in normal flow so it cannot become a viewport-sized
+   absolute layer before the first vocabulary panel. */
+.course-app .greetings-interactive-hero .introduction-scene-artwork {
+  position: static;
+  width: min(100%, 760px);
+  height: auto;
+  margin: 0 auto;
+  aspect-ratio: 760 / 390;
+}
+
+.course-app .greetings-learning-panel {
+  padding: 0;
+  border: 1px solid var(--zenith-border);
+  border-top: 4px solid var(--zenith-sage);
+  border-radius: var(--zenith-radius);
+  background: var(--zenith-paper);
+  overflow: hidden;
+}
+
+.course-app .greetings-learning-panel-head {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 26px 28px 22px;
+  border-bottom: 1px solid var(--zenith-border);
+}
+
+.course-app .greetings-learning-panel-head h2 {
+  margin: 5px 0 7px;
+  color: var(--zenith-ink);
+  font-size: clamp(24px, 2.3vw, 34px);
+}
+
+.course-app .greetings-learning-panel-head p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.course-app .greetings-item-count {
+  display: grid;
+  min-width: 70px;
+  padding: 9px 12px;
+  border: 1px solid #cbd8c6;
+  border-radius: var(--zenith-radius);
+  color: var(--zenith-sage);
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1;
+  place-items: center;
+}
+
+.course-app .greetings-item-count small {
+  margin-top: 5px;
+  color: var(--zenith-muted);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.course-app .greetings-mastery-board {
+  padding: 24px 28px 30px;
+}
+
+.course-app .greetings-mastery-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+.course-app .greetings-status-tabs {
+  display: flex;
+  min-width: 0;
+  border-bottom: 1px solid var(--zenith-border);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.course-app .greetings-status-tabs button {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 50px;
+  padding: 7px 13px 9px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--zenith-muted);
+  cursor: pointer;
+}
+
+.course-app .greetings-status-tabs button > span {
+  display: grid;
+  gap: 1px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.course-app .greetings-status-tabs button > span:first-child {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.course-app .greetings-status-tabs button small {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: .03em;
+}
+
+.course-app .greetings-status-tabs button b {
+  display: grid;
+  min-width: 23px;
+  height: 23px;
+  padding: 0 5px;
+  border-radius: 12px;
+  background: #edf0ec;
+  color: var(--zenith-ink);
+  font-size: 10px;
+  place-items: center;
+}
+
+.course-app .greetings-status-tabs button:hover,
+.course-app .greetings-status-tabs button.active {
+  color: var(--zenith-ink);
+}
+
+.course-app .greetings-status-tabs button.active { border-bottom-color: var(--zenith-sage); }
+.course-app .greetings-status-tabs button.status-difficult.active { border-bottom-color: #b85c65; }
+.course-app .greetings-status-tabs button.status-learning.active { border-bottom-color: #d39b46; }
+.course-app .greetings-status-tabs button.status-known.active { border-bottom-color: #588157; }
+
+.course-app .greetings-play-all,
+.course-app .greetings-play-dialogue,
+.course-app .greetings-detail-listen {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 15px;
+  border: 1px solid var(--zenith-sage);
+  border-radius: var(--zenith-radius);
+  background: var(--zenith-sage);
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.course-app .greetings-play-all svg,
+.course-app .greetings-play-dialogue svg,
+.course-app .greetings-detail-listen svg,
+.course-app .greetings-master-card-footer svg,
+.course-app .greetings-conversation-lines svg,
+.course-app .greetings-interactive-lines svg,
+.course-app .greetings-roleplay-line svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.course-app .greetings-play-all:disabled { cursor: not-allowed; opacity: .45; }
+.course-app .greetings-mastery-toolbar > .greetings-play-all { justify-self: end; }
+.course-app .greetings-play-all.is-playing,
+.course-app .greetings-play-dialogue.is-playing,
+.course-app .greetings-detail-listen.is-playing { background: var(--zenith-ink); border-color: var(--zenith-ink); }
+
+.course-app .greetings-master-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.course-app .greetings-master-card {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--zenith-border);
+  border-radius: var(--zenith-radius);
+  background: var(--zenith-paper);
+  overflow: hidden;
+  transition: border-color .18s ease, transform .18s ease;
+}
+
+.course-app .greetings-master-card:hover {
+  border-color: #9aac94;
+  transform: translateY(-2px);
+}
+
+.course-app .greetings-status-badge {
+  position: absolute;
+  z-index: 2;
+  top: 9px;
+  right: 9px;
+  padding: 4px 7px;
+  border: 1px solid var(--zenith-border);
+  border-radius: 999px;
+  background: rgba(255,255,255,.94);
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.course-app .greetings-status-badge.status-difficult { border-color: #dfb5b9; background: #fff5f5; color: #93434b; }
+.course-app .greetings-status-badge.status-learning { border-color: #e7c889; background: #fff9e9; color: #93641f; }
+.course-app .greetings-status-badge.status-known { border-color: #b9ceb3; background: #f1f7ef; color: #3f6d45; }
+
+.course-app .greetings-master-card-main {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--zenith-ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.course-app .greetings-master-card-main .greetings-card-svg {
+  border-bottom: 1px solid var(--zenith-border);
+}
+
+.course-app .greetings-master-copy {
+  display: grid;
+  gap: 5px;
+  min-height: 92px;
+  padding: 16px 17px 13px;
+}
+
+.course-app .greetings-master-copy strong {
+  color: var(--zenith-ink);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.course-app .greetings-master-copy small {
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.course-app .greetings-master-card-footer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-top: 1px solid var(--zenith-border);
+  background: #fbfcfa;
+}
+
+.course-app .greetings-master-card-footer > span {
+  color: var(--zenith-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.course-app .greetings-master-card-footer > div { display: flex; gap: 5px; }
+.course-app .greetings-master-card-footer button {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 8px;
+  border: 1px solid var(--zenith-border);
+  border-radius: var(--zenith-radius);
+  background: var(--zenith-paper);
+  color: var(--zenith-ink);
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.course-app .greetings-master-card-footer button:hover,
+.course-app .greetings-master-card-footer button.is-playing { border-color: var(--zenith-sage); color: var(--zenith-sage); }
+
+/* Chapter 1 vocabulary panels follow the reference sheet: a large
+   situation illustration with floating English bubbles beside a compact
+   "More phrases" shelf.  Japanese meaning and usage remain in the selected
+   phrase strip and in every shelf row. */
+.course-app .greetings-vocabulary-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(260px, .76fr);
+  gap: 20px;
+  align-items: stretch;
+  margin: 0 0 48px;
+  scroll-margin-top: 118px;
+}
+
+.course-app .greetings-vocabulary-scene-panel,
+.course-app .greetings-vocabulary-more {
+  min-width: 0;
+  border: 3px solid #72c900;
+  border-radius: 22px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.course-app .greetings-vocabulary-panel-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 25px 15px;
+  border-bottom: 1px solid #d6f2a7;
+}
+
+.course-app .greetings-vocabulary-panel-title {
+  display: flex;
+  gap: 11px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.course-app .greetings-vocabulary-panel-title h2 {
+  margin: 0;
+  color: #101a2d;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: clamp(21px, 2.3vw, 31px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+
+.course-app .greetings-vocabulary-panel-number {
+  flex: 0 0 auto;
+  color: #397f00;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+
+.course-app .greetings-vocabulary-panel-header p {
+  max-width: 640px;
+  margin: 10px 0 0;
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.course-app .greetings-vocabulary-panel-title + p { margin-top: 9px; }
+.course-app .greetings-vocabulary-tone-pill {
+  flex: 0 0 auto;
+  padding: 7px 15px;
+  border-radius: 999px;
+  background: #f2e5ff;
+  color: #6c12d1;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+.course-app .greetings-vocabulary-tone-pill.tone-formal { background: #dff3ff; color: #0877ae; }
+.course-app .greetings-vocabulary-tone-pill.tone-others { background: #fff0e8; color: #a94e20; }
+
+.course-app .greetings-vocabulary-stage {
+  position: relative;
+  min-height: 360px;
+  margin: 16px 18px 0;
+  border: 1px solid #d5ef9d;
+  border-radius: 15px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.course-app .greetings-scene-artwork {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.course-app .greetings-scene-bubbles { position: absolute; inset: 0; pointer-events: none; }
+.course-app .greetings-scene-bubble {
+  position: absolute;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-width: 94px;
+  max-width: 46%;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 3px solid #b45cff;
+  border-radius: 999px;
+  background: #fff;
+  color: #101a2d;
+  cursor: pointer;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: clamp(13px, 1.45vw, 20px);
+  font-weight: 850;
+  line-height: 1.1;
+  pointer-events: auto;
+  text-align: center;
+  transition: box-shadow .16s ease, transform .16s ease, background .16s ease;
+}
+
+.course-app .greetings-scene-bubble::after {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  width: 17px;
+  height: 17px;
+  border-right: 3px solid currentColor;
+  border-bottom: 3px solid currentColor;
+  background: #fff;
+  color: #b45cff;
+  content: '';
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.course-app .greetings-scene-bubble.tone-formal { border-color: #0aa6e8; }
+.course-app .greetings-scene-bubble.tone-formal::after { color: #0aa6e8; }
+.course-app .greetings-scene-bubble.tone-others { border-color: #d66b3d; color: #8b3f24; }
+.course-app .greetings-scene-bubble.tone-others::after { color: #d66b3d; }
+.course-app .greetings-scene-bubble span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.course-app .greetings-scene-bubble-sound { display: grid; width: 20px; height: 20px; color: currentColor; place-items: center; }
+.course-app .greetings-scene-bubble-sound .greetings-sound-glyph { width: 19px; height: 19px; }
+.course-app .greetings-scene-bubble:hover,
+.course-app .greetings-scene-bubble:focus-visible,
+.course-app .greetings-scene-bubble.is-selected,
+.course-app .greetings-scene-bubble.is-playing { background: #f8eaff; box-shadow: 0 4px 0 rgba(180, 92, 255, .22); outline: none; transform: translateY(-2px); }
+.course-app .greetings-scene-bubble.tone-formal:hover,
+.course-app .greetings-scene-bubble.tone-formal:focus-visible,
+.course-app .greetings-scene-bubble.tone-formal.is-selected,
+.course-app .greetings-scene-bubble.tone-formal.is-playing { background: #e7f7ff; box-shadow: 0 4px 0 rgba(10, 166, 232, .2); }
+.course-app .greetings-scene-bubble.tone-others:hover,
+.course-app .greetings-scene-bubble.tone-others:focus-visible,
+.course-app .greetings-scene-bubble.tone-others.is-selected,
+.course-app .greetings-scene-bubble.tone-others.is-playing { background: #fff0e8; box-shadow: 0 4px 0 rgba(214, 107, 61, .22); }
+
+.course-app .greetings-scene-bubble.position-top-left { top: 8%; left: 5%; }
+.course-app .greetings-scene-bubble.position-top-center { top: 6%; left: 34%; }
+.course-app .greetings-scene-bubble.position-top-right { top: 18%; right: 4%; }
+.course-app .greetings-scene-bubble.position-middle-left { top: 43%; left: 3%; }
+.course-app .greetings-scene-bubble.position-bottom-left { bottom: 7%; left: 17%; }
+.course-app .greetings-scene-bubble.position-bottom-right { right: 18%; bottom: 7%; }
+.course-app .greetings-scene-bubble.position-bottom-center { bottom: 7%; left: 38%; }
+
+.course-app .greetings-vocabulary-stage-play {
+  position: absolute;
+  right: 14px;
+  bottom: 13px;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #5daf00;
+  color: #fff;
+  cursor: pointer;
+  place-items: center;
+  box-shadow: 0 4px 8px rgba(51, 105, 0, .2);
+}
+.course-app .greetings-vocabulary-stage-play:hover,
+.course-app .greetings-vocabulary-stage-play:focus-visible { background: #478d00; outline: 3px solid rgba(93, 175, 0, .22); outline-offset: 3px; }
+.course-app .greetings-vocabulary-stage-play:disabled { cursor: not-allowed; opacity: .45; }
+.course-app .greetings-vocabulary-stage-play.is-playing { background: #25372b; }
+.course-app .greetings-vocabulary-stage-play .greetings-sound-glyph { width: 27px; height: 27px; }
+
+.course-app .greetings-vocabulary-selected {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 17px 18px 20px;
+  padding: 14px 16px;
+  border: 1px solid #e3e9df;
+  border-radius: 10px;
+  background: #fbfdfb;
+}
+.course-app .greetings-vocabulary-selected > div:first-child { min-width: 0; }
+.course-app .greetings-vocabulary-selected strong {
+  display: block;
+  margin: 4px 0 2px;
+  color: #101a2d;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: clamp(18px, 2vw, 27px);
+  line-height: 1.1;
+}
+.course-app .greetings-vocabulary-selected p { margin: 0 0 3px; color: var(--zenith-muted); font-family: 'Noto Sans JP', sans-serif; font-size: 12px; line-height: 1.5; }
+.course-app .greetings-vocabulary-selected small { color: var(--zenith-muted); font-family: 'Noto Sans JP', sans-serif; font-size: 10px; line-height: 1.5; }
+.course-app .greetings-vocabulary-selected-actions { display: flex; flex: 0 0 auto; gap: 7px; }
+.course-app .greetings-vocabulary-selected-actions button {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid #cddbc8;
+  border-radius: 6px;
+  background: #fff;
+  color: #365d3d;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.course-app .greetings-vocabulary-selected-actions button:hover,
+.course-app .greetings-vocabulary-selected-actions button:focus-visible,
+.course-app .greetings-vocabulary-selected-actions button.is-playing { border-color: #5daf00; background: #f2faea; outline: none; }
+.course-app .greetings-vocabulary-selected-actions .greetings-sound-glyph { width: 17px; height: 17px; }
+
+.course-app .greetings-vocabulary-more { display: flex; flex-direction: column; }
+.course-app .greetings-vocabulary-more-header { display: block; padding-bottom: 15px; }
+.course-app .greetings-vocabulary-more-header .greetings-vocabulary-panel-title h2 { font-size: clamp(20px, 2.2vw, 28px); }
+.course-app .greetings-vocabulary-more-list { display: grid; gap: 11px; padding: 15px 16px 10px; }
+.course-app .greetings-vocabulary-more-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 78px;
+  padding: 14px 15px;
+  border: 1px solid #dce4ef;
+  border-radius: 15px;
+  background: #fff;
+  color: #101a2d;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .16s ease, background .16s ease, transform .16s ease;
+}
+.course-app .greetings-vocabulary-more-item > span { display: grid; gap: 5px; min-width: 0; }
+.course-app .greetings-vocabulary-more-item strong { overflow-wrap: anywhere; font-family: 'Hanken Grotesk', sans-serif; font-size: 17px; font-weight: 800; line-height: 1.15; }
+.course-app .greetings-vocabulary-more-item small { color: #70809a; font-family: 'Noto Sans JP', sans-serif; font-size: 10px; line-height: 1.45; }
+.course-app .greetings-vocabulary-more-item > .greetings-sound-glyph { flex: 0 0 auto; width: 23px; height: 23px; color: #5daf00; }
+.course-app .greetings-vocabulary-more-item:hover,
+.course-app .greetings-vocabulary-more-item:focus-visible,
+.course-app .greetings-vocabulary-more-item.is-selected { border-color: #72c900; background: #fbfff5; outline: none; transform: translateY(-1px); }
+.course-app .greetings-vocabulary-section.tone-formal .greetings-vocabulary-more-item > .greetings-sound-glyph { color: #0a94d2; }
+.course-app .greetings-vocabulary-section.tone-formal .greetings-vocabulary-more-item:hover,
+.course-app .greetings-vocabulary-section.tone-formal .greetings-vocabulary-more-item:focus-visible,
+.course-app .greetings-vocabulary-section.tone-formal .greetings-vocabulary-more-item.is-selected { border-color: #0aa6e8; background: #f4fbff; }
+.course-app .greetings-vocabulary-section.tone-others .greetings-vocabulary-more-item:hover,
+.course-app .greetings-vocabulary-section.tone-others .greetings-vocabulary-more-item:focus-visible,
+.course-app .greetings-vocabulary-section.tone-others .greetings-vocabulary-more-item.is-selected { border-color: #d66b3d; background: #fff8f4; }
+.course-app .greetings-vocabulary-recognition-note { margin: 0 16px 18px; padding: 11px 12px; border-left: 3px solid #0aa6e8; background: #f2faff; color: #54728a; font-family: 'Noto Sans JP', sans-serif; font-size: 10px; line-height: 1.65; }
+
+/* Shared source-book reader panels (chapters 3–96).  The source-book
+   converter supplies every English/Japanese item; this layer only gives the
+   repeated panels a consistent, scannable visual treatment. */
+.course-app .source-book-interactive-page .source-book-intro {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, .8fr);
+}
+
+.course-app .source-book-interactive-page .source-book-intro .source-book-scene-artwork {
+  position: static;
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  margin: 0 auto;
+  aspect-ratio: 760 / 390;
+}
+
+.course-app .greetings-master-card-main .source-book-scene-artwork,
+.course-app .source-book-detail-dialog .source-book-scene-artwork {
+  position: static;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 760 / 390;
+}
+
+.course-app .source-book-interactive-section {
+  margin-bottom: 48px;
+}
+
+.course-app .source-book-interactive-section .greetings-vocabulary-scene-panel,
+.course-app .source-book-interactive-section .greetings-vocabulary-more {
+  border-color: #72c900;
+}
+
+.course-app .source-book-tone-pill {
+  background: #eef5e9;
+  color: #47704b;
+}
+
+.course-app .source-book-interactive-section .greetings-scene-bubble {
+  border-color: #8c63e8;
+}
+
+.course-app .source-book-interactive-section .greetings-scene-bubble::after {
+  color: #8c63e8;
+}
+
+.course-app .source-book-interactive-section .greetings-scene-bubble:hover,
+.course-app .source-book-interactive-section .greetings-scene-bubble:focus-visible,
+.course-app .source-book-interactive-section .greetings-scene-bubble.is-selected,
+.course-app .source-book-interactive-section .greetings-scene-bubble.is-playing {
+  background: #f5efff;
+  box-shadow: 0 4px 0 rgba(140, 99, 232, .2);
+}
+
+.course-app .source-book-more-empty {
+  margin: auto 18px;
+  padding: 20px 14px;
+  border: 1px dashed #d6e2d2;
+  border-radius: 10px;
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.course-app .source-book-good-to-know {
+  border: 1px solid #d8e4d3;
+  border-top: 4px solid #72c900;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.course-app .source-book-detail-dialog .source-book-detail-artwork,
+.course-app .source-book-detail-dialog .source-book-detail-artwork svg {
+  width: 100%;
+}
+
+.course-app .source-book-detail-dialog .source-book-detail-artwork {
+  margin-bottom: 15px;
+  border: 1px solid #dfe9dc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .course-app .source-book-interactive-page .source-book-intro {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .course-app .source-book-interactive-section {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .course-app .source-book-interactive-section .greetings-vocabulary-stage {
+    min-height: 300px;
+  }
+
+  .course-app .source-book-interactive-section .greetings-vocabulary-panel-header {
+    display: block;
+  }
+
+  .course-app .source-book-interactive-section .source-book-tone-pill {
+    display: inline-flex;
+    margin-top: 12px;
+  }
+}
+.course-app .greetings-vocabulary-recognition-note strong { color: #101a2d; font-family: 'Hanken Grotesk', sans-serif; }
+
+.course-app .greetings-empty-filter {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border: 1px dashed #bec9ba;
+  background: #fafcf9;
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 12px;
+}
+
+.course-app .greetings-empty-filter button {
+  padding: 8px 12px;
+  border: 1px solid var(--zenith-sage);
+  background: transparent;
+  color: var(--zenith-sage);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.course-app .greetings-detail-backdrop {
+  position: fixed;
+  z-index: 1800;
+  inset: 0;
+  display: grid;
+  padding: 28px;
+  background: rgba(31, 39, 36, .48);
+  overflow-y: auto;
+  place-items: center;
+}
+
+.course-app .greetings-detail-dialog {
+  position: relative;
+  width: min(680px, 100%);
+  padding: 28px;
+  border: 1px solid var(--zenith-border);
+  border-top: 5px solid var(--zenith-sage);
+  border-radius: var(--zenith-radius);
+  background: var(--zenith-paper);
+}
+
+.course-app .greetings-detail-close {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--zenith-border);
+  background: rgba(255,255,255,.94);
+  color: var(--zenith-ink);
+  cursor: pointer;
+  font-size: 24px;
+  place-items: center;
+}
+
+.course-app .greetings-detail-visual {
+  max-width: 390px;
+  margin: 0 auto 24px;
+  border: 1px solid var(--zenith-border);
+}
+
+.course-app .greetings-detail-dialog h2 {
+  margin: 7px 0 4px;
+  color: var(--zenith-ink);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: clamp(30px, 5vw, 46px);
+  line-height: 1.1;
+}
+
+.course-app .greetings-detail-meaning {
+  margin: 0 0 8px;
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+}
+
+.course-app .greetings-detail-context {
+  margin: 0 0 17px;
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
+}
+
+.course-app .greetings-classify-block {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--zenith-border);
+}
+
+.course-app .greetings-classify-block h3 { margin: 4px 0 13px; font-size: 20px; }
+.course-app .greetings-classify-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.course-app .greetings-classify-options button {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-height: 66px;
+  padding: 10px;
+  border: 1px solid var(--zenith-border);
+  background: #fff;
+  color: var(--zenith-ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.course-app .greetings-classify-options button b { display: grid; width: 30px; height: 30px; border-radius: 50%; background: #eff1ee; place-items: center; }
+.course-app .greetings-classify-options button span { display: grid; gap: 2px; font-family: 'Noto Sans JP', sans-serif; font-size: 11px; font-weight: 800; }
+.course-app .greetings-classify-options button small { color: var(--zenith-muted); font-family: 'Hanken Grotesk', sans-serif; font-size: 9px; }
+.course-app .greetings-classify-options button.status-difficult[aria-pressed="true"] { border-color: #b85c65; background: #fff3f4; }
+.course-app .greetings-classify-options button.status-learning[aria-pressed="true"] { border-color: #d39b46; background: #fff8e7; }
+.course-app .greetings-classify-options button.status-known[aria-pressed="true"] { border-color: #588157; background: #f0f7ee; }
+.course-app .greetings-reset-status { margin-top: 10px; padding: 7px 0; border: 0; background: transparent; color: var(--zenith-muted); cursor: pointer; font-size: 10px; text-decoration: underline; }
+.course-app .greetings-classify-block > p { margin: 9px 0 0; color: var(--zenith-muted); font-family: 'Noto Sans JP', sans-serif; font-size: 9px; }
+
+.course-app .greetings-conversation-section {
+  padding: 30px;
+  margin: 0 0 48px;
+  border: 3px solid #efbb28;
+  border-radius: 22px;
+  background: #fff;
+  scroll-margin-top: 118px;
+}
+
+.course-app .greetings-conversation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.course-app .greetings-conversation-card {
+  border: 1px solid #e1c78f;
+  border-radius: var(--zenith-radius);
+  background: #fffdf8;
+  overflow: hidden;
+}
+
+.course-app .greetings-conversation-card > header {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 18px 18px 14px;
+}
+
+.course-app .greetings-conversation-card > header h3 { margin: 4px 0 0; color: var(--zenith-ink); font-size: 19px; }
+.course-app .greetings-conversation-card > header > span { color: #9a6b26; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.course-app .greetings-conversation-scene { display: block; width: 100%; padding: 0; border: 0; border-top: 1px solid #ead9b6; border-bottom: 1px solid #ead9b6; background: transparent; cursor: pointer; }
+.course-app .greetings-conversation-lines { display: grid; gap: 9px; padding: 15px; }
+.course-app .greetings-conversation-lines button,
+.course-app .greetings-interactive-lines > button:not(.greetings-next-line),
+.course-app .greetings-roleplay-line,
+.course-app .greetings-roleplay-hidden {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) 18px;
+  gap: 4px 9px;
+  align-items: center;
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #e6d4ae;
+  border-radius: var(--zenith-radius);
+  background: #fff;
+  color: var(--zenith-ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.course-app .greetings-conversation-lines button.speaker-b,
+.course-app .greetings-interactive-lines button.speaker-b { background: #f4f8f2; }
+.course-app .greetings-conversation-lines button > span,
+.course-app .greetings-interactive-lines button > span,
+.course-app .greetings-roleplay-line > span,
+.course-app .greetings-roleplay-hidden > span { display: grid; grid-row: 1 / 3; width: 25px; height: 25px; border-radius: 50%; background: var(--zenith-sage); color: #fff; font-size: 9px; font-weight: 800; place-items: center; }
+.course-app .greetings-conversation-lines strong,
+.course-app .greetings-interactive-lines strong,
+.course-app .greetings-roleplay-line strong,
+.course-app .greetings-roleplay-hidden strong { font-size: 13px; line-height: 1.35; }
+.course-app .greetings-conversation-lines small,
+.course-app .greetings-interactive-lines small,
+.course-app .greetings-roleplay-line small,
+.course-app .greetings-roleplay-hidden small { grid-column: 2; color: var(--zenith-muted); font-family: 'Noto Sans JP', sans-serif; font-size: 9px; line-height: 1.45; }
+.course-app .greetings-conversation-lines svg,
+.course-app .greetings-interactive-lines svg,
+.course-app .greetings-roleplay-line svg { grid-column: 3; grid-row: 1 / 3; }
+.course-app .greetings-play-dialogue { width: calc(100% - 30px); margin: 0 15px 15px; background: #c98227; border-color: #c98227; }
+
+/* Conversation cards follow the reference chart: two large speech bubbles
+   around a shared scene, while the Japanese explanation stays attached to
+   each source line. */
+.course-app .greetings-conversation-card {
+  border: 2px solid #efbb28;
+  border-radius: 20px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.course-app .greetings-conversation-card-header {
+  align-items: center;
+  padding: 17px 22px 9px;
+  border-bottom: 0;
+}
+
+.course-app .greetings-conversation-card-header h3 {
+  margin: 5px 0 0;
+  color: var(--zenith-ink);
+  font-size: 18px;
+}
+
+.course-app .greetings-conversation-turns {
+  color: #a66d1f;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.course-app .greetings-conversation-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 480px;
+  padding: 5px 25px 22px;
+  align-items: stretch;
+}
+
+.course-app .greetings-dialogue-bubble {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px;
+  gap: 5px 10px;
+  width: min(88%, 390px);
+  min-height: 116px;
+  padding: 18px 18px 14px;
+  border: 2px solid #f0ae0a;
+  border-radius: 18px;
+  background: #fffefa;
+  color: var(--zenith-ink);
+  cursor: pointer;
+  text-align: left;
+  transition: background .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.course-app .greetings-dialogue-bubble::after {
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  border-right: 2px solid #f0ae0a;
+  border-bottom: 2px solid #f0ae0a;
+  background: #fffefa;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.course-app .greetings-dialogue-bubble.bubble-top {
+  align-self: flex-start;
+}
+
+.course-app .greetings-dialogue-bubble.bubble-top::after {
+  bottom: -11px;
+  left: 42px;
+}
+
+.course-app .greetings-dialogue-bubble.bubble-bottom {
+  align-self: flex-end;
+}
+
+.course-app .greetings-dialogue-bubble.bubble-bottom::after {
+  top: -11px;
+  right: 42px;
+  transform: rotate(225deg);
+}
+
+.course-app .greetings-dialogue-bubble.bubble-middle {
+  align-self: center;
+  width: min(94%, 410px);
+}
+
+.course-app .greetings-dialogue-bubble.bubble-middle::after {
+  bottom: -11px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.course-app .greetings-dialogue-bubble:hover,
+.course-app .greetings-dialogue-bubble:focus-visible,
+.course-app .greetings-dialogue-bubble.is-playing {
+  background: #fff6cc;
+  box-shadow: 0 0 0 3px rgba(240, 174, 10, .13);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.course-app .greetings-dialogue-speaker {
+  display: grid;
+  gap: 1px;
+  grid-column: 1;
+}
+
+.course-app .greetings-dialogue-speaker b {
+  color: #a44d0b;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.course-app .greetings-dialogue-speaker small {
+  color: #a66d1f;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.course-app .greetings-dialogue-english {
+  grid-column: 1;
+  color: #172139;
+  font-size: clamp(16px, 1.55vw, 23px);
+  font-weight: 850;
+  line-height: 1.23;
+}
+
+.course-app .greetings-dialogue-sound {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 25px;
+  height: 25px;
+  color: #ef7c08;
+  place-items: center;
+}
+
+.course-app .greetings-sound-glyph {
+  width: 24px;
+  height: 24px;
+}
+
+.course-app .greetings-dialogue-japanese {
+  grid-column: 1 / -1;
+  color: var(--zenith-muted);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.course-app .greetings-conversation-stage > .greetings-conversation-scene {
+  display: block;
+  width: min(100%, 470px);
+  margin: 10px auto 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.course-app .greetings-conversation-stage > .greetings-conversation-scene:focus-visible {
+  outline: 3px solid rgba(88, 129, 87, .45);
+  outline-offset: 4px;
+}
+
+.course-app .greetings-conversation-stage > .greetings-play-dialogue {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1px 9px;
+  width: min(92%, 300px);
+  min-height: 55px;
+  margin: 0 auto 7px;
+  padding: 9px 18px;
+  border: 1px solid #f46808;
+  border-radius: 999px;
+  background: #f46808;
+  color: #fff;
+  cursor: pointer;
+  place-items: center start;
+  text-align: left;
+  box-shadow: 0 6px 12px rgba(160, 91, 20, .16);
+}
+
+.course-app .greetings-conversation-stage > .greetings-play-dialogue > .greetings-play-dialogue-icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+}
+
+.course-app .greetings-conversation-stage > .greetings-play-dialogue > span:nth-of-type(2) {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.course-app .greetings-conversation-stage > .greetings-play-dialogue small {
+  grid-column: 2;
+  grid-row: 2;
+  color: rgba(255, 255, 255, .86);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9px;
+}
+
+.course-app .greetings-conversation-stage > .greetings-play-dialogue:hover,
+.course-app .greetings-conversation-stage > .greetings-play-dialogue:focus-visible {
+  background: #dc5907;
+  outline: 3px solid rgba(244, 104, 8, .22);
+  outline-offset: 2px;
+}
+
+.course-app .greetings-good-to-know {
+  padding: 30px;
+  margin: 0 0 48px;
+  border: 3px solid #72c900;
+  border-radius: 22px;
+  background: #f5f8f3;
+  scroll-margin-top: 118px;
+}
+.course-app .greetings-natural-table { display: grid; gap: 8px; margin-top: 18px; }
+.course-app .greetings-natural-table > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+  gap: 7px 12px;
+  align-items: center;
+  padding: 13px 15px;
+  border: 1px solid var(--zenith-border);
+  background: #fff;
+}
+.course-app .greetings-natural-table span { color: var(--zenith-muted); font-size: 13px; }
+.course-app .greetings-natural-table b { color: var(--zenith-sage); text-align: center; }
+.course-app .greetings-natural-table strong { font-size: 15px; }
+.course-app .greetings-natural-table small { grid-column: 1 / -1; color: var(--zenith-muted); font-family: 'Noto Sans JP', sans-serif; font-size: 9px; }
+.course-app .greetings-good-note { margin: 17px 0 0; padding: 14px 16px; border-left: 3px solid #d39b46; background: #fff; color: var(--zenith-muted); font-family: 'Noto Sans JP', sans-serif; font-size: 11px; line-height: 1.75; }
+.course-app .greetings-good-note strong { color: var(--zenith-ink); font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; }
+
+.course-app .greetings-track-switch,
+.course-app .greetings-studio-modes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  width: min(560px, 100%);
+  margin: 0 0 32px;
+  padding: 4px;
+  border: 1px solid var(--zenith-border);
+  background: var(--zenith-paper);
+}
+.course-app .greetings-track-switch button,
+.course-app .greetings-studio-modes button {
+  min-height: 48px;
+  padding: 8px 13px;
+  border: 0;
+  background: transparent;
+  color: var(--zenith-muted);
+  cursor: pointer;
+}
+.course-app .greetings-track-switch button span,
+.course-app .greetings-studio-modes button span { display: grid; gap: 2px; font-family: 'Noto Sans JP', sans-serif; font-size: 12px; font-weight: 800; }
+.course-app .greetings-track-switch button small,
+.course-app .greetings-studio-modes button small { font-family: 'Hanken Grotesk', sans-serif; font-size: 9px; }
+.course-app .greetings-track-switch button.active,
+.course-app .greetings-studio-modes button.active { background: var(--zenith-sage); color: #fff; }
+.course-app .greetings-interactive-practice .greetings-learning-panel,
+.course-app .greetings-interactive-practice .greetings-conversation-section { max-width: 1120px; padding: 28px; }
+.course-app .greetings-studio-modes { grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; margin: 18px 0; }
+.course-app .greetings-dialogue-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 20px; }
+.course-app .greetings-dialogue-tabs button { min-height: 38px; padding: 8px 12px; border: 1px solid var(--zenith-border); background: #fff; color: var(--zenith-muted); cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-size: 10px; font-weight: 800; }
+.course-app .greetings-dialogue-tabs button.active { border-color: var(--zenith-sage); background: #edf4ea; color: var(--zenith-ink); }
+.course-app .greetings-practice-conversation-card { max-width: 720px; padding: 18px; border: 1px solid #e1c78f; background: #fffdf8; }
+.course-app .greetings-practice-conversation-card > .greetings-conversation-svg { border: 1px solid #ead9b6; }
+.course-app .greetings-interactive-lines,
+.course-app .greetings-roleplay-panel { display: grid; gap: 9px; margin-top: 15px; }
+.course-app .greetings-next-line { min-height: 42px; padding: 10px 14px; border: 1px solid var(--zenith-sage); background: var(--zenith-sage); color: #fff; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-size: 11px; font-weight: 800; }
+.course-app .greetings-role-choice { display: flex; gap: 7px; margin-bottom: 5px; }
+.course-app .greetings-role-choice button { min-height: 37px; padding: 8px 12px; border: 1px solid var(--zenith-border); background: #fff; color: var(--zenith-muted); cursor: pointer; font-weight: 800; }
+.course-app .greetings-role-choice button.active { border-color: var(--zenith-sage); background: #edf4ea; color: var(--zenith-ink); }
+.course-app .greetings-roleplay-hidden { border-style: dashed; background: #f7f9f5; }
+.course-app .greetings-roleplay-line.is-own-line { border-color: var(--zenith-sage); background: #edf4ea; }
+
+@media (max-width: 1180px) {
+  .course-app .greetings-master-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-app .greetings-mastery-toolbar { grid-template-columns: 1fr; align-items: stretch; }
+  .course-app .greetings-play-all { justify-self: start; }
+}
+
+@media (max-width: 900px) {
+  .course-app .greetings-interactive-hero .greetings-hero-svg { max-width: 560px; }
+  .course-app .greetings-vocabulary-section { grid-template-columns: 1fr; }
+  .course-app .greetings-vocabulary-stage { min-height: clamp(320px, 48vw, 390px); }
+}
+
+@media (max-width: 760px) {
+  .course-app .greetings-interactive-hero,
+  .course-app .greetings-vocabulary-section,
+  .course-app .greetings-conversation-section,
+  .course-app .greetings-good-to-know { margin-bottom: 36px; }
+  .course-app .greetings-interactive-hero,
+  .course-app .greetings-conversation-section,
+  .course-app .greetings-good-to-know,
+  .course-app .greetings-interactive-practice .greetings-learning-panel,
+  .course-app .greetings-interactive-practice .greetings-conversation-section { padding: 20px; }
+  .course-app .greetings-learning-panel-head { padding: 20px; }
+  .course-app .greetings-mastery-board { padding: 18px 14px 22px; }
+  .course-app .greetings-master-grid,
+  .course-app .greetings-conversation-grid { grid-template-columns: 1fr; }
+  .course-app .greetings-status-tabs { width: calc(100vw - 76px); }
+  .course-app .greetings-status-tabs button { min-height: 47px; padding-right: 10px; padding-left: 10px; }
+  .course-app .greetings-play-all { width: 100%; }
+  .course-app .greetings-master-copy { min-height: 76px; }
+  .course-app .greetings-master-card-footer { align-items: flex-start; flex-direction: column; }
+  .course-app .greetings-master-card-footer > div { width: 100%; }
+  .course-app .greetings-master-card-footer button { flex: 1; justify-content: center; }
+  .course-app .greetings-detail-backdrop { padding: 12px; place-items: start center; }
+  .course-app .greetings-detail-dialog { padding: 20px; }
+  .course-app .greetings-classify-options { grid-template-columns: 1fr; }
+  .course-app .greetings-natural-table > div { grid-template-columns: 1fr 20px 1fr; padding: 11px; }
+  .course-app .greetings-track-switch { width: 100%; }
+  .course-app .greetings-studio-modes { display: flex; overflow-x: auto; }
+  .course-app .greetings-studio-modes button { flex: 0 0 128px; }
+  .course-app .greetings-vocabulary-panel-header { padding: 18px 18px 13px; }
+  .course-app .greetings-vocabulary-panel-title h2 { font-size: 22px; }
+  .course-app .greetings-vocabulary-panel-number { font-size: 22px; }
+  .course-app .greetings-vocabulary-tone-pill { padding: 6px 10px; font-size: 10px; }
+  .course-app .greetings-vocabulary-stage { min-height: 330px; margin: 12px 12px 0; }
+  .course-app .greetings-vocabulary-selected { align-items: flex-start; flex-direction: column; margin: 13px 12px 15px; }
+  .course-app .greetings-vocabulary-selected-actions { width: 100%; }
+  .course-app .greetings-vocabulary-selected-actions button { flex: 1; justify-content: center; }
+  .course-app .greetings-vocabulary-more-list { padding: 12px; }
+  .course-app .greetings-vocabulary-more-item { min-height: 70px; padding: 12px; }
+}
+
+@media (max-width: 430px) {
+  .course-app .greetings-interactive-hero { padding: 16px; }
+  .course-app .greetings-learning-panel-head { gap: 12px; padding: 16px; }
+  .course-app .greetings-item-count { min-width: 58px; font-size: 20px; }
+  .course-app .greetings-status-tabs { width: calc(100vw - 60px); }
+  .course-app .greetings-track-switch button span { font-size: 10px; }
+  .course-app .greetings-conversation-lines button,
+  .course-app .greetings-interactive-lines > button:not(.greetings-next-line),
+  .course-app .greetings-roleplay-line,
+  .course-app .greetings-roleplay-hidden { grid-template-columns: 24px minmax(0, 1fr) 16px; padding: 9px; }
+  .course-app .greetings-vocabulary-panel-header { gap: 9px; }
+  .course-app .greetings-vocabulary-panel-title { gap: 7px; }
+  .course-app .greetings-vocabulary-panel-title h2 { font-size: 18px; }
+  .course-app .greetings-vocabulary-panel-number { font-size: 18px; }
+  .course-app .greetings-vocabulary-tone-pill { max-width: 118px; white-space: normal; }
+  .course-app .greetings-vocabulary-stage { min-height: 285px; }
+  .course-app .greetings-scene-bubble { min-width: 75px; min-height: 38px; padding: 6px 8px; border-width: 2px; font-size: 12px; }
+  .course-app .greetings-scene-bubble::after { bottom: -9px; width: 12px; height: 12px; border-width: 2px; }
+  .course-app .greetings-scene-bubble-sound { width: 15px; height: 15px; }
+  .course-app .greetings-scene-bubble-sound .greetings-sound-glyph { width: 15px; height: 15px; }
+  .course-app .greetings-vocabulary-stage-play { right: 9px; bottom: 8px; width: 43px; height: 43px; }
+  .course-app .greetings-vocabulary-stage-play .greetings-sound-glyph { width: 22px; height: 22px; }
+}
+
+/* The app's outline and navigation reduce the reading column even on a
+   desktop viewport.  Use the actual reader width (not only the viewport
+   width) so the reference panels never collapse into two unreadable slivers. */
+@container greetings-reader (max-width: 650px) {
+  .course-app .greetings-vocabulary-section { grid-template-columns: 1fr; }
+  .course-app .greetings-vocabulary-stage { min-height: clamp(300px, 55cqw, 390px); }
+  .course-app .greetings-scene-bubble { max-width: 34%; min-width: 75px; font-size: clamp(11px, 2.3cqw, 16px); }
+  .course-app .greetings-vocabulary-more { min-height: 0; }
+}

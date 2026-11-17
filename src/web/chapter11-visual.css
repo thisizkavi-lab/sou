@@ -1,0 +1,200 @@
+/* Chapter 11: vocabulary-first illustrated atlas. Never show duplicate cards
+   beside the visual; English lives in the picture, translation is subordinate. */
+.ar-ch11-atlas {
+  width:100%;
+  min-width:0;
+  border:0;
+  border-radius:0;
+  overflow:visible;
+  background:transparent;
+  box-shadow:none;
+}
+@media(min-width:701px) {
+  .ar-ch11-atlas {
+    width:calc(100% + 48px);
+    margin-inline:-24px;
+  }
+}
+.ar-ch11-board {
+  position:relative;
+  aspect-ratio:1600 / 740;
+  width:100%;
+  isolation:isolate;
+}
+.ar-ch11-board-weather {
+  aspect-ratio:1600 / 820;
+}
+.ar-ch11-board-art {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  user-select:none;
+}
+.ar-ch11-term-hit {
+  position:absolute;
+  z-index:2;
+  transform:translate(-50%,-62%);
+  height:6.8%;
+  padding:0;
+  border:1px solid transparent;
+  border-radius:5px;
+  background:transparent;
+  cursor:pointer;
+  color:transparent;
+  touch-action:manipulation;
+}
+.ar-ch11-term-hit:hover,
+.ar-ch11-term-hit:focus-visible {
+  background:rgba(47,138,166,.095);
+  border-color:rgba(47,138,166,.26);
+  outline:0;
+}
+.ar-ch11-listen-mark {
+  position:absolute;
+  right:-7px;
+  top:-8px;
+  font-size:12px;
+  line-height:1;
+  color:#388ba2;
+  opacity:0;
+  transition:opacity .15s ease;
+  pointer-events:none;
+}
+.ar-ch11-term-hit:hover .ar-ch11-listen-mark,
+.ar-ch11-term-hit:focus-visible .ar-ch11-listen-mark {opacity:1;}
+.ar-ch11-translation {
+  position:absolute;
+  z-index:1;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+  max-width:none;
+  width:max-content;
+  padding:1px 3px;
+  overflow:visible;
+  color:var(--muted, #738079);
+  opacity:.76;
+  font-size:clamp(10px, .9vw, 13px);
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:0;
+  pointer-events:none;
+  text-align:center;
+}
+.ar-ch11-board-notes {
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+  padding:18px 26px;
+  margin:0 18px;
+  border-top:1px solid var(--line, #e1e5e2);
+}
+.ar-ch11-word-row {display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:start;}
+.ar-ch11-word-row-title {
+  color:#738079;
+  font-size:12px;
+  font-weight:600;
+  padding-top:8px;
+}
+.ar-ch11-words {display:flex;flex-wrap:wrap;column-gap:17px;row-gap:7px;align-items:start;}
+.ar-ch11-inline-word {
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  padding:6px 3px;
+  background:transparent;
+  border:0;
+  border-radius:4px;
+  color:#334a45;
+  font:inherit;
+  font-size:15px;
+  font-weight:500;
+  line-height:1.3;
+  cursor:pointer;
+}
+.ar-ch11-inline-word:hover,
+.ar-ch11-inline-word:focus-visible {color:#277e98;text-decoration:underline;text-underline-offset:3px;outline:0;}
+.ar-ch11-inline-word small {color:var(--muted, #8a9690);font-size:11px;font-weight:400;line-height:1.25;text-decoration:none;}
+.ar-ch11-frequency-extra {flex-direction:row;align-items:center;gap:25px;}
+.ar-ch11-month-mini {width:137px;flex:none;padding:5px;border:1px solid #d6e3d5;border-radius:7px;background:#fff;}
+.ar-ch11-month-mini strong {display:block;padding:1px 0 5px;color:#678173;font-size:10px;text-align:center;letter-spacing:.08em;}
+.ar-ch11-month-grid {display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.ar-ch11-month-grid span {
+  display:grid;place-items:center;width:15px;height:15px;border:1px solid #e6eae5;border-radius:2px;
+  background:#f4f8f2;color:#88958a;font-size:7px;
+}
+.ar-ch11-month-grid span.is-visited {background:#b9dba9;border-color:#8ebc7a;color:#3c6c3a;font-weight:700;}
+.ar-ch11-audio-hint {
+  margin:0;
+  padding:10px 22px 14px;
+  color:#99a49d;
+  font-size:12px;
+  font-weight:400;
+}
+.ar-ch11-audio-error {margin:0;padding:0 22px 14px;font-size:12px;color:#9d4c3a;}
+.ar-ch11-screen-reader {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
+@media(max-width:700px){
+  /* Keep the precisely aligned audio targets and translations on a
+     minimum-width board; scroll horizontally rather than shrinking them. */
+  .ar-ch11-atlas {width:100%;margin:0;border-radius:12px;overflow-x:auto;overscroll-behavior-x:contain;}
+  .ar-ch11-board {width:720px;min-width:720px;aspect-ratio:1600 / 740;}
+  .ar-ch11-board-weather {aspect-ratio:1600 / 820;}
+  .ar-ch11-board-art {width:100%;height:100%;}
+  .ar-ch11-translation {font-size:10px;opacity:.72;}
+  .ar-ch11-board-notes {width:720px;box-sizing:border-box;padding:14px 18px;margin:0;}
+  .ar-ch11-word-row {grid-template-columns:112px minmax(0,1fr);gap:8px;}
+  .ar-ch11-words {gap:6px 12px;}
+  .ar-ch11-inline-word {font-size:13px;}
+  .ar-ch11-audio-hint {width:720px;box-sizing:border-box;padding:7px 12px 12px;font-size:11px;}
+}
+@media(prefers-reduced-motion:reduce){.ar-ch11-listen-mark{transition:none;}}
+
+
+/* Weather translations are a simple text index below the illustration. */
+.ar-ch11-weather-ja {
+  padding:20px 0 8px;
+  border:0;
+  background:transparent;
+}
+.ar-ch11-weather-ja-grid {
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  column-gap:24px;
+  row-gap:18px;
+}
+.ar-ch11-weather-ja-item {
+  display:flex;
+  min-width:0;
+  min-height:0;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:7px 3px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  text-align:center;
+}
+.ar-ch11-weather-ja-item span:first-child {
+  color:#53645d;
+  font-size:11px;
+  font-weight:600;
+  line-height:1.25;
+  overflow-wrap:anywhere;
+}
+.ar-ch11-weather-ja-item span:last-child {
+  color:#7d8983;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.3;
+  overflow-wrap:anywhere;
+}
+@media(max-width:700px) {
+  .ar-ch11-weather-ja {width:720px;box-sizing:border-box;padding:16px 18px 10px;}
+  .ar-ch11-weather-ja-grid {grid-template-columns:repeat(6,minmax(0,1fr));column-gap:14px;row-gap:12px;}
+  .ar-ch11-weather-ja-item {min-height:0;padding:6px 3px;}
+  .ar-ch11-weather-ja-item span:first-child {font-size:10px;}
+  .ar-ch11-weather-ja-item span:last-child {font-size:12px;}
+}

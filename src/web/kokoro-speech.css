@@ -1,0 +1,110 @@
+/* Subtle pronunciation control shared by every Chapter 98 vocabulary card. */
+.artico-speak {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  border: 0;
+  border-radius: 50%;
+  color: #8493a7;
+  background: transparent;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: color 140ms ease, background-color 140ms ease;
+}
+.artico-speak svg { display: block; width: 16px; height: 16px; }
+.artico-speak:hover,
+.artico-speak:focus-visible,
+.artico-speak.is-playing {
+  background: rgba(40, 112, 202, .09);
+  color: #285bcc;
+}
+.artico-speak:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.artico-speak.is-loading { color: #6484ad; cursor: progress; }
+.artico-speak.is-error { color: #ab6371; }
+.artico-speak.is-error:hover, .artico-speak.is-error:focus-visible { background: rgba(171,99,113,.09); }
+
+.artico-speak.is-loading svg { animation: artico-speech-pulse 1s ease-in-out infinite; }
+@keyframes artico-speech-pulse { 50% { opacity: .25; transform: scale(.9); } }
+@media (prefers-reduced-motion: reduce) {
+  .artico-speak, .artico-speak svg { animation: none !important; transition: none; }
+}
+
+/* Lessons 03–78: the icon always sits in the bottom-right corner.
+   Reserve enough room so text, pictures and the icon never overlap.
+   In Practice the reveal card is a button; the speaker is its sibling. */
+.vlt-lesson .vlt-card { position: relative; }
+.vlt-lesson .vlt-card.vlt-image-card,
+.vlt-lesson .vlt-card.vlt-text-card { padding-bottom: 43px; }
+.vlt-lesson .vlt-card > .artico-speak,
+.vlt-lesson .vlt-recall-container > .artico-speak {
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  z-index: 2;
+}
+.vlt-recall-container { position: relative; display: flex; min-width: 0; }
+.vlt-recall-container > .vlt-recall-card { height: 100%; }
+
+/* Lesson 01: one sound button per country card (country + visible
+   nationality), and one per word or expression card. */
+.vl01-card-item,
+.vl01-word-grid > div,
+.vl01-phrase-grid > div { position: relative; }
+.vl01-card-item > .vl01-country-audio,
+.vl01-word-grid > div > .artico-speak,
+.vl01-phrase-grid > div > .artico-speak {
+  position: absolute;
+  right: 8px;
+  bottom: 7px;
+  z-index: 2;
+}
+.vl01-card-item .vl01-country-card { padding-bottom: 45px; }
+.vl01-lesson .vl01-word-grid > div,
+.vl01-lesson .vl01-phrase-grid > div { padding-bottom: 45px; }
+
+/* Number/units/frequency tables are rows, not cards; their speaker
+   remains next to the text rather than floating over table cells. */
+.vl02-table-audio { margin-left: 3px; }
+.vlt-week-days .artico-speak,
+.vlt-month-table .artico-speak,
+.vlt-span-table .artico-speak,
+.vlt-frequency-bars .artico-speak { width: 30px; height: 30px; padding: 7px; }
+
+/* Only the active speaker shows progress/errors. Most cards stay unchanged. */
+.artico-speak-status {
+  position: absolute;
+  right: 6px;
+  bottom: 41px;
+  z-index: 5;
+  width: max-content;
+  max-width: min(220px, calc(100% - 12px));
+  padding: 9px 11px;
+  border: 1px solid #e2e7ee;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(30, 45, 60, .08);
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 400;
+  color: #526273;
+  text-align: left;
+}
+.artico-speak-status.is-error {
+  border-color: #e8cbd1;
+}
+.artico-speak-status button {
+  display: block;
+  margin-top: 6px;
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: #386ca5;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.artico-speak-status button:hover { text-decoration: underline; }
