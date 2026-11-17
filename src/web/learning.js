@@ -136,7 +136,7 @@ export function shouldShowLanding(hash) {
 
 export function parseCourseRoute(hash) {
   const route = parseRoute(hash)
-  return ['foundation', 'lesson', 'vocabulary', 'saved'].includes(route.page)
+  return route.path === '/courses?social' || ['foundation', 'lesson', 'vocabulary', 'saved'].includes(route.page)
     ? route
     : parseRoute('#/foundation/orientation/study')
 }

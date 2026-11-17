@@ -18,9 +18,9 @@ import { landingPageCopy } from './landingCopy.js'
 
 test('the course opens Orientation and preserves direct lesson links', () => {
   const start = '/foundation/orientation/study'
-  for (const hash of ['', '#/', '#/home', '#/landing', '#/courses', '#/progress', '#/application/tests/ielts', '#unknown'])
+  for (const hash of ['', '#/', '#/home', '#/landing', '#/courses', '#/courses?application', '#/progress', '#/application/tests/ielts', '#unknown'])
     assert.equal(parseCourseRoute(hash).path, start, hash)
-  for (const path of [start, '/foundation/orientation/practice', '/foundation/letters/study', '/lesson/02/practice/friend', '/lesson/98/study', '/saved'])
+  for (const path of [start, '/foundation/orientation/practice', '/foundation/letters/study', '/courses?social', '/lesson/02/practice/friend', '/lesson/98/study', '/saved'])
     assert.equal(parseCourseRoute('#' + path).path, path)
 })
 

@@ -8,6 +8,7 @@ import './english-shell.css'
 import { getLearningStage, learningStages } from './pathway'
 import { isStaleAssetFailure, shouldRefreshStaleAssets } from './routeRecovery.js'
 
+const SocialCourse = lazy(() => import('./Library').then(module => ({ default: module.SocialCourse })))
 const Saved = lazy(() => import('./Library').then(module => ({ default: module.Saved })))
 const Foundation = lazy(() => import('./Foundation'))
 const Vocabulary = lazy(() => import('./Vocabulary'))
@@ -19,7 +20,7 @@ const orientationPath = learningStages[0].start
 const destinations = [
   { id: 'orientation', path: orientationPath, label: 'Orientation', icon: 'next' },
   { id: 'foundation', path: learningStages[1].start, label: 'Level Zero', icon: 'audio' },
-  { id: 'social', path: learningStages[2].start, label: 'Social Fluency', icon: 'book' },
+  { id: 'social', path: learningStages[2].overview, label: 'Social Fluency', icon: 'book' },
   { id: 'saved', path: '/saved', label: 'Saved phrases', icon: 'check' },
 ]
 
@@ -180,6 +181,10 @@ export default function ArticoWeb() {
     return stopRestoring
   }, [route.path])
   useEffect(() => {
+    if (route.page === 'courses') {
+      document.title = t('Social Fluency') + ' · English with Kavi'
+      return
+    }
     if (route.page === 'vocabulary') {
       const lesson = route.topic ? (language === 'ja' ? `レッスン${Number(route.topic)} · ` : `Lesson ${Number(route.topic)} · `) : ''
       document.title = `${lesson}${language === 'ja' ? '語彙' : 'Vocabulary'} · English with Kavi`
@@ -214,9 +219,10 @@ export default function ArticoWeb() {
       180,
     )
   }
-  const activeNav = getLearningStage(route.path)?.id ?? (route.page === 'vocabulary' ? 'social' : route.page)
+  const activeNav = getLearningStage(route.path)?.id ?? (['courses', 'vocabulary'].includes(route.page) ? 'social' : route.page)
   let screen
-  if (route.page === 'saved') screen = <Saved learning={learning} save={save} />
+  if (route.page === 'courses') screen = <SocialCourse learning={learning} />
+  else if (route.page === 'saved') screen = <Saved learning={learning} save={save} />
   else if (route.page === 'vocabulary') screen = <Vocabulary route={route} />
   else if (route.page === 'foundation')
     screen = <Foundation key={route.path} route={route} learning={learning} update={update} />

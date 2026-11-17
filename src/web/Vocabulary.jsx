@@ -75,8 +75,8 @@ function LessonLink({ topic, japanese }) {
 function VocabularyIndex({ japanese }) {
   return (
     <div className="aw-page vl-page">
-      <a className="vl-back" href="#/lesson/01/study">
-        <span aria-hidden="true">←</span> {japanese ? '日常会話のはじめへ' : 'Back to conversations'}
+      <a className="vl-back" href="#/courses?social">
+        <span aria-hidden="true">←</span> {japanese ? '日常会話の章一覧へ' : 'Back to chapter list'}
       </a>
       <header className="vl-heading">
         <p className="vl-eyebrow">CHAPTER 98 · VOCABULARY</p>
