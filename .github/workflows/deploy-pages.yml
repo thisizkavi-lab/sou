@@ -1,4 +1,4 @@
-name: Publish English with Kavi to GitHub Pages
+name: Publish English for Sou to GitHub Pages
 
 on:
   push:

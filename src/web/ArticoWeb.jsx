@@ -182,21 +182,21 @@ export default function ArticoWeb() {
   }, [route.path])
   useEffect(() => {
     if (route.page === 'courses') {
-      document.title = t('Social Fluency') + ' · English with Kavi'
+      document.title = t('Social Fluency') + ' · English for Sou'
       return
     }
     if (route.page === 'vocabulary') {
       const lesson = route.topic ? (language === 'ja' ? `レッスン${Number(route.topic)} · ` : `Lesson ${Number(route.topic)} · `) : ''
-      document.title = `${lesson}${language === 'ja' ? '語彙' : 'Vocabulary'} · English with Kavi`
+      document.title = `${lesson}${language === 'ja' ? '語彙' : 'Vocabulary'} · English for Sou`
       return
     }
     if (route.page === 'saved') {
-      document.title = `${t('Saved phrases')} · English with Kavi`
+      document.title = `${t('Saved phrases')} · English for Sou`
       return
     }
     const chapter = chapterById[route.id]
     const foundation = foundationSteps.find((step) => step.id === route.id)
-    document.title = `${(language === 'ja' ? chapter?.ja : chapter?.title) ?? (language === 'ja' ? foundation?.ja : foundation?.en) ?? t('Orientation')} · English with Kavi`
+    document.title = `${(language === 'ja' ? chapter?.ja : chapter?.title) ?? (language === 'ja' ? foundation?.ja : foundation?.en) ?? t('Orientation')} · English for Sou`
   }, [route.path, language, t])
   useEffect(() => () => clearTimeout(scrollTimer.current), [])
   useEffect(() => {
@@ -263,7 +263,7 @@ export default function ArticoWeb() {
         }}
       > {t("Skip to content")} </a>
       <aside className="aw-sidebar">
-        <a className="aw-wordmark sou-wordmark" href={`#${orientationPath}`}>English with Kavi</a>
+        <a className="aw-wordmark sou-wordmark" href={`#${orientationPath}`}>English for Sou</a>
         <nav className="aw-destinations" aria-label={t("Main navigation")}>
           {destinations.map((destination) => (
             <a

@@ -1,4 +1,4 @@
-# English with Kavi
+# English for Sou
 
 A responsive React/Vite prototype for Artico, implementing the approved illustrated Figma web design. English leads the lesson content; smaller Japanese text supports understanding.
 
