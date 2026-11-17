@@ -1,0 +1,440 @@
+name: Publish English with Kavi to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Import the adapted Artico source
+        if: ${{ hashFiles('.github/sou-artico.patch') != '' }}
+        env:
+          ARTICO_BASE: 7d685f2f764f66bda7cae11aac0b393ac7226adb
+        run: |
+          set -euo pipefail
+          source_dir="$RUNNER_TEMP/artico-source"
+          git init --quiet "$source_dir"
+          git -C "$source_dir" fetch --depth=1 https://github.com/thisizkavi-lab/artico-web.git "$ARTICO_BASE"
+          git -C "$source_dir" checkout --detach FETCH_HEAD
+          git -C "$source_dir" apply "$GITHUB_WORKSPACE/.github/sou-artico.patch"
+          git -C "$source_dir" ls-files -z -- . ':(exclude).github' ':(exclude).obsidian' ':(exclude)public/smalltalk-field-guide.html' |
+            tar --directory "$source_dir" --null --files-from=- --create --file=- |
+            tar --directory "$GITHUB_WORKSPACE" --extract --file=-
+          git rm .github/sou-artico.patch
+          git add -A
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Import English with Kavi course source'
+          git push origin HEAD:main
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache generated licensed vocabulary artwork
+        uses: actions/cache@v4
+        with:
+          path: |
+            public/vocabulary-symbols/mulberry
+            public/vocabulary-symbols/openmoji
+            public/vocabulary-symbols/original
+          key: vocabulary-art-v4-${{ hashFiles('src/web/vocabularyMulberryManifest.json', 'src/web/vocabularyOpenmojiManifest.json', 'src/web/vocabularyOriginalScenes.json', 'src/web/vocabularyPersonalityScenes.json', 'scripts/build_vocabulary_original_scenes.py', 'scripts/build_vocabulary_personality_scenes.py') }}
+
+      - name: Generate locally hosted Mulberry vocabulary PNGs
+        run: |
+          python3 -m pip install --quiet cairosvg pillow
+          python3 scripts/build_vocabulary_library.py
+
+      - name: Compile Lesson 07 Sharing Information SVG illustrations
+        run: |
+          mkdir -p work/vocab-art/svg/07
+          for bundle in work/vocab-art/source-bundles/lesson07-svg-source-*.tar.gz; do
+            tar -xzf "$bundle" -C work/vocab-art/svg/07
+          done
+          python3 -m pip install --quiet resvg-py pillow
+          python3 scripts/svg_vocab_compiler.py build --lesson 7 --debug-grid
+          test "$(find public/vocabulary-course/07 -maxdepth 1 -name '*.webp' -type f | wc -l)" -eq 49
+
+      - name: Install ten Lesson 06 positive-opinion WebP illustrations
+        run: |
+          mkdir -p public/vocabulary-course/06
+          unzip -oq scripts/artico-lesson-06-positive-opinions-webp.zip -d public/vocabulary-course/06
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          terms = ["amazing","beautiful","breathtaking","brilliant","delicious","exciting","extraordinary","fantastic","fun","good"]
+          root = Path('public/vocabulary-course/06')
+          for term in terms:
+              path = root / f'{term}.webp'
+              assert path.is_file() and path.stat().st_size <= 80 * 1024, term
+              with Image.open(path) as image:
+                  assert image.size == (608, 384), (term, image.size)
+          print('Verified ten 608x384 Lesson 06 WebP illustrations')
+          PY
+
+      - name: Install ten original Meals illustrations and validate remaining Lesson 04 artwork
+        run: python3 scripts/fetch_lesson04_public_domain.py
+
+      - name: Cache Artico handwriting worksheets
+        id: handwriting-cache
+        uses: actions/cache@v4
+        with:
+          path: public/worksheets
+          key: artico-handwriting-v1-${{ hashFiles('scripts/generate_handwriting_worksheets.py') }}
+
+      - name: Generate printable A4 handwriting worksheets
+        if: steps.handwriting-cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-sil-andika fonts-lato
+          python3 -m pip install --quiet numpy pillow scikit-image reportlab
+          python3 scripts/generate_handwriting_worksheets.py
+
+      - name: Verify printable worksheets
+        run: |
+          test -f public/worksheets/Artico_Complete_Handwriting_Workbook.pdf
+          test -f public/worksheets/Artico_Handwriting_PDF_Collection.zip
+          test "$(find public/worksheets -maxdepth 1 -name '*.pdf' | wc -l)" -eq 58
+
+      - name: Generate original chapter-specific teaching scenes
+        run: python3 scripts/build_vocabulary_original_scenes.py
+
+      - name: Generate Chapter 02 illustrated vocabulary PNG cards
+        run: |
+          python3 scripts/generate_ch02_vocabulary_png.py
+          for key in friend colleague name photography-class; do
+            test -s "public/assets/course/ch02-${key}.png"
+          done
+
+      - name: Generate personality behavior-scene PNGs
+        run: python3 scripts/build_vocabulary_personality_scenes.py
+
+      - name: Generate all Lesson 3 time PNG diagrams
+        run: python3 scripts/build_vocab_time_png.py
+
+      - name: Produce original daily-commute PNG illustrations
+        run: python3 scripts/build_ch04_ai_actions.py
+
+      - name: Cache complete single-voice American IPA word audio
+        id: ipa-one-voice-cache
+        uses: actions/cache@v4
+        with:
+          path: public/audio/ipa-one-voice
+          key: artico-ipa-one-voice-v1-${{ hashFiles('scripts/generate_ipa_single_voice.py', 'src/web/ipaSounds.js', 'src/web/ipaExamples.json') }}
+
+      - name: Generate every IPA word with one American voice
+        if: steps.ipa-one-voice-cache.outputs.cache-hit != 'true'
+        run: |
+          python3 -m pip install --quiet piper-tts==1.8.0
+          mkdir -p "$RUNNER_TEMP/artico-voice"
+          (cd "$RUNNER_TEMP/artico-voice" && python3 -m piper.download_voices en_US-ljspeech-medium)
+          python3 scripts/generate_ipa_single_voice.py "$RUNNER_TEMP/artico-voice/en_US-ljspeech-medium.onnx"
+
+      - name: Verify every IPA word example has its locally hosted WAV
+        run: |
+          python3 - <<'PY'
+          import json, wave
+          from pathlib import Path
+          directory=Path('public/audio/ipa-one-voice')
+          manifest=json.loads((directory/'manifest.json').read_text(encoding='utf-8'))
+          entries=manifest['entries']
+          assert len(entries)==41, f"Wrong entry count: {len(entries)}"
+          examples=manifest['examples']
+          assert len(examples)==43
+          files={e['file'] for e in entries}
+          for ipa, words in examples.items():
+              assert 2 <= len(words) <= 4, ipa
+              files.update(example['file'] for example in words)
+          assert len(files)==manifest['unique_audio_count']
+          for filename in files:
+              path=directory/filename
+              assert path.is_file() and path.stat().st_size>8000, filename
+              with wave.open(str(path),'rb') as stream:
+                  assert stream.getnframes()>3000 and stream.getnchannels()==1, filename
+          assert len(list(directory.glob('*.wav')))==len(files)
+          print(f"Verified {len(entries)} IPA entries, {len(files)} playable word examples, one US voice")
+          PY
+
+      - name: Crop original AI food picture sheets into local PNGs
+        run: python3 scripts/build_vocab_food_sheets.py
+
+      - name: Crop original AI grooming sheets to local PNGs
+        run: python3 scripts/build_vocab_grooming_sheets.py
+
+      - name: Generate twenty-four tongue-twister illustrations
+        run: |
+          python3 scripts/build_tongue_twister_png.py
+          test "$(find public/assets/illustrations/twisters -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 24
+          test -s public/assets/illustrations/twisters/woodchuck.png
+
+      - name: Install the approved twenty-four generated PNG illustrations
+        run: |
+          python3 scripts/extract_generated_twister_art.py
+          test "$(find public/assets/illustrations/twisters -maxdepth 1 -type f -name '*.png' | wc -l)" -eq 24
+          test -s public/assets/illustrations/twisters/woodchuck.png
+
+      - name: Verify all 267 tongue-twister recordings and exact-text mappings
+        run: pnpm run test:twister-audio
+
+      - name: Compile lesson content
+        run: pnpm lessons
+
+      - name: Generate Chapter 08 PNG illustrations before tests
+        run: python3 scripts/build_ch08_png_scenes.py
+
+      - name: Test course and learning progress
+        run: pnpm test
+
+      - name: Verify committed Chapter 09 native transparent PNGs
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          from hashlib import sha256
+          checksums = {"ch09-01-say-what-happened.png":"639d61e20e4920afb3f24264f8d575adddc12e3b115fd02393ba60071a31dfcf","ch09-02-informal-responsibility-and-stronger-apologies.png":"437b52a031b26677edec07539241073243f4218afaa0270f0676d25ab3e7e96b","ch09-03-receive-an-apology.png":"8a77081944c9a742ec1516b80ed53719c55dbdefd81d2c97055a309d4da2a869","ch09-04-sympathy-is-a-different-use.png":"e6dafe4c408221c5fbd3b31740e3c35924651d2ccef4d5201fb803945d3ccfca"}
+          expected = [
+              'ch09-01-say-what-happened.png',
+              'ch09-02-informal-responsibility-and-stronger-apologies.png',
+              'ch09-03-receive-an-apology.png',
+              'ch09-04-sympathy-is-a-different-use.png',
+          ]
+          for name in expected:
+              path = Path('public/assets/course') / name
+              assert path.is_file(), name
+              assert sha256(path.read_bytes()).hexdigest() == checksums[name], name
+              with Image.open(path) as picture:
+                  assert picture.size == (1774, 887), (name, picture.size)
+                  assert picture.mode == 'RGBA', (name, picture.mode)
+                  assert picture.getchannel('A').getextrema() == (0, 255), name
+          print('Chapter 09: four transparent PNGs verified')
+          PY
+
+      - name: Build site
+        run: pnpm run build
+
+      - name: Verify Chapter 05 phrase illustrations are four distinct transparent PNGs
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          from hashlib import sha256
+          names = [
+              'ch05-01-likes-dislikes.png',
+              'ch05-02-asking-opinions.png',
+              'ch05-03-choosing-options.png',
+              'ch05-04-strong-reactions.png',
+          ]
+          checksums = []
+          for name in names:
+              source = Path('public/assets/course') / name
+              served = Path('dist/assets/course') / name
+              assert source.is_file() and served.is_file(), f'Missing Chapter 05 illustration: {name}'
+              assert source.read_bytes() == served.read_bytes(), f'Bundle altered artwork: {name}'
+              with Image.open(served) as im:
+                  assert im.format == 'PNG' and im.mode == 'RGBA', name
+                  assert im.width >= 1000 and im.height >= 600, name
+                  low, high = im.getchannel('A').getextrema()
+                  assert low == 0 and high >= 250, (name, low, high)
+              checksums.append(sha256(served.read_bytes()).hexdigest())
+          assert len(set(checksums)) == 4, 'Chapter 05 phrase artwork is duplicated'
+          print('Chapter 05: four distinct RGBA PNGs verified in Pages bundle')
+          PY
+
+      - name: Retain Chapter 05 PNG originals in source repository
+        run: |
+          git add public/assets/course/ch05-01-likes-dislikes.png \
+                  public/assets/course/ch05-02-asking-opinions.png \
+                  public/assets/course/ch05-03-choosing-options.png \
+                  public/assets/course/ch05-04-strong-reactions.png
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Add four distinct transparent Chapter 05 phrase PNGs'
+            git push origin HEAD:main
+          fi
+
+
+      - name: Verify Chapter 06 dedicated transparent PNG illustrations reach Pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          expected = {
+              'ch06-01-agree-with-the-idea.png': (1821, 864),
+              'ch06-02-understand-without-agreeing.png': (1774, 887),
+              'ch06-03-disagree-or-qualify.png': (1796, 876),
+              'ch06-04-continue-or-close-disagreement.png': (1536, 1024),
+          }
+          for name, size in expected.items():
+              path = Path('dist/assets/course') / name
+              assert path.is_file(), f'Missing Chapter 06 illustration: {name}'
+              with Image.open(path) as image:
+                  assert image.format == 'PNG', (name, image.format)
+                  assert image.size == size, (name, image.size)
+                  alpha = image.convert('RGBA').getchannel('A')
+                  low, high = alpha.getextrema()
+                  assert low == 0 and high >= 250, (name, (low, high))
+          print('Verified four distinct Chapter 06 PNGs with transparency in the Pages bundle')
+          PY
+
+      - name: Verify Chapter 09 PNG illustrations are in the published bundle
+        run: |
+          for key in 01-say-what-happened 02-informal-responsibility-and-stronger-apologies 03-receive-an-apology 04-sympathy-is-a-different-use; do
+            test -s "dist/assets/course/ch09-$key.png"
+          done
+
+      - name: Verify Chapter 10 transparent PNG illustrations reach Pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          names = [
+              'ch10-01-signal-that-you-are-leaving.png',
+              'ch10-02-choose-a-closing.png',
+              'ch10-03-future-contact-specific-or-open.png',
+              'ch10-04-familiar-closings.png',
+          ]
+          for name in names:
+              path = Path('dist/assets/course') / name
+              assert path.is_file(), f'Missing artwork: {name}'
+              with Image.open(path) as image:
+                  assert image.size == (1400, 840), (name, image.size)
+                  assert image.mode == 'RGBA', (name, image.mode)
+                  assert image.getchannel('A').getextrema() == (0, 255), name
+          print('Chapter 10: all 4 PNGs reached the Pages bundle with alpha intact')
+          PY
+
+      - name: Verify Lesson 07 Sharing Information illustrations reach Pages
+        run: |
+          test "$(find dist/vocabulary-course/07 -maxdepth 1 -name '*.webp' -type f | wc -l)" -eq 49
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          files = sorted(Path('dist/vocabulary-course/07').glob('*.webp'))
+          assert len(files) == 49, len(files)
+          for path in files:
+              assert path.stat().st_size <= 80 * 1024, path.name
+              with Image.open(path) as image:
+                  assert image.size == (608, 384), (path.name, image.size)
+          print('Verified 49 Lesson 07 illustrations at 608x384')
+          PY
+
+      - name: Verify all Lesson 06 vocabulary WebP illustrations reach Pages
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          art = json.loads(Path('src/web/vocabularyCourseArt.json').read_text(encoding='utf-8'))['entries']
+          root = Path('dist/vocabulary-course')
+          expected = {root / f'{path}.webp' for key, path in art.items() if key.startswith('6:')}
+          actual = set((root / '06').glob('*.webp'))
+          assert len(expected) == 58, len(expected)
+          assert actual == expected, {'missing': sorted(str(path) for path in expected - actual), 'extra': sorted(str(path) for path in actual - expected)}
+          for path in actual:
+              assert path.stat().st_size <= 80 * 1024, path.name
+              with Image.open(path) as image:
+                  assert image.size == (608, 384), (path.name, image.size)
+          print(f'Verified all {len(actual)} mapped Lesson 06 illustrations at 608x384')
+          PY
+
+      - name: Verify all sixteen Daily Routines PNGs reach Pages
+        run: |
+          test "$(find dist/vocabulary-ai/ch04 -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 16
+          test -f dist/vocabulary-ai/ch04/arrive-late.png
+          test -f dist/vocabulary-ai/ch04/catch-the-bus.png
+          test -f dist/vocabulary-ai/ch04/catch-the-train.png
+          test -f dist/vocabulary-ai/ch04/do-homework.png
+          test -f dist/vocabulary-ai/ch04/go-home.png
+          test -f dist/vocabulary-ai/ch03/03-000.png
+
+      - name: Verify original AI-painted vocabulary images reached the site
+        run: |
+          test "$(find dist/vocabulary-ai/ch04/sheet -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 25
+          test "$(find dist/vocabulary-ai/food -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 24
+          test -s dist/vocabulary-ai/ch04/sheet/catch-the-bus.png
+          test -s dist/vocabulary-ai/food/tomato.png
+          test "$(find dist/vocabulary-ai/grooming -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 16
+          test -s dist/vocabulary-ai/grooming/brush-your-hair.png
+
+      - name: Verify illustrated tongue-twister practice assets
+        run: |
+          test "$(find dist/assets/illustrations/twisters -maxdepth 1 -name '*.png' -type f | wc -l)" -eq 24
+          test -s dist/assets/illustrations/twisters/woodchuck.png
+          test -s dist/assets/illustrations/twisters/betty-botter.png
+          test "$(find dist/audio/tongue-twisters/ga-v01 -maxdepth 1 -name '*.mp3' -type f | wc -l)" -eq 267
+          test -s dist/audio/tongue-twisters/ga-v01/tt-24-betty-botter--study-full--natural--en-us--v01.mp3
+
+      - name: Verify all 58 sourced and original Lesson 04 images are included
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          j=json.loads(pathlib.Path('src/web/vocabularyDailyRoutineSources.json').read_text())
+          for term,e in j['entries'].items():
+            f=pathlib.Path('dist/vocabulary-curated-04')/(e['file']+'.webp')
+            assert f.is_file() and f.stat().st_size>4000, term
+            if e.get('generationBatch') == 'work-errands-10':
+              versioned=pathlib.Path('dist/vocabulary-curated-04')/(e['file']+'-illustrated-v2.webp')
+              assert versioned.is_file() and versioned.stat().st_size>4000, term
+          print(len(j['entries']),'selected illustrations and refreshed work-scene assets verified')
+          PY
+
+      - name: Verify Chapter 08 illustrated PNG assets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          expected = {
+              'ch08-01-practical-favor-ai.png': (1774, 887),
+              'ch08-02-responding-to-thanks-ai.png': (1792, 877),
+              'ch08-03-gift-appreciation-ai.png': (1774, 887),
+              'ch08-04-different-intention-ai.png': (1774, 887),
+          }
+          for name, size in expected.items():
+              path = Path('dist/assets/course') / name
+              assert path.is_file() and path.stat().st_size > 20000, path
+              with Image.open(path) as img:
+                  assert img.format == 'PNG' and img.mode == 'RGBA', path
+                  assert img.size == size, (path, img.size)
+                  assert img.getextrema()[3][0] == 0, path
+                  assert img.getextrema()[3][1] == 255, path
+          print('Verified 4 transparent Chapter 08 PNG assets in Pages build')
+          PY
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
