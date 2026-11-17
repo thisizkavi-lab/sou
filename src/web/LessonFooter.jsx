@@ -1,7 +1,7 @@
 import { useLanguage } from './Language'
 import { chapterById, foundationSteps } from './content'
 import { parseRoute } from './learning'
-import { getLessonNavigation } from './pathway'
+import { getLessonNavigation, levelZero } from './pathway'
 import Glyph from './Glyph'
 import './lesson-navigation.css'
 
@@ -11,6 +11,7 @@ export default function LessonFooter({ route, practice, practicePath }) {
   if (!navigation) return null
 
   function destinationTitle(path) {
+    if (path === levelZero.overview) return t(levelZero.title)
     const destination = parseRoute(`#${path}`)
     if (destination.page === 'lesson') {
       const chapter = chapterById[destination.id]
@@ -38,7 +39,8 @@ export default function LessonFooter({ route, practice, practicePath }) {
       )}
       <nav className="ln-navigation" aria-label={t('Lesson navigation')}>
         {['previous', 'next'].map((direction) => {
-          const path = navigation[direction]
+          const path = direction === 'previous' && route.page === 'foundation' && route.id === levelZero.lessonIds[0]
+            ? levelZero.overview : navigation[direction]
           if (path === '/home') return null
           const title = destinationTitle(path)
           const back = direction === 'previous'

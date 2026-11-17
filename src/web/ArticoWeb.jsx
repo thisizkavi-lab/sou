@@ -6,10 +6,11 @@ import { Button, Icon } from './components'
 import { chapterById, foundationSteps } from './content'
 import { learningItem, loadLearning, parseCourseRoute, STORAGE_KEY, toggleSaved, visit } from './learning'
 import './english-shell.css'
-import { getLearningStage, learningStages } from './pathway'
+import { getLearningStage, learningStages, levelZero } from './pathway'
 import { isStaleAssetFailure, shouldRefreshStaleAssets } from './routeRecovery.js'
 
 const SocialCourse = lazy(() => import('./Library').then(module => ({ default: module.SocialCourse })))
+const LevelZeroCourse = lazy(() => import('./Library').then(module => ({ default: module.LevelZeroCourse })))
 const Saved = lazy(() => import('./Library').then(module => ({ default: module.Saved })))
 const Foundation = lazy(() => import('./Foundation'))
 const Vocabulary = lazy(() => import('./Vocabulary'))
@@ -17,10 +18,8 @@ const ChapterLesson = lazy(() => import('./ChapterLesson'))
 const HumorLesson = lazy(() => import('./HumorLesson'))
 const GreetingsLesson = lazy(() => import('./GreetingsLesson'))
 const IntroductionsLesson = lazy(() => import('./IntroductionsLesson'))
-const orientationPath = learningStages[0].start
 const destinations = [
-  { id: 'orientation', path: orientationPath, label: 'Orientation', icon: 'next' },
-  { id: 'foundation', path: learningStages[1].start, label: 'Level Zero', icon: 'audio' },
+  { id: 'foundation', path: levelZero.overview, label: 'Level Zero', icon: 'audio' },
   { id: 'social', path: learningStages[2].overview, label: 'Social Fluency', icon: 'book' },
   { id: 'saved', path: '/saved', label: 'Saved', icon: 'check' },
 ]
@@ -127,6 +126,7 @@ export default function ArticoWeb() {
     const viewport = mainRef.current
     viewport?.scrollTo({ top: viewport.scrollTop, behavior: 'instant' })
   })
+  const onLevelZero = route.path === levelZero.overview
   const notify = (message) => setToast(message)
   const save = (item) =>
     update((previous) => {
@@ -193,7 +193,7 @@ export default function ArticoWeb() {
   }, [route.path, update])
   useEffect(() => {
     if (route.page === 'courses') {
-      document.title = t('Social Fluency') + ' · English for Sou'
+      document.title = t(onLevelZero ? 'Level Zero' : 'Social Fluency') + ' · English for Sou'
       return
     }
     if (route.page === 'vocabulary') {
@@ -207,8 +207,8 @@ export default function ArticoWeb() {
     }
     const chapter = chapterById[route.id]
     const foundation = foundationSteps.find((step) => step.id === route.id)
-    document.title = `${(language === 'ja' ? chapter?.ja : chapter?.title) ?? (language === 'ja' ? foundation?.ja : foundation?.en) ?? t('Orientation')} · English for Sou`
-  }, [route.path, language, t])
+    document.title = `${(language === 'ja' ? chapter?.ja : chapter?.title) ?? (language === 'ja' ? foundation?.ja : foundation?.en) ?? t('Level Zero')} · English for Sou`
+  }, [route.path, onLevelZero, language, t])
   useEffect(() => {
     if (!toast) return
     const timeout = setTimeout(() => setToast(''), 6500)
@@ -222,11 +222,13 @@ export default function ArticoWeb() {
     clearTimeout(scrollTimer.current)
     scrollTimer.current = setTimeout(flushScroll, 180)
   }
-  const resume = !learningPages.includes(route.page) && learning.last
+  const resumePath = !learningPages.includes(route.page) && learning.last
     ? parseCourseRoute('', learning.last).path : null
-  const activeNav = getLearningStage(route.path)?.id ?? (['courses', 'vocabulary'].includes(route.page) ? 'social' : route.page)
+  const resume = resumePath === levelZero.overview ? null : resumePath
+  const activeNav = onLevelZero ? 'foundation' : getLearningStage(route.path)?.id ?? (['courses', 'vocabulary'].includes(route.page) ? 'social' : route.page)
   let screen
-  if (route.page === 'courses') screen = <SocialCourse learning={learning} />
+  if (onLevelZero) screen = <LevelZeroCourse learning={learning} />
+  else if (route.page === 'courses') screen = <SocialCourse learning={learning} />
   else if (route.page === 'saved') screen = <Saved learning={learning} save={save} />
   else if (route.page === 'vocabulary') screen = <Vocabulary route={route} />
   else if (route.page === 'foundation')
@@ -269,7 +271,7 @@ export default function ArticoWeb() {
         }}
       > {t("Skip to content")} </a>
       <aside className="aw-sidebar">
-        <a className="aw-wordmark sou-wordmark" href={`#${orientationPath}`}>English for Sou</a>
+        <a className="aw-wordmark sou-wordmark" href={`#${levelZero.overview}`}>English for Sou</a>
         <nav className="aw-destinations" aria-label={t("Main navigation")}>
           {destinations.map((destination) => (
             <a

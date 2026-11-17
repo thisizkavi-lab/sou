@@ -18,11 +18,14 @@ import { applicationTracks, applicationResponseKey } from './applicationTracks.j
 import { publicChapterId, sourceChapterId, migrateLegacyLessonPath } from './chapterNumbers.js'
 import { landingPageCopy } from './landingCopy.js'
 
-test('the course opens Orientation and preserves direct lesson links', () => {
-  const start = '/foundation/orientation/study'
-  for (const hash of ['', '#/', '#/home', '#/landing', '#/courses', '#/courses?application', '#/progress', '#/application/tests/ielts', '#unknown'])
+test('the course opens Level Zero and preserves direct lesson links', () => {
+  const start = '/courses?foundation'
+  for (const hash of ['', '#/', '#/home', '#/landing', '#/courses', '#/courses?application', '#/courses?orientation', '#/foundation/orientation/study', '#/foundation/orientation/practice', '#/foundation/how-it-works/study', '#/foundation/how-it-works/practice', '#/progress', '#/application/tests/ielts', '#unknown'])
     assert.equal(parseCourseRoute(hash).path, start, hash)
-  for (const path of [start, '/foundation/orientation/practice', '/foundation/letters/study', '/courses?social', '/lesson/02/practice/friend', '/lesson/98/study', '/saved'])
+  assert.equal(parseCourseRoute('', '/foundation/orientation/practice').path, start)
+  assert.equal(parseCourseRoute('', '/foundation/how-it-works/study').path, start)
+  assert.equal(parseCourseRoute('', '/foundation/sounds/practice').path, '/foundation/sounds/practice')
+  for (const path of [start, '/foundation/letters/study', '/foundation/write/study', '/foundation/sounds/study', '/foundation/tongue-intro/study', '/courses?social', '/lesson/02/practice/friend', '/lesson/98/study', '/saved'])
     assert.equal(parseCourseRoute('#' + path).path, path)
 })
 
@@ -421,8 +424,8 @@ test('Home is restored while lesson, Learn and Progress routes keep working', ()
 
 test('the course shell links to lessons and saved phrases without public navigation', () => {
   const shell = readFileSync(new URL('./ArticoWeb.jsx', import.meta.url), 'utf8')
-  assert.match(shell, /id: 'orientation', path: orientationPath/)
-  assert.match(shell, /id: 'foundation', path: learningStages/)
+  assert.doesNotMatch(shell, /id: 'orientation'|orientationPath/)
+  assert.match(shell, /id: 'foundation', path: levelZero.overview/)
   assert.match(shell, /id: 'social', path: learningStages/)
   assert.match(shell, /id: 'saved', path: '\/saved'/)
   assert.doesNotMatch(shell, /<Home|<Application|<Progress|Artico Connect/)

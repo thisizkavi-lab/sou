@@ -182,7 +182,7 @@ test('the shared IELTS switch stays disabled during an active attempt', async ()
   assert.ok(bar.includes('Finish or leave this attempt'))
 })
 
-test('the course entry redirects Application links to Orientation', async () => {
+test('the course entry shows the Level Zero directory for Application links', async () => {
   const { getLearningStage } = await vite.ssrLoadModule('/src/web/pathway.js')
   const { emptyLearning, sanitizeLearning, STORAGE_KEY } = await vite.ssrLoadModule('/src/web/learning.js')
   const path = '/application/other-half/11/practice'
@@ -194,7 +194,11 @@ test('the course entry redirects Application links to Orientation', async () => 
   const { default:ArticoWeb } = await vite.ssrLoadModule('/src/web/ArticoWeb.jsx')
   const result = await html(createElement(ArticoWeb))
   const sidebar = result.slice(result.indexOf('<aside'),result.indexOf('</aside>'))
-  assert.ok(sidebar.includes('#/foundation/orientation/study'))
+  assert.ok(sidebar.includes('#/courses?foundation'))
+  assert.ok(!sidebar.includes('Orientation'))
+  assert.ok(result.includes('aria-label="Level Zero lessons"'))
+  for (const id of ['letters', 'write', 'sounds', 'tongue-intro'])
+    assert.ok(result.includes('#/foundation/' + id + '/study'), id)
   assert.ok(!sidebar.includes('/application/'))
   assert.ok(!sidebar.includes('Chapter 06'))
 })

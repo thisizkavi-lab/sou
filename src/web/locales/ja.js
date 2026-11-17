@@ -58,6 +58,7 @@ export default {
   "Orientation": "はじめに",
   "Foundations": "文字・音・リズム",
   "Level Zero": "レベルゼロ",
+  "Level Zero lessons": "レベルゼロのレッスン",
   "Social Fluency": "日常のやりとり",
   "SOCIAL FLUENCY": "日常のやりとり",
   "Words for everyday life.": "毎日の会話に、使える言葉を。",

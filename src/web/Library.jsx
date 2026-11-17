@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button, Heading, Icon } from './components'
 import CurriculumIcon, { chapterIcon, foundationIcon, groupIcon, stageIcon } from './CurriculumIcon'
 import { introductionAliases } from '../course/introductions'
-import { getLearningStage, learningStages } from './pathway'
+import { getLearningStage, learningStages, levelZero } from './pathway'
 import { catalog, foundationSteps, groups, savedItems } from './content'
 import { applicationTracks } from './applicationTracks'
 import KokoroSpeakButton from './KokoroSpeakButton'
@@ -116,6 +116,26 @@ export function SocialCourse({ learning }) {
     <div className="aw-page aw-library-page rl-vertical-page">
       <header className="aw-heading"><h1>{t('Social Fluency')}</h1></header>
       <SocialChapters learning={learning} />
+    </div>
+  )
+}
+
+export function LevelZeroCourse({ learning }) {
+  const { t, language } = useLanguage()
+  return (
+    <div className="aw-page aw-library-page rl-vertical-page">
+      <header className="aw-heading"><h1>{t('Level Zero')}</h1></header>
+      <nav className="rl-vertical-lessons rl-vertical-foundation" aria-label={t('Level Zero lessons')}>
+        {levelZero.lessonIds.map((id, index) => {
+          const lesson = foundationSteps.find(step => step.id === id)
+          return <CourseLesson key={id}
+            href={`#/foundation/${id}/study`}
+            number={String(index + 1).padStart(2, '0')}
+            iconName={foundationIcon(id)}
+            title={language === 'ja' ? lesson.ja : lesson.en}
+            active={learning.last?.startsWith(`/foundation/${id}/`)} />
+        })}
+      </nav>
     </div>
   )
 }

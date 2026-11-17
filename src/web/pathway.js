@@ -44,6 +44,7 @@ export const learningStages = [
 ]
 
 export const applicationStage = { id:'application', title:'Application', ja:'実践', overview:'/courses?application', start:'/courses?application', lessonIds:[] }
+export const levelZero = learningStages.find(stage => stage.id === 'foundation')
 
 export function getLearningStage(path) {
   if (/^\/application\//.test(path ?? '')) return applicationStage

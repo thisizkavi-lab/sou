@@ -1,5 +1,6 @@
 import { sanitizePracticeSets } from './phrasePractice.js'
 import { migrateLegacyLessonPath, sourceChapterId } from './chapterNumbers.js'
+import { levelZero } from './pathway.js'
 
 export const STORAGE_KEY = 'sou.english.learning.v1'
 const RENUMBER_MARKER = 'sou.english.chapter34-inserted.v1'
@@ -151,14 +152,16 @@ export function shouldShowLanding(hash) {
 }
 
 export function parseCourseRoute(hash, last = null) {
+  const isLesson = (route) => ['lesson', 'vocabulary'].includes(route.page) ||
+    (route.page === 'foundation' && levelZero.lessonIds.includes(route.id))
   if (hash === '' || hash === '#' || hash === '#/') {
     const resume = last && parseRoute('#' + last)
-    if (resume && ['foundation', 'lesson', 'vocabulary'].includes(resume.page)) return resume
+    if (resume && isLesson(resume)) return resume
   }
   const route = parseRoute(hash)
-  return route.path === '/courses?social' || ['foundation', 'lesson', 'vocabulary', 'saved'].includes(route.page)
+  return route.path === '/courses?social' || route.page === 'saved' || isLesson(route)
     ? route
-    : parseRoute('#/foundation/orientation/study')
+    : parseRoute('#' + levelZero.overview)
 }
 
 export function parseRoute(hash) {
