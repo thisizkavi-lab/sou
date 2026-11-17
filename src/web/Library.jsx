@@ -7,6 +7,7 @@ import { getLearningStage, learningStages } from './pathway'
 import { catalog, foundationSteps, groups, savedItems } from './content'
 import { applicationTracks } from './applicationTracks'
 import KokoroSpeakButton from './KokoroSpeakButton'
+import { publicChapterId } from './chapterNumbers'
 import './library-readable.css'
 
 function CourseLesson({ href, number, iconName, title, active = false, recommended = false }) {
@@ -249,32 +250,35 @@ export function Saved({ learning, save }) {
       <p className="rl-intro">{t('Your collection is saved in this browser.')}</p>
       {items.length ? (
         <div className="aw-saved-list">
-          {items.map((item) => (
-            <article key={item.id}>
-              <div className="sou-saved-expression">
-                <p lang="en">{item.en}</p>
-                <KokoroSpeakButton text={item.en} japanese={language === 'ja'} />
-              </div>
-              {language === 'ja' && item.ja && <p lang="ja">{item.ja}</p>}
-              <div className="aw-actions">
-                {item.topic ? (
-                  <Button href={`/lesson/98/study/${item.topic}`} variant="outline">
-                    {t('Vocabulary lesson')} {Number(item.topic)}
-                  </Button>
-                ) : (item.chapter || introductionAliases[item.id]) && (
-                  <Button
-                    href={item.id.startsWith('study-')
-                      ? `/lesson/${item.chapter}/study`
-                      : `/lesson/${item.chapter ?? '02'}/practice?line=${introductionAliases[item.id] ?? item.id}`}
-                    variant="outline"
-                  >
-                    {t('Chapter {id}', { id: item.chapter ?? '02' })}
-                  </Button>
-                )}
-                <Button variant="quiet" onClick={() => save(item.id)}> {t("Remove")} </Button>
-              </div>
-            </article>
-          ))}
+          {items.map((item) => {
+            const chapter = publicChapterId(/^ch(\d{2})-/.exec(item.id)?.[1]) ?? item.chapter ?? '02'
+            return (
+              <article key={item.id}>
+                <div className="sou-saved-expression">
+                  <p lang="en">{item.en}</p>
+                  <KokoroSpeakButton text={item.en} japanese={language === 'ja'} />
+                </div>
+                {language === 'ja' && item.ja && <p lang="ja">{item.ja}</p>}
+                <div className="aw-actions">
+                  {item.topic ? (
+                    <Button href={`/lesson/98/study/${item.topic}`} variant="outline">
+                      {t('Vocabulary lesson')} {Number(item.topic)}
+                    </Button>
+                  ) : (item.chapter || introductionAliases[item.id]) && (
+                    <Button
+                      href={item.id.startsWith('study-')
+                        ? `/lesson/${item.chapter}/study`
+                        : `/lesson/${chapter}/practice?line=${introductionAliases[item.id] ?? item.id}`}
+                      variant="outline"
+                    >
+                      {t('Chapter {id}', { id: chapter })}
+                    </Button>
+                  )}
+                  <Button variant="quiet" onClick={() => save(item.id)}> {t("Remove")} </Button>
+                </div>
+              </article>
+            )
+          })}
         </div>
       ) : (
         <div className="aw-empty">
