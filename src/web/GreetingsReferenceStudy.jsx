@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import './GreetingsReferenceStudy.css'
 import { approvedAudio } from './components'
 import { useLanguage } from './Language'
+import { SaveExpression } from './CourseMemory'
 
 // Chapter 01 study artwork follows the approved five-page Artico reference.
 // Seven original transparent Chapter 01 greeting illustrations.
@@ -177,6 +178,7 @@ export function PhraseShelf({ title, titleJa, options, scene = 'people', initial
         </button>)}
       </div>
       {option && <div className="ar-context" aria-live="polite">{language === 'ja' ? option.contextJa || jpContext[option.text] || option.description : option.description}</div>}
+      {option && <SaveExpression item={option} en={option.text} ja={option.ja || jpPhrase[option.text]} />}
     </div>
     {note && <aside className="ar-note ar-shelf-note"><span className="ar-note-label">Note</span><p className="ar-note-copy">{note.title && <strong>{note.title} </strong>}{language === 'ja' ? note.ja : note.en}</p></aside>}
   </article>

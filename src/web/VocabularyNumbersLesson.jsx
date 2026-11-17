@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { SaveExpression, useActivityValue } from './CourseMemory'
 import { numberGroups, numberLessonNotes } from './vocabularyLesson02'
 import VocabularyNumberVisual from './VocabularyNumberVisual'
 import KokoroSpeakButton from './KokoroSpeakButton'
@@ -19,7 +20,7 @@ function NumberTable({ group, japanese, practice, revealed, onReveal }) {
         <tbody>
           {group.items.map((item, index) => {
             const id = group.id + '-' + index
-            const visible = revealed.has(id)
+            const visible = revealed.includes(id)
             return (
               <tr key={id}>
                 <td className="vl02-cue-cell">
@@ -39,6 +40,7 @@ function NumberTable({ group, japanese, practice, revealed, onReveal }) {
                       </button>
                     : <strong className="vl02-en-value" lang="en">{item.term}</strong>}
                   <KokoroSpeakButton text={item.term} japanese={japanese} className="vl02-table-audio" />
+                  {(!practice || visible) && <SaveExpression topic={2} en={item.term} ja={item.ja} />}
                   <span className="vl02-mobile-ja" lang="ja">{item.ja}</span>
                 </td>
                 <td className="vl02-ja-cell" lang="ja">{item.ja}</td>
@@ -74,9 +76,11 @@ function LessonNote({ note, japanese, label }) {
 }
 
 export default function VocabularyNumbersLesson({ japanese }) {
-  const [activeGroup, setActiveGroup] = useState('all')
-  const [practice, setPractice] = useState(false)
-  const [revealed, setRevealed] = useState(() => new Set())
+  const [activeGroup, setActiveGroup] = useActivityValue('vocab-2-group', 'all',
+    value => value === 'all' || numberGroups.some(group => group.id === value))
+  const [practice, setPractice] = useActivityValue('vocab-2-mode', false, value => typeof value === 'boolean')
+  const [revealed, setRevealed] = useActivityValue('vocab-2-revealed', [],
+    value => Array.isArray(value) && value.every(key => typeof key === 'string'))
   const visibleGroups = useMemo(
     () => activeGroup === 'all' ? numberGroups : numberGroups.filter((group) => group.id === activeGroup),
     [activeGroup],
@@ -85,16 +89,11 @@ export default function VocabularyNumbersLesson({ japanese }) {
 
   function togglePractice() {
     setPractice((enabled) => !enabled)
-    setRevealed(new Set())
+    setRevealed([])
   }
 
   function revealTerm(id) {
-    setRevealed((current) => {
-      const next = new Set(current)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+    setRevealed(current => current.includes(id) ? current.filter(item => item !== id) : [...current, id])
   }
 
   return (

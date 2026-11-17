@@ -6,6 +6,7 @@ import { introductionAliases } from '../course/introductions'
 import { getLearningStage, learningStages } from './pathway'
 import { catalog, foundationSteps, groups, savedItems } from './content'
 import { applicationTracks } from './applicationTracks'
+import KokoroSpeakButton from './KokoroSpeakButton'
 import './library-readable.css'
 
 function CourseLesson({ href, number, iconName, title, active = false, recommended = false }) {
@@ -236,27 +237,38 @@ export function PracticeLibrary({ learning }) {
   )
 }
 
-export function Saved({ learning, save, notify }) {
+export function Saved({ learning, save }) {
   const { t, language } = useLanguage()
   const items = learning.saved
     .map((id) => learning.savedDetails[id] ?? savedItems[id])
     .filter(Boolean)
+    .reverse()
   return (
     <div className="aw-page aw-library-page">
-      <Heading eyebrow={t("YOUR PHRASES")} title={t("Keep a useful phrase.")} />
-      <p className="rl-intro">{t("A small collection of words you want to come back to.")}</p>
+      <Heading title={t('Saved words & phrases')} />
+      <p className="rl-intro">{t('Your collection is saved in this browser.')}</p>
       {items.length ? (
         <div className="aw-saved-list">
           {items.map((item) => (
             <article key={item.id}>
-              <p lang="en">{item.en}</p>
+              <div className="sou-saved-expression">
+                <p lang="en">{item.en}</p>
+                <KokoroSpeakButton text={item.en} japanese={language === 'ja'} />
+              </div>
+              {language === 'ja' && item.ja && <p lang="ja">{item.ja}</p>}
               <div className="aw-actions">
-                {(item.chapter || introductionAliases[item.id]) && (
+                {item.topic ? (
+                  <Button href={`/lesson/98/study/${item.topic}`} variant="outline">
+                    {t('Vocabulary lesson')} {Number(item.topic)}
+                  </Button>
+                ) : (item.chapter || introductionAliases[item.id]) && (
                   <Button
-                    href={`/lesson/${item.chapter ?? '02'}/practice?line=${introductionAliases[item.id] ?? item.id}`}
+                    href={item.id.startsWith('study-')
+                      ? `/lesson/${item.chapter}/study`
+                      : `/lesson/${item.chapter ?? '02'}/practice?line=${introductionAliases[item.id] ?? item.id}`}
                     variant="outline"
                   >
-                    {t('Practice')} · {t('Chapter {id}', { id: item.chapter ?? '02' })}
+                    {t('Chapter {id}', { id: item.chapter ?? '02' })}
                   </Button>
                 )}
                 <Button variant="quiet" onClick={() => save(item.id)}> {t("Remove")} </Button>
@@ -266,8 +278,8 @@ export function Saved({ learning, save, notify }) {
         </div>
       ) : (
         <div className="aw-empty">
-          <h2>{t("No saved phrases yet.")}</h2>
-          <p>{t("Save a phrase during practice to keep it here.")}</p>
+          <h2>{t('Nothing saved yet.')}</h2>
+          <p>{t('Tap the bookmark next to a word or phrase to save it here.')}</p>
           <Button href="/courses?social">{t("Explore lessons")}</Button>
         </div>
       )}

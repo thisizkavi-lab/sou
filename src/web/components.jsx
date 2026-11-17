@@ -1,6 +1,7 @@
 import { useLanguage } from './Language'
 import { useEffect, useRef, useState } from 'react'
 import Glyph from './Glyph'
+import { SaveExpression } from './CourseMemory'
 import { speakKokoroSpeech, stopKokoroSpeech } from './kokoroSpeech'
 
 const icons = {
@@ -293,11 +294,14 @@ export function PhrasePlaybackButton({ item, audio, activeId, onPlay, className 
   const playing = activeId === item.id && audio.playing
   const title = t(loading ? 'Preparing audio…' : playing ? 'Stop audio' : 'Listen to this phrase')
   return (
+    <>
     <button type="button" className={className} aria-busy={loading} title={title}
       aria-label={t(loading || playing ? 'Stop: {phrase}' : 'Listen to: {phrase}', { phrase: item.en })}
       onClick={() => onPlay(item.id, false, item.en)}>
       <Glyph name={loading || playing ? 'pause' : 'speaker'} size={size} />
     </button>
+    <SaveExpression item={item} />
+    </>
   )
 }
 

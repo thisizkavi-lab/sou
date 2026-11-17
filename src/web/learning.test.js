@@ -8,6 +8,8 @@ import {
   parseRoute,
   sanitizeLearning,
   shouldShowLanding,
+  STORAGE_KEY,
+  textBookmarkId,
   toggleSaved,
   visit,
 } from './learning.js'
@@ -22,6 +24,31 @@ test('the course opens Orientation and preserves direct lesson links', () => {
     assert.equal(parseCourseRoute(hash).path, start, hash)
   for (const path of [start, '/foundation/orientation/practice', '/foundation/letters/study', '/courses?social', '/lesson/02/practice/friend', '/lesson/98/study', '/saved'])
     assert.equal(parseCourseRoute('#' + path).path, path)
+})
+
+test('returning learners keep vocabulary scroll, exercise progress, and old and new bookmarks', () => {
+  const path = '/lesson/98/study/03'
+  const word = textBookmarkId('vocab', '03', 'Monday')
+  const phrase = textBookmarkId('study', '01', 'Good to see you.')
+  const state = visit({
+    ...emptyLearning,
+    positions: { [path]: 1200 },
+    activities: { 'vocab-3-mode': '"practice"', 'quiz-02-en': '{"position":1,"answers":{}}' },
+    saved: ['first-1', ...Array.from({ length: 201 }, (_, i) => 'previous-' + i), word, phrase],
+    savedDetails: {
+      [word]: { en: 'Monday', ja: '月曜日', topic: '03' },
+      [phrase]: { en: 'Good to see you.', ja: 'また会えてうれしいよ', chapter: '01' },
+    },
+  }, path)
+  const restored = loadLearning({ getItem: key => key === STORAGE_KEY ? JSON.stringify(state) : '1' })
+  assert.equal(parseCourseRoute('', restored.last).path, path)
+  assert.equal(parseCourseRoute('#/lesson/01/study', restored.last).path, '/lesson/01/study')
+  assert.equal(visit(restored, '/saved').last, path)
+  assert.deepEqual(restored.positions, state.positions)
+  assert.deepEqual(restored.activities, state.activities)
+  assert.deepEqual(restored.saved, state.saved)
+  assert.deepEqual(restored.savedDetails[word], { ...state.savedDetails[word], id: word })
+  assert.deepEqual(restored.savedDetails[phrase], { ...state.savedDetails[phrase], id: phrase })
 })
 
 test('landing uses a full-height illustrated hero with a working blue entry and preserved philosophy', () => {

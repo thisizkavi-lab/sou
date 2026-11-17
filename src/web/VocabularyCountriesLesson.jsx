@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { SaveExpression, useActivityValue } from './CourseMemory'
 import { countries, placePhrases, placeWords, regions } from './vocabularyLesson01'
 import KokoroSpeakButton from './KokoroSpeakButton'
 
@@ -35,27 +35,26 @@ function CountryCard({ item, revealed, onToggle, japanese }) {
         japanese={japanese}
         className="vl01-country-audio"
       />
+      <SaveExpression topic={1} en={item.country} ja={item.ja} />
+      {revealed && <SaveExpression topic={1} en={item.nationality} ja={item.nationalityJa} />}
     </li>
   )
 }
 
 export default function VocabularyCountriesLesson({ japanese }) {
-  const [region, setRegion] = useState('all')
-  const [hiddenCountries, setHiddenCountries] = useState(() => new Set())
+  const [region, setRegion] = useActivityValue('vocab-1-group', 'all',
+    value => regions.some(option => option.id === value))
+  const [hiddenCountries, setHiddenCountries] = useActivityValue('vocab-1-revealed', [],
+    value => Array.isArray(value) && value.every(code => typeof code === 'string'))
   const visible = region === 'all' ? countries : countries.filter((item) => item.regions.includes(region))
-  const someHidden = hiddenCountries.size > 0
+  const someHidden = hiddenCountries.length > 0
 
   function toggleCountry(code) {
-    setHiddenCountries((current) => {
-      const next = new Set(current)
-      if (next.has(code)) next.delete(code)
-      else next.add(code)
-      return next
-    })
+    setHiddenCountries(current => current.includes(code) ? current.filter(item => item !== code) : [...current, code])
   }
 
   function toggleAll() {
-    setHiddenCountries(someHidden ? new Set() : new Set(countries.map((item) => item.code)))
+    setHiddenCountries(someHidden ? [] : countries.map((item) => item.code))
   }
 
   return (
@@ -114,7 +113,7 @@ export default function VocabularyCountriesLesson({ japanese }) {
           {japanese ? `${visible.length}か国を表示` : `Showing ${visible.length} ${visible.length === 1 ? 'country' : 'countries'}`}
         </p>
         <ul className="vl01-cards">
-          {visible.map((item) => <CountryCard key={item.code} item={item} revealed={!hiddenCountries.has(item.code)}
+          {visible.map((item) => <CountryCard key={item.code} item={item} revealed={!hiddenCountries.includes(item.code)}
             onToggle={() => toggleCountry(item.code)} japanese={japanese} />)}
         </ul>
         <p className="vl01-region-note">{japanese
@@ -134,10 +133,10 @@ export default function VocabularyCountriesLesson({ japanese }) {
           </div>
         </div>
         <dl className="vl01-word-grid">
-          {placeWords.map((word) => <div key={word.en}><dt lang="en">{word.en}</dt><dd lang="ja">{word.ja}</dd><KokoroSpeakButton text={word.en} japanese={japanese} /></div>)}
+          {placeWords.map((word) => <div key={word.en}><dt lang="en">{word.en}</dt><dd lang="ja">{word.ja}</dd><KokoroSpeakButton text={word.en} japanese={japanese} /><SaveExpression topic={1} en={word.en} ja={word.ja} /></div>)}
         </dl>
         <div className="vl01-phrase-grid">
-          {placePhrases.map((phrase) => <div key={phrase.en}><strong lang="en">{phrase.en}</strong><p lang="ja">{phrase.ja}</p><KokoroSpeakButton text={phrase.en} japanese={japanese} /></div>)}
+          {placePhrases.map((phrase) => <div key={phrase.en}><strong lang="en">{phrase.en}</strong><p lang="ja">{phrase.ja}</p><KokoroSpeakButton text={phrase.en} japanese={japanese} /><SaveExpression topic={1} en={phrase.en} ja={phrase.ja} /></div>)}
         </div>
       </section>
     </div>

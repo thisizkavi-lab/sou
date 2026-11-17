@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useActivityValue } from './CourseMemory'
 import { useLanguage } from './Language'
 import { Glyph } from './LessonExperience'
 import { LETTERS_PER_CHECK, makeAlphabetRecognitionCards } from './alphabetRecognition'
@@ -48,9 +49,13 @@ const copy = {
 export default function AlphabetRecognition() {
   const { language } = useLanguage()
   const l = copy[language] ?? copy.en
-  const [round, setRound] = useState(0)
-  const [index, setIndex] = useState(0)
-  const [responses, setResponses] = useState({})
+  const [round, setRound] = useActivityValue('alphabet-round', 0,
+    value => Number.isSafeInteger(value) && value >= 0)
+  const [index, setIndex] = useActivityValue('alphabet-index', 0,
+    value => Number.isInteger(value) && value >= 0 && value <= LETTERS_PER_CHECK)
+  const [responses, setResponses] = useActivityValue('alphabet-answers', {},
+    value => value && typeof value === 'object' && !Array.isArray(value) &&
+      Object.values(value).every(answer => typeof answer === 'string' && /^[A-Za-z]$/.test(answer)))
   const [audioAvailable, setAudioAvailable] = useState(() =>
     typeof window !== 'undefined' &&
     typeof window.speechSynthesis !== 'undefined' &&

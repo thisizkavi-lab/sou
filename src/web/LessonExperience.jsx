@@ -1249,7 +1249,10 @@ function Experience({ route, learning, update, save, notify }) {
     const target = practiceById[canonical]?.studyId ?? canonical
     const practiceIds = catalog.aliases[canonical] ?? (practiceById[canonical] ? [canonical] : [])
     if (practice && practiceIds.length)
-      change((current) => ({ ...current, session: { ids: practiceIds, index: 0, active: true, completed: false } }))
+      change((current) => current.session.active &&
+        practiceIds.length === current.session.ids.length && practiceIds.every((id, index) => id === current.session.ids[index])
+        ? current
+        : { ...current, session: { ids: practiceIds, index: 0, active: true, completed: false } })
     if (!practice) {
       const id = introductionById[target]
         ? `study-${target}`
@@ -1338,7 +1341,7 @@ function Experience({ route, learning, update, save, notify }) {
             <PracticeEntry set={set} change={change} audioProps={audioProps} onStart={start} />
           )}
           <div id="ip-situations">
-            <ScenarioQuiz key={id + '-' + language} questions={quizQuestions} />
+            <ScenarioQuiz key={id + '-' + language} chapterId={id} questions={quizQuestions} />
           </div>
         </div>
       ) : (

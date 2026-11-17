@@ -32,7 +32,7 @@ export function breadcrumbItems(route, { t = value => value, language = 'en', fo
     items = [orientation ? { label:t('Home'), href:'#/home' } : learn]
     if (!orientation) items.push({ label:t(stageTitle || 'Level Zero'), href:'#/courses?foundation' })
     items.push({ label:foundationTitle || route.id, href:'#' + route.path })
-  } else if (route.page === 'saved') items = [{ label:t('Progress'), href:'#/progress' }, { label:t('Saved phrases'), href:'#/saved' }]
+  } else if (route.page === 'saved') items = [{ label:t('Progress'), href:'#/progress' }, { label:t('Saved words & phrases'), href:'#/saved' }]
   else items = [{ label:t({ home:'Home', courses:'Learn', progress:'Progress', practice:'Practice' }[route.page] || 'Learn'), href:'#' + route.path }]
   return items.map((item, index) => index === items.length - 1 ? { label:item.label } : item)
 }

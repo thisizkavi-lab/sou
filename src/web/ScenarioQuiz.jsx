@@ -1,18 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useActivityValue } from './CourseMemory'
 import { useLanguage } from './Language'
 import Glyph from './Glyph'
 import './scenario-quiz.css'
 
-export default function ScenarioQuiz({ questions }) {
+const start = { position: 0, answers: {} }
+
+export default function ScenarioQuiz({ chapterId, questions }) {
   const { language } = useLanguage()
   const ja = language === 'ja'
-  const [position, setPosition] = useState(0)
-  const [answers, setAnswers] = useState({})
-  // Reinitialize when switching chapters / language, never mix answers.
-  const identity = questions.map((question) => question.id).join('|') + language
-  useEffect(() => { setPosition(0); setAnswers({}) }, [identity])
-
   const count = questions.length
+  const [{ position, answers }, setProgress] = useActivityValue('quiz-' + chapterId + '-' + language, start,
+    value => Number.isInteger(value?.position) && value.position >= 0 && value.position <= count &&
+      value.answers && typeof value.answers === 'object' && !Array.isArray(value.answers) &&
+      Object.entries(value.answers).every(([id, option]) => {
+        const question = questions.find(item => item.id === id)
+        return question && Number.isInteger(option) && option >= 0 && option < question.options.length
+      }))
   if (!count) return null
   const finished = position >= count
   const question = finished ? null : questions[position]
@@ -22,8 +25,8 @@ export default function ScenarioQuiz({ questions }) {
     const item = questions.find((entry) => entry.id === id)
     return item && answers[id] === item.answer
   }).length
-  const restart = () => { setAnswers({}); setPosition(0) }
-  const next = () => setPosition((current) => Math.min(current + 1, count))
+  const restart = () => setProgress(start)
+  const next = () => setProgress(current => ({ ...current, position: Math.min(current.position + 1, count) }))
 
   return (
     <section className="ip-your-turn sq-quiz" aria-labelledby="ip-situations-heading">
@@ -64,8 +67,8 @@ export default function ScenarioQuiz({ questions }) {
                   (answered && selected === i && i !== question.answer ? ' is-incorrect' : '')}
                 aria-pressed={selected === i}
                 disabled={answered}
-                onClick={() => setAnswers((current) =>
-                  current[question.id] !== undefined ? current : { ...current, [question.id]: i })}
+                onClick={() => setProgress(current => current.answers[question.id] !== undefined
+                  ? current : { ...current, answers: { ...current.answers, [question.id]: i } })}
               >
                 <span className="sq-option-letter" aria-hidden="true">{'ABC'[i]}</span>
                 <span lang="en">{option}</span>

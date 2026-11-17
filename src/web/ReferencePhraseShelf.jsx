@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLanguage } from './Language'
 import Glyph from './Glyph'
+import { SaveExpression } from './CourseMemory'
 
 const art = (file) => `${import.meta.env.BASE_URL}assets/course/${file}`
 
@@ -48,6 +49,7 @@ export default function ReferencePhraseShelf({ ids = [], byId, audioProps, title
               : current.context && <p>{current.context}</p>}
           </div>
         )}
+        <SaveExpression item={current} />
       </div>
       {note && <aside className="ar-reference-note">
         <span className="ar-reference-note-label">Note</span>

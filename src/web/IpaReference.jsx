@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useActivityValue } from './CourseMemory'
 import { useLanguage } from './Language'
 import { Glyph } from './LessonExperience'
 import { ipaGroups, allIpaSounds } from './ipaSounds'
@@ -167,7 +168,7 @@ function SoundTable({ group, l, play }) {
 export default function IpaReference({ mode = 'study' }) {
   const { language } = useLanguage()
   const l = copy[language] ?? copy.en
-  const [selected, setSelected] = useState('i')
+  const [selected, setSelected] = useActivityValue('ipa-' + mode, 'i', value => typeof value === 'string')
   const { play, message } = useIpaPlayback()
   const sound = displayGroups.flatMap(group => group.sounds).find(item => item.ipa === selected) || vowels.sounds[0]
 

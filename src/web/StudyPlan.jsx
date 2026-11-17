@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useActivityValue } from './CourseMemory'
 import { useLanguage } from './Language'
 import {
   PLAN_RESPONSE_KEY, DEFAULT_PLAN, MINUTE_OPTIONS, DAY_OPTIONS,
@@ -73,8 +73,11 @@ export default function StudyPlan({ learning, update }) {
   const { language } = useLanguage()
   const t = copy[language] ?? copy.en
   const stored = readStudyPlan(learning.responses?.[PLAN_RESPONSE_KEY])
-  const [settings, setSettings] = useState(() => stored ?? DEFAULT_PLAN)
-  const [showOutlook, setShowOutlook] = useState(() => Boolean(stored))
+  const [settings, setSettings] = useActivityValue('plan-draft', stored ?? DEFAULT_PLAN,
+    value => MINUTE_OPTIONS.includes(value?.minutes) && DAY_OPTIONS.includes(value?.days) &&
+      Object.hasOwn(FOCUSES, value.focus) && Object.hasOwn(LEVELS, value.level))
+  const [showOutlook, setShowOutlook] = useActivityValue('plan-outlook', Boolean(stored),
+    value => typeof value === 'boolean')
   const plan = buildStudyPlan(settings)
   const patch = (key,value) => setSettings(previous => ({ ...previous, [key]:value }))
   const save = () => {

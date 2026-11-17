@@ -197,3 +197,53 @@
     text-align: center;
   }
 }
+.sou-continue {
+  flex: none;
+  padding: 5px 9px;
+  border: 1px solid #cad7ef;
+  border-radius: 8px;
+  color: #2452a2;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.sou-bookmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 5px;
+  margin-inline: 4px;
+  border: 1px solid #cad7ef;
+  border-radius: 8px;
+  background: #fff;
+  color: #315582;
+  cursor: pointer;
+}
+.sou-bookmark:hover,
+.sou-continue:hover { background: #edf4ff; }
+.sou-bookmark[aria-pressed="true"] {
+  border-color: #9bb8ec;
+  background: #e6efff;
+  color: #164898;
+}
+.sou-bookmark:focus-visible,
+.sou-continue:focus-visible { outline: 2px solid #2452a2; outline-offset: 2px; }
+.sou-word-actions,
+.sou-saved-expression { display: flex; align-items: center; gap: 6px; }
+.sou-saved-expression p { font-size: clamp(1.25rem, 4vw, 1.85rem); overflow-wrap: anywhere; }
+.aw-saved-list .aw-actions { flex-wrap: wrap; }
+.vlt-card > .sou-bookmark,
+.vlt-recall-container > .sou-bookmark,
+.vl01-card-item > .sou-bookmark,
+.vl01-word-grid > div > .sou-bookmark,
+.vl01-phrase-grid > div > .sou-bookmark {
+  position: absolute;
+  right: 50px;
+  bottom: 7px;
+  margin: 0;
+  z-index: 2;
+}
+.vl01-card-item > .sou-bookmark + .sou-bookmark { right: 89px; }

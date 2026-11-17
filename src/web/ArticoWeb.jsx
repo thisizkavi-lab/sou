@@ -1,9 +1,10 @@
 import Breadcrumbs from './Breadcrumbs.jsx'
 import { LanguageSelector, useLanguage } from './Language'
-import { Component, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Component, lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { CourseMemory } from './CourseMemory'
 import { Button, Icon } from './components'
 import { chapterById, foundationSteps } from './content'
-import { loadLearning, parseCourseRoute, STORAGE_KEY, toggleSaved, visit } from './learning'
+import { learningItem, loadLearning, parseCourseRoute, STORAGE_KEY, toggleSaved, visit } from './learning'
 import './english-shell.css'
 import { getLearningStage, learningStages } from './pathway'
 import { isStaleAssetFailure, shouldRefreshStaleAssets } from './routeRecovery.js'
@@ -21,10 +22,9 @@ const destinations = [
   { id: 'orientation', path: orientationPath, label: 'Orientation', icon: 'next' },
   { id: 'foundation', path: learningStages[1].start, label: 'Level Zero', icon: 'audio' },
   { id: 'social', path: learningStages[2].overview, label: 'Social Fluency', icon: 'book' },
-  { id: 'saved', path: '/saved', label: 'Saved phrases', icon: 'check' },
+  { id: 'saved', path: '/saved', label: 'Saved', icon: 'check' },
 ]
-
-const readCourseRoute = () => parseCourseRoute(window.location.hash)
+const learningPages = ['lesson', 'foundation', 'vocabulary']
 
 function readLearning() {
   try {
@@ -33,14 +33,16 @@ function readLearning() {
     return loadLearning({ getItem: () => null })
   }
 }
-function useRoute(beforeChange) {
-  const [route, setRoute] = useState(readCourseRoute)
+function useRoute(last, beforeChange) {
+  const [route, setRoute] = useState(() => parseCourseRoute(window.location.hash, last))
   const currentRoute = useRef(route)
+  const lastRef = useRef(last)
   const beforeChangeRef = useRef(beforeChange)
+  lastRef.current = last
   beforeChangeRef.current = beforeChange
   useEffect(() => {
     const change = () => {
-      const next = readCourseRoute()
+      const next = parseCourseRoute(window.location.hash, lastRef.current)
       if (next.path === currentRoute.current.path) return
       beforeChangeRef.current(currentRoute.current)
       currentRoute.current = next
@@ -93,75 +95,84 @@ export default function ArticoWeb() {
   const { t, language } = useLanguage()
   const mainRef = useRef(null)
   const pendingScroll = useRef(null)
-  const vocabularyPositions = useRef({})
-  const route = useRoute((outgoing) => {
-    const viewport = mainRef.current
-    if (!viewport) return
-    if (['lesson', 'foundation'].includes(outgoing.page))
-      pendingScroll.current = { path: outgoing.path, top: viewport.scrollTop }
-    if (outgoing.page === 'vocabulary')
-      vocabularyPositions.current[outgoing.path] = viewport.scrollTop
-    // Stop any section-jump animation before replacing the page. Capture the
-    // outgoing position before React changes its height or the browser clamps it.
-    viewport.scrollTo({ top: viewport.scrollTop, behavior: 'instant' })
-  })
-  const [learning, update] = useState(readLearning)
+  const restoringScroll = useRef(false)
+  const scrollTimer = useRef(null)
+  const [learning, setLearning] = useState(readLearning)
   const [toast, setToast] = useState('')
   const contentRef = useRef(null)
   const learningRef = useRef(learning)
-  const scrollTimer = useRef(null)
-  learningRef.current = learning
+  const update = useCallback((transform) => {
+    const previous = learningRef.current
+    const next = transform(previous)
+    if (next === previous) return
+    learningRef.current = next
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+    } catch {
+      setToast('local-storage-unavailable')
+    }
+    setLearning(next)
+  }, [])
+  const flushScroll = useCallback(() => {
+    clearTimeout(scrollTimer.current)
+    const position = pendingScroll.current
+    pendingScroll.current = null
+    if (!position) return
+    update(previous => previous.positions[position.path] === position.top ? previous : {
+      ...previous, positions: { ...previous.positions, [position.path]: position.top },
+    })
+  }, [update])
+  const route = useRoute(learning.last, () => {
+    flushScroll()
+    const viewport = mainRef.current
+    viewport?.scrollTo({ top: viewport.scrollTop, behavior: 'instant' })
+  })
   const notify = (message) => setToast(message)
   const save = (item) =>
     update((previous) => {
       const id = typeof item === 'string' ? item : item.id
-      const saved = toggleSaved(previous.saved, id)
       const savedDetails = { ...previous.savedDetails }
+      const detail = typeof item === 'string' ? null : learningItem(id, item)
+      if (!previous.saved.includes(id) && !detail) return previous
+      const saved = toggleSaved(previous.saved, id)
       if (!saved.includes(id)) delete savedDetails[id]
-      else if (typeof item !== 'string')
-        savedDetails[id] = { id, en: item.en, ja: item.ja ?? '', chapter: item.chapter }
+      else savedDetails[id] = detail
       return { ...previous, saved, savedDetails }
     })
+  const savedIds = useMemo(() => new Set(learning.saved), [learning.saved])
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(learning))
-    } catch {
-      // Learning remains available in memory when browser storage is blocked.
+    const capture = () => {
+      if (document.visibilityState === 'hidden') flushScroll()
     }
-  }, [learning])
-  useLayoutEffect(() => {
-    if (scrollTimer.current) {
+    const receive = (event) => {
+      if (event.key !== STORAGE_KEY && event.key !== null) return
+      // A later tab write can already have replaced the event's snapshot.
+      const latest = readLearning()
+      learningRef.current = latest
+      setLearning(latest)
+    }
+    window.addEventListener('pagehide', flushScroll)
+    document.addEventListener('visibilitychange', capture)
+    window.addEventListener('storage', receive)
+    return () => {
       clearTimeout(scrollTimer.current)
-      scrollTimer.current = null
+      window.removeEventListener('pagehide', flushScroll)
+      document.removeEventListener('visibilitychange', capture)
+      window.removeEventListener('storage', receive)
     }
-    const outgoing = pendingScroll.current
-    pendingScroll.current = null
-    update((previous) =>
-      visit(
-        outgoing
-          ? {
-              ...previous,
-              positions: {
-                ...previous.positions,
-                [outgoing.path]: outgoing.top,
-              },
-            }
-          : previous,
-        route.path,
-      ),
-    )
+  }, [flushScroll])
+  useLayoutEffect(() => {
+    update(previous => visit(previous, route.path))
     const viewport = mainRef.current
-    const target = route.page === 'vocabulary'
-      ? vocabularyPositions.current[route.path] ?? 0
-      : learningRef.current.positions[route.path] ?? 0
-    let restoring = true
+    const target = learningRef.current.positions[route.path] ?? 0
+    restoringScroll.current = true
     const observer = new ResizeObserver(() => {
-      if (!restoring) return
+      if (!restoringScroll.current) return
       viewport.scrollTop = target
       if (Math.abs(viewport.scrollTop - target) < 1) stopRestoring()
     })
     const stopRestoring = () => {
-      restoring = false
+      restoringScroll.current = false
       observer.disconnect()
       viewport.removeEventListener('wheel', stopRestoring)
       viewport.removeEventListener('touchstart', stopRestoring)
@@ -179,7 +190,7 @@ export default function ArticoWeb() {
       viewport.addEventListener('keydown', stopRestoring)
     } else stopRestoring()
     return stopRestoring
-  }, [route.path])
+  }, [route.path, update])
   useEffect(() => {
     if (route.page === 'courses') {
       document.title = t('Social Fluency') + ' · English for Sou'
@@ -191,34 +202,28 @@ export default function ArticoWeb() {
       return
     }
     if (route.page === 'saved') {
-      document.title = `${t('Saved phrases')} · English for Sou`
+      document.title = `${t('Saved words & phrases')} · English for Sou`
       return
     }
     const chapter = chapterById[route.id]
     const foundation = foundationSteps.find((step) => step.id === route.id)
     document.title = `${(language === 'ja' ? chapter?.ja : chapter?.title) ?? (language === 'ja' ? foundation?.ja : foundation?.en) ?? t('Orientation')} · English for Sou`
   }, [route.path, language, t])
-  useEffect(() => () => clearTimeout(scrollTimer.current), [])
   useEffect(() => {
     if (!toast) return
     const timeout = setTimeout(() => setToast(''), 6500)
     return () => clearTimeout(timeout)
   }, [toast])
   const recordScroll = (event) => {
-    if (!['lesson', 'foundation'].includes(route.page)) return
+    if (!learningPages.includes(route.page) || restoringScroll.current) return
     const top = event.currentTarget.scrollTop
     const path = route.path
     pendingScroll.current = { path, top }
     clearTimeout(scrollTimer.current)
-    scrollTimer.current = setTimeout(
-      () =>
-        update((previous) => ({
-          ...previous,
-          positions: { ...previous.positions, [path]: top },
-        })),
-      180,
-    )
+    scrollTimer.current = setTimeout(flushScroll, 180)
   }
+  const resume = !learningPages.includes(route.page) && learning.last
+    ? parseCourseRoute('', learning.last).path : null
   const activeNav = getLearningStage(route.path)?.id ?? (['courses', 'vocabulary'].includes(route.page) ? 'social' : route.page)
   let screen
   if (route.page === 'courses') screen = <SocialCourse learning={learning} />
@@ -253,6 +258,7 @@ export default function ArticoWeb() {
     )
   }
   return (
+    <CourseMemory.Provider value={{ learning, update, savedIds, save, chapter: route.page === 'lesson' ? route.id : null }}>
     <div className="aw-app is-english-pilot" data-language={language}>
       <a
         className="aw-skip"
@@ -281,6 +287,7 @@ export default function ArticoWeb() {
       <div className="aw-main">
         <header className="aw-topbar">
           <Breadcrumbs lessonOnly route={route} language={language} t={t} stageTitle={getLearningStage(route.path)?.title} foundationTitle={foundationSteps.find(step => step.id === route.id)?.[language === 'ja' ? 'ja' : 'en']} />
+          {resume && <a className="sou-continue" href={`#${resume}`}>{t('Continue learning')}</a>}
           <LanguageSelector />
         </header>
         <main
@@ -310,12 +317,13 @@ export default function ArticoWeb() {
       </div>
       {toast && (
         <div className="aw-toast" role="status">
-          <span>{toast}</span>
+          <span>{toast === 'local-storage-unavailable' ? t('This browser could not save your progress.') : toast}</span>
           <button type="button" aria-label={t("Dismiss message")} onClick={() => setToast('')}>
             ×
           </button>
         </div>
       )}
     </div>
+    </CourseMemory.Provider>
   )
 }

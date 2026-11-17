@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useActivityValue } from './CourseMemory'
 import { useLanguage } from './Language'
 import { TheoryAudioSample } from './FoundationContent'
 import { twisterCards, twisterLevels, twisterAudioSource, twisterAudioClip, twisterAudioGroups } from './twisterCollection'
@@ -110,13 +111,17 @@ export function TongueTwisterStudy() {
 export function TongueTwisterPractice({ initialId }) {
   const { language, t } = useLanguage()
   const ja = language === 'ja'
-  const [index, setIndex] = useState(Math.max(0, twisterCards.findIndex(card => card.id === initialId)))
-  const [chunkIndex, setChunkIndex] = useState(0)
-  const [delivery, setDelivery] = useState('careful')
-  const [extraSelection, setExtraSelection] = useState(null)
+  const [index, setIndex] = useActivityValue('tongue-index', Math.max(0, twisterCards.findIndex(card => card.id === initialId)),
+    value => Number.isInteger(value) && value >= 0 && value < twisterCards.length)
+  const item = twisterCards[index]
+  const [chunkIndex, setChunkIndex] = useActivityValue('tongue-chunk', 0,
+    value => Number.isInteger(value) && value >= 0 && value < item.buildSteps.length)
+  const [delivery, setDelivery] = useActivityValue('tongue-delivery', 'careful',
+    value => value === 'careful' || value === 'natural')
+  const [extraSelection, setExtraSelection] = useActivityValue('tongue-extra', null,
+    value => value === null || (['focus', 'transfer'].includes(value?.kind) && Boolean(twisterAudioClip(item, value))))
   const [playRequest, setPlayRequest] = useState(0)
   const requestSequence = useRef(0)
-  const item = twisterCards[index]
   const chunk = item.buildSteps[chunkIndex] || item.phrase
   const selection = extraSelection ?? { kind: 'practice', step: chunkIndex, delivery }
   const clip = twisterAudioClip(item, selection)

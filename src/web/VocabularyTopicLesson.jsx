@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { SaveExpression, useActivityValue } from './CourseMemory'
 import organized from './vocabularyOrganized.json'
 import { vocabularyGroupJapanese, vocabularyJapanese } from './vocabularySupport'
 import { vocabularyVisual } from './vocabularyVisual'
@@ -54,7 +55,10 @@ function WeekDaysChart({ japanese }) {
                     {japanese && <small lang="ja">{vocabularyJapanese(day.name, 3)}</small>}
                   </span>
                   <abbr className="vlt-week-day-short" title={day.name} lang="en">{day.short}</abbr>
-                  <KokoroSpeakButton text={day.name} japanese={japanese} />
+                  <span className="sou-word-actions">
+                    <KokoroSpeakButton text={day.name} japanese={japanese} />
+                    <SaveExpression topic={3} en={day.name} ja={vocabularyJapanese(day.name, 3)} />
+                  </span>
                 </li>
               ))}
             </ol>
@@ -116,6 +120,7 @@ function MonthsOfYearChart({ japanese }) {
               <th scope="row" className="vlt-month-name">
                 <strong lang="en">{month.name}</strong>
                 <KokoroSpeakButton text={month.name} japanese={japanese} />
+                <SaveExpression topic={3} en={month.name} ja={month.ja} />
                 {japanese && <small lang="ja">{month.ja}</small>}
               </th>
               <td className="vlt-month-abbreviation">
@@ -171,6 +176,7 @@ function TimeSpansTable({ items, japanese }) {
               <th scope="row" className="vlt-span-name">
                 <strong lang="en">{term}</strong>
                 <KokoroSpeakButton text={term} japanese={japanese} />
+                <SaveExpression topic={3} en={term} ja={vocabularyJapanese(term, 3)} />
                 {japanese && <small lang="ja">{vocabularyJapanese(term, 3)}</small>}
               </th>
               <td className="vlt-span-equivalent" lang="en">{timeSpanEquivalents[term]}</td>
@@ -234,6 +240,7 @@ function FrequencyScale({items,japanese}) {
               }}>
                 <span lang="en">{level.label}</span>
                 <KokoroSpeakButton text={level.label} japanese={japanese} />
+                <SaveExpression topic={3} en={level.label} ja={vocabularyJapanese(level.label, 3)} />
                 {japanese&&<small lang="ja">{vocabularyJapanese(level.term,3)}</small>}
               </div>
             </li>
@@ -294,18 +301,24 @@ function VocabCard({ entry, lesson, practice, revealed, onReveal, japanese, upco
           {body}
         </button>
         <KokoroSpeakButton text={term} japanese={japanese} upcoming={upcoming} />
+        {!answerHidden && <SaveExpression topic={lesson} en={term} ja={ja} />}
       </div>
     : <article className={'vlt-card' + cardType}>
         {body}
         <KokoroSpeakButton text={term} japanese={japanese} upcoming={upcoming} />
+        <SaveExpression topic={lesson} en={term} ja={ja} />
       </article>
 }
 
 export default function VocabularyTopicLesson({ topic, japanese }) {
   const lesson = lessons.get(topic.sourceLesson)
-  const [groupIndex, setGroupIndex] = useState(-1)
-  const [mode, setMode] = useState('study')
-  const [revealed, setRevealed] = useState(() => new Set())
+  const activity = 'vocab-' + topic.sourceLesson
+  const [groupIndex, setGroupIndex] = useActivityValue(activity + '-group', -1,
+    value => Number.isInteger(value) && value >= -1 && value < (lesson?.groups.length ?? 0))
+  const [mode, setMode] = useActivityValue(activity + '-mode', 'study',
+    value => value === 'study' || value === 'practice')
+  const [revealed, setRevealed] = useActivityValue(activity + '-revealed', [],
+    value => Array.isArray(value) && value.every(key => typeof key === 'string'))
   // Source stays intact for editorial traceability; this heading is not a word.
   const groups = useMemo(() => (lesson?.groups || []).map((group, index) =>
     topic.sourceLesson === 5 && index === 0
@@ -329,19 +342,14 @@ export default function VocabularyTopicLesson({ topic, japanese }) {
 
   function chooseGroup(index) {
     setGroupIndex(index)
-    setRevealed(new Set())
+    setRevealed([])
   }
   function chooseMode(value) {
     setMode(value)
-    setRevealed(new Set())
+    setRevealed([])
   }
   function toggleReveal(key) {
-    setRevealed(current => {
-      const next = new Set(current)
-      if (next.has(key)) next.delete(key)
-      else next.add(key)
-      return next
-    })
+    setRevealed(current => current.includes(key) ? current.filter(item => item !== key) : [...current, key])
   }
   const sample = groups.flatMap(group => organizeVocabularyGroup(group.items,topic.sourceLesson).fresh)
     .map(([term]) => ({term,visual:vocabularyVisual(term,topic.sourceLesson)}))
@@ -435,7 +443,7 @@ export default function VocabularyTopicLesson({ topic, japanese }) {
                     {cards.map((entry, index) => {
                       const key = group.index + '-' + index
                       return <VocabCard key={key} entry={entry} lesson={topic.sourceLesson}
-                        practice={mode === 'practice'} revealed={revealed.has(key)}
+                        practice={mode === 'practice'} revealed={revealed.includes(key)}
                         onReveal={() => toggleReveal(key)} japanese={japanese}
                          upcoming={cards.slice(index + 1, index + 3).map(item => item[0])} />
                     })}

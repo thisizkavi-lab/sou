@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useActivityValue } from './CourseMemory'
 import { useLanguage } from './Language'
 import { getLessonNavigation } from './pathway'
 import CurriculumIcon from './CurriculumIcon'
@@ -156,12 +157,13 @@ function Practice({ja,learning,update}) {
   const stored = useMemo(()=>readProgress(learning.responses?.[progressKey]),[learning.responses])
   const [mode,setMode]=useState(stored.mode||'starter')
   const [index,setIndex]=useState(stored.index||0)
-  const [picked,setPicked]=useState(null)
-  const [checked,setChecked]=useState(false)
-  const [branchId,setBranchId]=useState(branches[0].id)
-  const [branchPick,setBranchPick]=useState(null)
   const [opened,setOpened]=useState(false)
-  const [view,setView]=useState('quiz')
+  const [view,setView]=useActivityValue('humor-view','quiz',value=>['quiz','branches','open'].includes(value))
+  const [branchId,setBranchId]=useActivityValue('humor-branch',branches[0].id,
+    value=>branches.some(branch=>branch.id===value))
+  const activeBranch=branches.find(b=>b.id===branchId)||branches[0]
+  const [branchPick,setBranchPick]=useActivityValue('humor-reply',null,
+    value=>value===null || (Number.isInteger(value) && value>=0 && value<activeBranch.choices.length))
   const setStore = (patch) => update(previous => {
     const current=readProgress(previous.responses?.[progressKey])
     return { ...previous, responses:{ ...previous.responses, [progressKey]:JSON.stringify({...current,...patch}) } }
@@ -170,15 +172,19 @@ function Practice({ja,learning,update}) {
   const list = ids.map(id=>exercises.find(x=>x.id===id)).filter(Boolean)
   const done = index>=list.length
   const item = list[Math.min(index,list.length-1)]
-  const chooseMode=(next)=>{setMode(next);setIndex(0);setPicked(null);setChecked(false);setStore({mode:next,index:0})}
+  const [answer,setAnswer]=useActivityValue('humor-answer',null,
+    value=>value===null || (value?.id===item?.id && Number.isInteger(value.choice) &&
+      value.choice>=0 && value.choice<item.options.length && typeof value.checked==='boolean'))
+  const picked=answer?.choice??null
+  const checked=answer?.checked??false
+  const chooseMode=(next)=>{setMode(next);setIndex(0);setAnswer(null);setStore({mode:next,index:0})}
   const check=()=>{
     if(picked===null)return
-    setChecked(true)
+    setAnswer({id:item.id,choice:picked,checked:true})
     setStore({attempts:{...(stored.attempts||{}),[item.id]:{choice:picked,correct:picked===item.correct}}})
   }
-  const next=()=>{const i=index+1;setIndex(i);setPicked(null);setChecked(false);setStore({index:i})}
-  const restart=()=>{setIndex(0);setPicked(null);setChecked(false);setStore({index:0})}
-  const activeBranch=branches.find(b=>b.id===branchId)||branches[0]
+  const next=()=>{const i=index+1;setIndex(i);setAnswer(null);setStore({index:i})}
+  const restart=()=>{setIndex(0);setAnswer(null);setStore({index:0})}
   const notes=(learning.responses||{})
   const saveNotes=(i,value)=>{const id=i<2?'application-humor-'+i:'ch34-note-o'+(i+1);update(prev=>({...prev,responses:{...prev.responses,[id]:value}}))}
   return <div className="hm-practice">
@@ -201,7 +207,7 @@ function Practice({ja,learning,update}) {
         <h3 lang="en">{item.question}</h3>
         <fieldset className="hm-options" disabled={checked}><legend className="hm-sr-only">{item.question}</legend>
           {item.options.map((option,i)=><label key={i} className={'hm-option'+(picked===i?' is-picked':'')+(checked&&i===item.correct?' is-supported':'')}>
-            <input type="radio" name={item.id} value={i} checked={picked===i} onChange={()=>setPicked(i)}/><span className="hm-choice-letter">{String.fromCharCode(65+i)}</span><span lang="en">{option}</span>
+            <input type="radio" name={item.id} value={i} checked={picked===i} onChange={()=>setAnswer({id:item.id,choice:i,checked:false})}/><span className="hm-choice-letter">{String.fromCharCode(65+i)}</span><span lang="en">{option}</span>
           </label>)}
         </fieldset>
         {checked && <div className="hm-feedback" role="status"><strong>{picked===item.correct ? copy('A supported reading','この場面に合う読み方です',ja) : copy('Consider the context','場面をもう一度考えましょう',ja)}</strong><p>{copy(item.why,item.whyJa,ja)}</p><p className="hm-feedback-clarity">{copy('Most likely or best default—not a claim that all people react the same way.','ここでの答えは、最も自然と思われる解釈です。すべての人に当てはまるわけではありません。',ja)}</p></div>}

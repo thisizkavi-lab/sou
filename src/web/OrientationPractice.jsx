@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useActivityValue } from './CourseMemory'
 import { useLanguage } from './Language'
 import CurriculumIcon from './CurriculumIcon'
 import {
@@ -96,7 +97,13 @@ export default function OrientationPractice({ learning, update }) {
   const { language } = useLanguage()
   const l = copy[language] ?? copy.en
   const answers = parseOrientationAnswers(learning.responses?.[ORIENTATION_RESPONSE_KEY])
-  const [step, setStep] = useState(() => orientationComplete(answers) ? 4 : 0)
+  const [initialStep] = useState(() => {
+    const firstIncomplete = questions.findIndex((_, index) => !canAdvanceOrientation(answers, index))
+    return firstIncomplete < 0 ? questions.length : firstIncomplete
+  })
+  const [step, setStep] = useActivityValue('orientation-step', initialStep,
+    value => Number.isInteger(value) && value >= 0 && value <= questions.length &&
+      (value < questions.length || orientationComplete(answers)))
   const [celebration, setCelebration] = useState(null)
   const titleRef = useRef(null)
   useEffect(() => { titleRef.current?.focus({ preventScroll: true }) }, [step])
@@ -128,6 +135,7 @@ export default function OrientationPractice({ learning, update }) {
     responses: { ...previous.responses, [ORIENTATION_RESPONSE_KEY]: JSON.stringify({ v:1, ...values }) },
   }))
   const choose = (question, option) => {
+    setStep(step)
     if (question === 'context') {
       const exists = answers.context.includes(option)
       if (!exists && selectedCount === 2) return

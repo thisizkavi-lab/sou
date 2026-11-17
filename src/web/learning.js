@@ -10,6 +10,7 @@ export const emptyLearning = {
   positions: {},
   saved: [],
   savedDetails: {},
+  activities: {},
   responses: {},
   indices: {},
   practiceSets: {},
@@ -17,10 +18,29 @@ export const emptyLearning = {
   speed: 1,
   soundSpeed: 0.75,
 }
+const chapterNumber = /^(?:0[1-9]|[1-8]\d|9[0-7])$/
+const vocabularyTopic = /^(?:0[1-9]|[1-6]\d|7[0-8])$/
+const vocabularyView = /^\/lesson\/98\/study(?:\/(?:0[1-9]|[1-6]\d|7[0-8]))?$/
+const activityKey = /^(?:vocab-(?:[1-9]|[1-6]\d|7[0-8])-(?:group|mode|revealed)|quiz-\d{2}-(?:en|ja)|alphabet-(?:round|index|answers)|tongue-(?:index|chunk|delivery|extra)|ipa-(?:study|practice)|orientation-step|plan-(?:draft|outlook)|humor-(?:view|answer|branch|reply))$/
+
+export function learningItem(id, item) {
+  if (typeof item?.en !== 'string' || !item.en.trim() || item.en.length >= 5000) return null
+  const details = { id, en: item.en, ja: typeof item.ja === 'string' ? item.ja.slice(0, 2000) : '' }
+  if (typeof item.topic === 'string' && vocabularyTopic.test(item.topic) && id === textBookmarkId('vocab', item.topic, item.en))
+    return { ...details, topic: item.topic }
+  if (typeof item.chapter === 'string' && chapterNumber.test(item.chapter) &&
+    (/^ch\d{2}-(?:line|v|b|p)\d+$/.test(id) || id === textBookmarkId('study', item.chapter, item.en)))
+    return { ...details, chapter: item.chapter }
+  return null
+}
+
+export function textBookmarkId(kind, number, text) {
+  return kind + '-' + number + ':' + text.trim().normalize('NFC').replace(/\s+/g, ' ').toLowerCase()
+}
 const validView =
   /^(?:\/lesson\/(?:0[1-9]|[1-8]\d|9[0-7])\/(?:study|practice|reader|words|phrases)(?:\/(?:first|friend))?(?:\?(?:phrase=phrase-(?:friend|coworker)|line=ch(?:0[1-9]|[1-8]\d|9[0-7])-(?:line|v|b|p)\d+))?|\/foundation\/(?:orientation|how-it-works|letters|hear|write|sounds|tongue-intro|lr)(?:\/(?:study|practice|chunks|whole))?|\/application\/storytelling\/(?:0[1-9]|1\d|2[0-8])\/(?:study|practice)|\/application\/smalltalk\/(?:0[1-9]|1[0-2])\/(?:study|practice)|\/application\/reading\/(?:home|short|stories|everyday|media|ideas|literature|saved)\/(?:study|practice)(?:\?text=[a-z0-9-]{1,70})?|\/application\/ideas\/(?:home|0[1-8])\/(?:study|practice)(?:\?task=0[1-8]-[a-z])?|\/application\/presentations\/(?:0[1-9]|1[0-8])\/(?:study|practice)|\/application\/presentations\/(?:blueprint|cases|guide)|\/application\/other-half(?:\/(?:0[1-9]|1[0-3]|introduction))?)$/
 function isTrackedView(path) {
-  if (validView.test(path)) return true
+  if (validView.test(path) || vocabularyView.test(path)) return true
   if (typeof path !== 'string' || !path.startsWith('/application/') || path.length > 600) return false
   const route = parseRoute('#' + path)
   return route.page === 'application' && route.path === path
@@ -49,22 +69,18 @@ export function sanitizeLearning(input) {
     ),
   )
   const saved = Array.isArray(input.saved)
-    ? [...new Set(input.saved.filter((value) => typeof value === 'string').slice(0, 200))]
+    ? [...new Set(input.saved.filter((value) => typeof value === 'string' && value.length <= 5050))]
     : []
+  const savedIds = new Set(saved)
   const savedDetails = Object.fromEntries(
     Object.entries(input.savedDetails ?? {})
-      .filter(
-        ([key, item]) =>
-          saved.includes(key) &&
-          /^ch\d{2}-(?:line\d+|v\d+|b\d+|p\d+)$/.test(key) &&
-          item &&
-          typeof item.en === 'string' &&
-          item.en.length < 5000 &&
-          typeof item.ja === 'string' &&
-          item.ja.length < 2000 &&
-          /^(?:0[1-9]|[1-8]\d|9[0-7])$/.test(item.chapter),
-      )
-      .map(([id, item]) => [id, { id, en: item.en, ja: item.ja, chapter: item.chapter }]),
+      .filter(([id]) => savedIds.has(id))
+      .map(([id, item]) => [id, learningItem(id, item)])
+      .filter(([, item]) => item),
+  )
+  const activities = Object.fromEntries(
+    Object.entries(input.activities ?? {}).filter(([key, value]) =>
+      activityKey.test(key) && typeof value === 'string' && value.length <= 16000),
   )
   const responses = Object.fromEntries(
     Object.entries(input.responses ?? {})
@@ -75,8 +91,7 @@ export function sanitizeLearning(input) {
           ) &&
           typeof value === 'string' &&
           value.length <= 5000,
-      )
-      .slice(-384),
+      ),
   )
   return {
     version: 1,
@@ -92,6 +107,7 @@ export function sanitizeLearning(input) {
     practiceSets: sanitizePracticeSets(input.practiceSets),
     saved,
     savedDetails,
+    activities,
     responses,
     mode: ['listen', 'repeat', 'shadow'].includes(input.mode) ? input.mode : 'shadow',
     speed: [0.75, 0.9, 1, 1.1].includes(input.speed) ? input.speed : 1,
@@ -134,7 +150,11 @@ export function shouldShowLanding(hash) {
   return path === '/landing' || path === ''
 }
 
-export function parseCourseRoute(hash) {
+export function parseCourseRoute(hash, last = null) {
+  if (hash === '' || hash === '#' || hash === '#/') {
+    const resume = last && parseRoute('#' + last)
+    if (resume && ['foundation', 'lesson', 'vocabulary'].includes(resume.page)) return resume
+  }
   const route = parseRoute(hash)
   return route.path === '/courses?social' || ['foundation', 'lesson', 'vocabulary', 'saved'].includes(route.page)
     ? route
@@ -283,7 +303,7 @@ export function parseRoute(hash) {
 }
 
 export function visit(learning, path) {
-  return isTrackedView(path)
+  return path !== learning.last && isTrackedView(path)
     ? { ...learning, last: path, lastPractice: isPractice(path) ? path : learning.lastPractice }
     : learning
 }
