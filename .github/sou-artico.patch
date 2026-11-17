@@ -1,0 +1,905 @@
+diff --git a/index.html b/index.html
+index 279fb7c..ab2e148 100644
+--- a/index.html
++++ b/index.html
+@@ -6,10 +6,9 @@
+     <meta name="theme-color" content="#fbfaf7" />
+     <meta
+       name="description"
+-      content="Artico — One language. Many possibilities. ひとつの言語、たくさんの可能性。場面で理解して、声に出して練習する。登録なしで始められる英語学習。"
++      content="English with Kavi — 英語の音と日常会話を、自分のペースで。"
+     />
+-    <title>Artico — One language. Many possibilities.</title>
+-    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
++    <title>English with Kavi</title>
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+     <link
+diff --git a/src/course/foundations-en.js b/src/course/foundations-en.js
+index b9d7ba0..389afd0 100644
+--- a/src/course/foundations-en.js
++++ b/src/course/foundations-en.js
+@@ -2,57 +2,42 @@
+ // Japanese sources remain available for a future language edition.
+ const section = (id, title, paragraphs, extra = {}) => ({ id, title, paragraphs, ...extra })
+ export const orientation = [
+-  section('orientation-language', 'Why does language matter?', [
+-    'Other people cannot read your mind. **Language** helps you share your thoughts, ask questions, make plans, and build relationships.',
+-    'We do not always understand each other. **Communication** also means listening, asking questions, and explaining things again.',
++  section('orientation-language', 'Who would you like to talk to?', [
++    'Tell a friend about your day, ask someone a question while you’re travelling, or describe a place you love in Hokkaido. Which conversation would you like to have in English?',
+   ]),
+-  section('orientation-english', 'Why English?', [
+-    'Your own language already connects you to people. English gives you another way to reach people, information, and opportunities.',
+-    'People use English across borders, including in science, work, travel, and online communication. Its **wide use** makes English useful, not better than other languages.',
++  section('orientation-english', 'What could English open up for you?', [
++    'Learning English is your choice. It can help you meet people while travelling, explore work in other countries, and show the parts of your personality you want people to see.',
+   ]),
+-  section('orientation-answer', 'Why do you want to learn?', [
+-    'English is a **tool**, not a measure of intelligence.',
+-    'What would you like to understand, say, or do in English? Your reason might be personal, practical, or simply curiosity.',
+-    '**Start with your own reason.** It can change over time.',
++  section('orientation-answer', 'Start with your own reason.', [
++    '**I want to talk to ___ about ___.** Fill in the blanks in Japanese or English. We can choose our first practice from there.',
+   ]),
+ ]
+ 
+ export const howItWorks = [
+-  section('how-philosophy', 'Our philosophy.', [
+-    '**Make learning simple, not superficial.**',
+-    'Artico provides clear explanations, useful language, and meaningful practice. We remove **unnecessary complexity**, not the effort that helps you learn.',
+-    'The goal is not to finish lessons or collect points. **The goal is to understand English and use it in your life.**',
++  section('how-philosophy', 'Learn a phrase in a real situation.', [
++    'You’re late: **Sorry I’m late.** You missed a call: **Sorry I missed your call.** Listen and try the whole phrase. Then change it to fit what you want to say. We can look at the grammar when it helps.',
+   ]),
+   section('how-start-line', 'Choose where to begin.', [
+-    'Artico has three learning areas. Choose the one that helps you now:',
+-  ], {
+-    items: [
+-      'Level Zero — letters, sounds, pronunciation, and rhythm.',
+-      'Social Fluency — everyday conversations and vocabulary.',
+-      'Application — practical goals, such as interviews, presentations, academic work, reading, and writing.',
+-    ],
+-  }),
++    'If the alphabet already feels familiar, start with **Sounds** or a short **tongue twister**. Then try your first everyday conversation with a greeting you can use after work.',
++  ]),
+   section('how-two-by-two', 'Study and Practice.', [
+-    'Most lessons have two modes.',
+-    '**Study** helps you understand. See the situation, learn useful expressions, and understand when and why people use them.',
+-    '**Practice** helps you use what you learned. Listen when audio is available. Speak aloud, recall expressions, change details, and respond to situations.',
++    '**Study** shows you the situation and the expressions people use.',
++    '**Practice** gives you a chance to say them aloud, then answer with your own details. Try **How was your day?** Add one real detail and ask the other person back.',
+   ]),
+-  section('how-chapter-loop', 'How learning happens.', [
+-    '**Understand → Practise → Recall → Use → Review.**',
+-    'Reading about English is not the same as using English. You need repeated practice, feedback, and real opportunities to communicate.',
+-    'Artico provides the material and practice tools. You decide how to use them, at your own pace.',
++  section('how-chapter-loop', 'Between calls.', [
++    'Pick a moment you already have, like after dinner. On a day that works, take **five minutes** to listen, copy one phrase, then put the example away and answer in your own words. We’ll try a similar question next time we talk.',
+   ]),
+ ]
+ 
+ export const foundationReading = {
+   orientation: {
+-    title: 'The big picture',
+-    subtitle: 'Your reason to learn. Your way forward.',
++    title: 'What would you like to say in English?',
++    subtitle: 'For Sou. Let’s find one conversation you’d like to have in English.',
+     sections: orientation,
+   },
+   'how-it-works': {
+-    title: 'How Artico works',
+-    subtitle: 'A little understanding. A lot of meaningful practice.',
++    title: 'How we’ll practise',
++    subtitle: 'Hear a short phrase and make it your own.',
+     sections: howItWorks,
+   },
+   letters: {
+@@ -122,7 +107,7 @@ export const foundationReading = {
+           'A pencil makes corrections easy. Lined paper or a beginner’s guide sheet helps you judge size and position. Typing and tapping do not replace this particular handwriting exercise.',
+           'Focus on ordinary print letters first. Cursive connects letters in a flowing style, but it is optional and can come later.',
+           'Do not rush toward a fixed deadline. Return for short sessions and aim for clear, recognizable forms.',
+-          'In Practice, you can open Artico’s own printable A–Z, letter tracing, and word writing worksheets. Print at 100% on A4 paper.',
++          'In Practice, you can open printable A–Z, letter tracing, and word writing worksheets. Print at 100% on A4 paper.',
+         ],
+       ),
+     ],
+@@ -144,7 +129,7 @@ export const foundationReading = {
+       }),
+       section('sounds-reference', 'Which English sounds will we learn?', [
+         'English is spoken in many countries, and people do not all pronounce it in exactly the same way. Even within the United States, pronunciation can vary from one speaker or region to another.',
+-        'In Artico, we follow **General American English** — a broad, widely recognizable pattern of American pronunciation. It gives us one clear reference to learn from and practise consistently.',
++        'We use **General American English** — a broad, widely recognizable pattern of American pronunciation. It gives us one clear reference to learn from and practise consistently.',
+         'This does not mean every American sounds identical, or that other accents are wrong. We are simply **choosing one model to guide our learning**.',
+       ]),
+       section('sounds-ipa', 'How do we write a sound?', [
+diff --git a/src/course/locales/ja/00-orientation.md b/src/course/locales/ja/00-orientation.md
+index 99795de..875b528 100644
+--- a/src/course/locales/ja/00-orientation.md
++++ b/src/course/locales/ja/00-orientation.md
+@@ -1,33 +1,25 @@
+ <!-- lesson: orientation | source: artico-web/src/course/foundations-en.js -->
+-# OR01 — 言葉を学ぶ理由 / The big picture
++# OR01 — 英語で、何を話したい？ / What would you like to say in English?
+ 
+-**このレッスンで考えること:** 英語を学ぶ理由を、自分の生活から考える。
++**このレッスンで考えること:** Souへ。まずは、英語で話してみたい場面を一つ見つけよう。
+ 
+ ## Study — 全体像をつかむ
+ 
+ <!-- section: orientation-language -->
+-### 01 言葉は、なぜ大切なのか？
++### 01 誰と、どんな話がしたい？
+ 
+-相手は、あなたの頭の中を直接知ることはできません。**言葉**を使えば、考えや気持ちを伝え、質問し、予定を決め、人との関係を築けます。
+-
+-言葉を使っても、誤解は起こります。だから**伝え合うこと**には、相手の話を聞き、確かめ、必要なら説明し直すことも含まれます。
++友だちに今日あったことを話す。旅先で出会った人に質問する。北海道の好きな場所を紹介する。英語でできるようになったら、どれが一番うれしい？
+ 
+ <!-- section: orientation-english -->
+-### 02 なぜ英語なのか？
+-
+-あなたが今使っている言葉も、すでに人と人をつないでいます。英語を学ぶと、さらに多くの人や情報、機会に触れられます。
++### 02 英語でできること
+ 
+-英語は国境を越えて広く使われ、研究、仕事、旅行、インターネットなどで役立ちます。**使える場面が広い**から便利なのであって、ほかの言語より優れているわけではありません。
++英語を学ぶかどうかは、自分で決めていい。英語を使えると、旅先で話せる人が増えたり、仕事や住む場所の選択肢が広がったりする。英語でも、ふだんの自分らしく話せるようになろう。
+ 
+ <!-- section: orientation-answer -->
+-### 03 あなたは、なぜ英語を学ぶのか？
+-
+-英語は**道具**です。知性や人としての価値を測るものではありません。
+-
+-英語で何を理解し、伝え、できるようになりたいですか？ 仕事、友人、旅行、好奇心など、理由は人それぞれです。
++### 03 自分の理由から始めよう
+ 
+-**自分の理由**から始めましょう。その理由は、あとから変わってもかまいません。
++**「英語で、＿＿と＿＿について話したい。」** まずは日本語で空欄を埋めてみよう。最初の練習を、そこから一緒に決めよう。
+ 
+ ## Practice — 自分の理由を考える
+ 
+-4つの短い質問に答えて、英語を使いたい場面や、なりたい自分を想像してみましょう。正解はありません。
++4つの短い質問に答えて、英語を使いたい場面を考えてみよう。
+diff --git a/src/course/locales/ja/01-how-artico-works.md b/src/course/locales/ja/01-how-artico-works.md
+index 922ac17..01afc1a 100644
+--- a/src/course/locales/ja/01-how-artico-works.md
++++ b/src/course/locales/ja/01-how-artico-works.md
+@@ -1,46 +1,32 @@
+ <!-- lesson: how-it-works | source: artico-web/src/course/foundations-en.js -->
+-# OR02 — Articoの使い方 / How Artico works
++# OR02 — 一緒に練習する方法 / How we’ll practise
+ 
+-**このレッスンでできるようになること:** 学ぶ場所と、Study・Practiceの役割を知る。
++**このレッスンでできるようになること:** 短い表現を、声に出して使う流れを知ろう。
+ 
+ ## Study — 学び方を知る
+ 
+ <!-- section: how-philosophy -->
+-### 01 Articoの考え方
++### 01 場面で覚える
+ 
+-**学びはシンプルに。でも、中身は薄くしない。**
+-
+-Articoは、分かりやすい説明、役立つ英語、実際に使う練習を用意します。**余計な手間**は減らしますが、身につけるために必要な努力は省きません。
+-
+-大切なのは、レッスンを終えたり、ポイントを集めたりすることではありません。**英語を理解し、自分の生活で使えるようになることです。**
++待ち合わせに遅れたら **Sorry I’m late.**。電話に出られなかったら **Sorry I missed your call.**。まずは場面と一緒に聞いてまねする。それから、自分が言いたいことに合わせて言い換えてみよう。文法は、気になったところから一緒に見ていこう。
+ 
+ <!-- section: how-start-line -->
+ ### 02 どこから始める？
+ 
+-Articoには、3つの学習エリアがあります。
+-
+-- **Level Zero（基礎）** — アルファベット、英語の音、発音、リズムを学びます。
+-- **Social Fluency（日常会話）** — 日常のやり取りを学び、語彙も増やします。
+-- **Application（実践）** — 面接、プレゼン、研究、読解、作文など、自分の目的に英語を使います。
++アルファベットに慣れていたら、**英語の音**や**早口言葉**から始めて大丈夫。早口言葉は、ゆっくり口を動かす短いウォームアップにしよう。最初の日常会話は、仕事のあとにも使えるあいさつから。
+ 
+ <!-- section: how-two-by-two -->
+ ### 03 Study と Practice
+ 
+-多くのレッスンには、2つのモードがあります。
++**Study（学習）**では、どんな場面で、どんな言い方をするか見る。
+ 
+-**Study（学習）**では、場面を見て、役立つ表現と、その意味や使い方を理解します。
+-
+-**Practice（練習）**では、学んだ表現を使います。音声があれば聞き、声に出し、思い出し、一部を変え、場面に合わせて答えます。
++**Practice（練習）**では、声に出してまねしたあと、例を見ずに自分のことを話す。**How was your day?** と聞かれたら、今日あったことを一つ答えて、相手にも聞き返してみよう。
+ 
+ <!-- section: how-chapter-loop -->
+-### 04 学びを、使える英語に変える
+-
+-**理解する → 練習する → 思い出す → 使う → 復習する。** この流れを繰り返します。
+-
+-英語について読むことと、英語を実際に使うことは違います。繰り返し練習し、相手の反応や助言を受け、実際に使う機会が必要です。
++### 04 次に話す日まで
+ 
+-Articoは、教材と練習の道具を用意します。どこから始め、どのくらい進めるかは、自分のペースで決めてください。
++仕事のあとや夜ごはんのあと、できそうな日に**５分だけ**。短いお手本を聞いて、一文をまねして、最後は自分の言葉で答える。次の通話で、似た質問をやってみよう。
+ 
+ ## Practice — 自分の学習計画を作る
+ 
+-1日に使える時間と今の英語力を選び、学習と練習の目安を確認しましょう。これは計画であり、上達を保証するものではありません。
++続けられそうな時間を選んでみよう。最初は５分からでも大丈夫。
+diff --git a/src/course/locales/ja/02-foundations.md b/src/course/locales/ja/02-foundations.md
+index e733d76..f4c1144 100644
+--- a/src/course/locales/ja/02-foundations.md
++++ b/src/course/locales/ja/02-foundations.md
+@@ -66,7 +66,7 @@
+ 3. 大文字と小文字を、対にして書きます。
+ 4. 身近な単語にもつなげます。例は **A, a, apple** です。
+ 
+-**アニメーション:** 下にあるArticoの書き方ガイドで、文字と書き順を選べます。大文字と小文字を切り替え、１画ずつ確認しましょう。
++**アニメーション:** 下にある書き方ガイドで、文字と書き順を選べます。大文字と小文字を切り替え、１画ずつ確認しましょう。
+ 
+ <!-- section: write-names -->
+ ### 03 自分に関係のある名前を書く
+@@ -86,7 +86,7 @@
+ 
+ 期限を決めて急ぐより、短い時間で戻り、見分けられる形を目指しましょう。
+ 
+-**印刷用ワークシート:** Articoの「Practice」で、A〜Zの一覧、１文字ずつのなぞり書き、単語を書くシートを選べます。A4用紙に100%の大きさで印刷してください。
++**印刷用ワークシート:** 「Practice」で、A〜Zの一覧、１文字ずつのなぞり書き、単語を書くシートを選べます。A4用紙に100%の大きさで印刷してください。
+ 
+ ## Practice — 一枚の紙で試す
+ 
+@@ -128,7 +128,7 @@
+ 
+ 英語は世界中で話されていて、発音のしかたは一つではありません。アメリカ国内でも、地域や話す人によって音が違うことがあります。
+ 
+-Articoでは、**一般米語（General American English）** を基準にします。アメリカで広く聞かれる発音の特徴をまとめたもので、学ぶときに一貫した目安になります。
++ここでは、**一般米語（General American English）** を基準にします。アメリカで広く聞かれる発音の特徴をまとめたもので、学ぶときに一貫した目安になります。
+ 
+ すべてのアメリカ人が同じ発音をするという意味でも、ほかのアクセントが間違いという意味でもありません。**学習を進めるために、一つの基準を選んでいる** のです。
+ 
+diff --git a/src/course/locales/ja/foundations.json b/src/course/locales/ja/foundations.json
+index a76b1fe..78920c3 100644
+--- a/src/course/locales/ja/foundations.json
++++ b/src/course/locales/ja/foundations.json
+@@ -1 +1 @@
+-{"orientation":{"title":"言葉を学ぶ理由","subtitle":"英語を学ぶ理由を、自分の生活から考える。","sections":[{"id":"orientation-language","title":"言葉は、なぜ大切なのか？","blocks":[{"id":"chorientation-language-b0","type":"explanation","runs":[{"text":"相手は、あなたの頭の中を直接知ることはできません。"},{"text":"言葉","emphasis":true},{"text":"を使えば、考えや気持ちを伝え、質問し、予定を決め、人との関係を築けます。"}],"span":[3,3]},{"id":"chorientation-language-b1","type":"explanation","runs":[{"text":"言葉を使っても、誤解は起こります。だから"},{"text":"伝え合うこと","emphasis":true},{"text":"には、相手の話を聞き、確かめ、必要なら説明し直すことも含まれます。"}],"span":[5,5]}]},{"id":"orientation-english","title":"なぜ英語なのか？","blocks":[{"id":"chorientation-english-b0","type":"explanation","runs":[{"text":"あなたが今使っている言葉も、すでに人と人をつないでいます。英語を学ぶと、さらに多くの人や情報、機会に触れられます。"}],"span":[3,3]},{"id":"chorientation-english-b1","type":"explanation","runs":[{"text":"英語は国境を越えて広く使われ、研究、仕事、旅行、インターネットなどで役立ちます。"},{"text":"使える場面が広い","emphasis":true},{"text":"から便利なのであって、ほかの言語より優れているわけではありません。"}],"span":[5,5]}]},{"id":"orientation-answer","title":"あなたは、なぜ英語を学ぶのか？","blocks":[{"id":"chorientation-answer-b0","type":"explanation","runs":[{"text":"英語は"},{"text":"道具","emphasis":true},{"text":"です。知性や人としての価値を測るものではありません。"}],"span":[3,3]},{"id":"chorientation-answer-b1","type":"explanation","runs":[{"text":"英語で何を理解し、伝え、できるようになりたいですか？ 仕事、友人、旅行、好奇心など、理由は人それぞれです。"}],"span":[5,5]},{"id":"chorientation-answer-b2","type":"explanation","runs":[{"text":"自分の理由","emphasis":true},{"text":"から始めましょう。その理由は、あとから変わってもかまいません。"}],"span":[7,7]}]}],"practice":[{"id":"chorientation-practice-b0","type":"explanation","runs":[{"text":"4つの短い質問に答えて、英語を使いたい場面や、なりたい自分を想像してみましょう。正解はありません。"}],"span":[3,3]}]},"how-it-works":{"title":"Articoの使い方","subtitle":"学ぶ場所と、Study・Practiceの役割を知る。","sections":[{"id":"how-philosophy","title":"Articoの考え方","blocks":[{"id":"chhow-philosophy-b0","type":"explanation","runs":[{"text":"学びはシンプルに。でも、中身は薄くしない。","emphasis":true}],"span":[3,3]},{"id":"chhow-philosophy-b1","type":"explanation","runs":[{"text":"Articoは、分かりやすい説明、役立つ英語、実際に使う練習を用意します。"},{"text":"余計な手間","emphasis":true},{"text":"は減らしますが、身につけるために必要な努力は省きません。"}],"span":[5,5]},{"id":"chhow-philosophy-b2","type":"explanation","runs":[{"text":"大切なのは、レッスンを終えたり、ポイントを集めたりすることではありません。"},{"text":"英語を理解し、自分の生活で使えるようになることです。","emphasis":true}],"span":[7,7]}]},{"id":"how-start-line","title":"どこから始める？","blocks":[{"id":"chhow-start-line-b0","type":"explanation","runs":[{"text":"Articoには、3つの学習エリアがあります。"}],"span":[3,3]},{"id":"chhow-start-line-b1","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Level Zero（基礎）","emphasis":true},{"text":" — アルファベット、英語の音、発音、リズムを学びます。"}]},{"number":null,"runs":[{"text":"Social Fluency（日常会話）","emphasis":true},{"text":" — 日常のやり取りを学び、語彙も増やします。"}]},{"number":null,"runs":[{"text":"Application（実践）","emphasis":true},{"text":" — 面接、プレゼン、研究、読解、作文など、自分の目的に英語を使います。"}]}],"span":[5,7]}]},{"id":"how-two-by-two","title":"Study と Practice","blocks":[{"id":"chhow-two-by-two-b0","type":"explanation","runs":[{"text":"多くのレッスンには、2つのモードがあります。"}],"span":[3,3]},{"id":"chhow-two-by-two-b1","type":"explanation","runs":[{"text":"Study（学習）","emphasis":true},{"text":"では、場面を見て、役立つ表現と、その意味や使い方を理解します。"}],"span":[5,5]},{"id":"chhow-two-by-two-b2","type":"explanation","runs":[{"text":"Practice（練習）","emphasis":true},{"text":"では、学んだ表現を使います。音声があれば聞き、声に出し、思い出し、一部を変え、場面に合わせて答えます。"}],"span":[7,7]}]},{"id":"how-chapter-loop","title":"学びを、使える英語に変える","blocks":[{"id":"chhow-chapter-loop-b0","type":"explanation","runs":[{"text":"理解する → 練習する → 思い出す → 使う → 復習する。","emphasis":true},{"text":" この流れを繰り返します。"}],"span":[3,3]},{"id":"chhow-chapter-loop-b1","type":"explanation","runs":[{"text":"英語について読むことと、英語を実際に使うことは違います。繰り返し練習し、相手の反応や助言を受け、実際に使う機会が必要です。"}],"span":[5,5]},{"id":"chhow-chapter-loop-b2","type":"explanation","runs":[{"text":"Articoは、教材と練習の道具を用意します。どこから始め、どのくらい進めるかは、自分のペースで決めてください。"}],"span":[7,7]}]}],"practice":[{"id":"chhow-it-works-practice-b0","type":"explanation","runs":[{"text":"1日に使える時間と今の英語力を選び、学習と練習の目安を確認しましょう。これは計画であり、上達を保証するものではありません。"}],"span":[3,3]}]},"letters":{"title":"アルファベット","subtitle":"26文字の大文字と小文字を見分け、名前を聞いて言い、紙に書いて試す。","sections":[{"id":"letters-start","title":"英語の、いちばん最初の場所へようこそ","blocks":[{"id":"chletters-start-b0","type":"explanation","runs":[{"text":"英語で書く言葉は、たった"},{"text":"26文字","emphasis":true},{"text":"からできています。これだけです。それぞれに大文字と小文字、2つの形があります。"}],"span":[3,3]},{"id":"chletters-start-b1","type":"explanation","runs":[{"text":"この文字は、最初からイギリスにあったわけではありません。長い時間をかけて受け継がれてきました。英語のアルファベットはラテン文字をもとにしていて、その歴史はギリシャ文字やフェニキア文字にもつながります。今、あなたが書く一文字にも、何千年もの歴史があります。"}],"span":[5,5]},{"id":"chletters-start-b2","type":"explanation","runs":[{"text":"文字を、小さな"},{"text":"積み木","emphasis":true},{"text":"だと思ってみてください。一つずつは単純です。でも、組み合わせると、名前、冗談、歌、物語、想像の世界まで表せます。"}],"span":[7,7]},{"id":"chletters-start-b3","type":"explanation","runs":[{"text":"今日は、この26文字から始めます。形を見て、名前を聞いて、声に出してみましょう。少しずつなじんでくれば、その先の英語も学びやすくなります。"}],"span":[9,9]},{"id":"chletters-start-b4","type":"explanation","runs":[{"text":"まずは、全部の文字に会ってみましょう。","emphasis":true}],"span":[11,11]}]},{"id":"letters-board","title":"26文字を見てみよう","blocks":[{"id":"chletters-board-b0","type":"explanation","runs":[{"text":"文字には、"},{"text":"大文字（capital letters）","emphasis":true},{"text":"と"},{"text":"小文字（small letters）","emphasis":true},{"text":"があります。文字を押すと、端末の英語音声で名前を聞けます。"}],"span":[3,3]}],"widget":"alphabet"},{"id":"letters-try","title":"見る・言う・書く","blocks":[{"id":"chletters-try-b0","type":"explanation","runs":[{"text":"文字に会えたら、次は"},{"text":"3つのステップ","emphasis":true},{"text":"で試してみましょう。"}],"span":[3,3]},{"id":"chletters-try-b1","type":"explanation","runs":[{"text":"文字の"},{"text":"名前","emphasis":true},{"text":"と、単語の中での"},{"text":"音","emphasis":true},{"text":"は、必ずしも同じではありません。音の違いは、次のレッスンで少しずつ学びます。"}],"span":[5,5]},{"id":"chletters-try-b2","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"見る。","emphasis":true},{"text":" Super Simple ABCsの動画を再生し、AからZまで目で追います。"}]},{"number":2,"runs":[{"text":"言う。","emphasis":true},{"text":" もう一度聞いて、一緒に声に出します。動画を止めて、いくつかの文字を言ってみましょう。"}]},{"number":3,"runs":[{"text":"書く。","emphasis":true},{"text":" 紙に大文字と小文字をいくつか書きます。見本を見ずに、もう一度試します。"}]}],"span":[7,9]}],"video":["MgmIHtp-ZQM","The Alphabet Song | Lower Case Letters | Super Simple ABCs","Super Simple ABCs / Super Simple Songs",20]}],"practice":[{"id":"chletters-practice-b0","type":"explanation","runs":[{"text":"文字を一つ見て、まず自分で名前を言い、押して聞いてみましょう。そのあと大文字と小文字を紙に書きます。忘れた文字だけ、もう一度確認すれば十分です。"}],"span":[3,3]}]},"write":{"title":"アルファベットを書く","subtitle":"大文字と小文字の形を紙で確かめ、自分や身近な人の名前を書き、つづりを声に出す。","sections":[{"id":"write-start","title":"きれいさより、見分けられる形","blocks":[{"id":"chwrite-start-b0","type":"explanation","runs":[{"text":"聞いたり歌ったりすると、名前や順番に慣れます。書く練習では、線がどこから始まり、どちらへ動き、どんな形を作るかを、近くで見ます。"}],"span":[3,3]},{"id":"chwrite-start-b1","type":"explanation","runs":[{"text":"目標は、速く書くことでも、美しい字を競うことでもありません。自分や相手が見分けられる形にすることです。鉛筆、消しゴム、罫線のある紙を用意しましょう。なぞるための見本も役立ちます。"}],"span":[5,5]}]},{"id":"write-model","title":"見る、なぞる、自分で書く","blocks":[{"id":"chwrite-model-b0","type":"explanation","runs":[{"text":"見本の書き方を見たあと、紙で試します。数回なぞり、見ながら写し、最後に見ないで書いてみます。大文字と小文字の両方を扱います。"}],"span":[3,3]},{"id":"chwrite-model-b1","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"形を何回かなぞります。"}]},{"number":2,"runs":[{"text":"見ないで書き、見本と比べます。"}]},{"number":3,"runs":[{"text":"大文字と小文字を、対にして書きます。"}]},{"number":4,"runs":[{"text":"身近な単語にもつなげます。例は "},{"text":"A, a, apple","emphasis":true},{"text":" です。"}]}],"span":[5,8]},{"id":"chwrite-model-b2","type":"explanation","runs":[{"text":"アニメーション:","emphasis":true},{"text":" 下にあるArticoの書き方ガイドで、文字と書き順を選べます。大文字と小文字を切り替え、１画ずつ確認しましょう。"}],"span":[10,10]}]},{"id":"write-names","title":"自分に関係のある名前を書く","blocks":[{"id":"chwrite-names-b0","type":"explanation","runs":[{"text":"まず自分の名前を書きます。英語で名前を書くときは、通常、各名前の初めを大文字にします。名前の順番は、言語や使う場面によって違うため、自分が使う形を確認しましょう。"}],"span":[3,3]},{"id":"chwrite-names-b1","type":"explanation","runs":[{"text":"次に、家族の名前をいくつかと、友人の名前を三〜五人分書きます。名前を言ったあと、一文字ずつつづりを言ってみてください。"}],"span":[5,5]},{"id":"chwrite-names-b2","type":"explanation","runs":[{"text":"名前は、自己紹介、予約、書類、アカウントなどで使います。ここで覚えた形は、すでに実際の用件に役立つものです。"}],"span":[7,7]}]},{"id":"write-materials","title":"道具と練習を、簡単にする","blocks":[{"id":"chwrite-materials-b0","type":"explanation","runs":[{"text":"鉛筆なら、修正しやすくなります。罫線や初心者向けの見本があると、大きさや位置を比べやすくなります。キーボードで打つことと、紙で形を書くことは、ここでは別の練習です。"}],"span":[3,3]},{"id":"chwrite-materials-b1","type":"explanation","runs":[{"text":"最初は、普通の活字体を練習します。文字をつなげる筆記体は、必要なら後で学べます。最初からできなければいけないものではありません。"}],"span":[5,5]},{"id":"chwrite-materials-b2","type":"explanation","runs":[{"text":"期限を決めて急ぐより、短い時間で戻り、見分けられる形を目指しましょう。"}],"span":[7,7]},{"id":"chwrite-materials-b3","type":"explanation","runs":[{"text":"印刷用ワークシート:","emphasis":true},{"text":" Articoの「Practice」で、A〜Zの一覧、１文字ずつのなぞり書き、単語を書くシートを選べます。A4用紙に100%の大きさで印刷してください。"}],"span":[9,9]}]}],"practice":[{"id":"chwrite-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"自分の名前を書き、初めの大文字を確かめます。"}]},{"number":2,"runs":[{"text":"家族の名前をいくつか書きます。"}]},{"number":3,"runs":[{"text":"友人の名前を三〜五人分書きます。"}]},{"number":4,"runs":[{"text":"それぞれの名前を言い、一文字ずつつづりを言います。"}]}],"span":[3,6]},{"id":"chwrite-practice-b1","type":"explanation","runs":[{"text":"もう一度試したい文字があれば、一つメモしましょう。ウェブのPracticeにあるメモ欄は任意です。書く練習そのものは、紙で行います。"}],"span":[8,8]}]},"sounds":{"title":"文字と音","subtitle":"26文字と英語の音の違いを理解し、一般米語の主な音をIPAで見たり聞いたりする。","sections":[{"id":"sounds-difference","title":"文字と音は、同じではない","blocks":[{"id":"chsounds-difference-b0","type":"explanation","runs":[{"text":"英語には "},{"text":"26文字","emphasis":true},{"text":" があります。文字は単語を書くために使います。でも、話すときに使うのは "},{"text":"音","emphasis":true},{"text":" です。英語には、文字の数よりも多くの音があります。"}],"span":[3,3]},{"id":"chsounds-difference-b1","type":"explanation","runs":[{"text":"一つの文字が、いつも同じ音になるとは限りません。二つの文字が、一つの音を表すこともあります。"}],"span":[5,5]},{"id":"chsounds-difference-b2","type":"table","header":[[{"text":"単語"}],[{"text":"何が起こっている？"}]],"rows":[[[{"text":"cat と city","emphasis":true}],[{"text":"同じ "},{"text":"c","emphasis":true},{"text":" でも、違う音になります。"}]],[[{"text":"ship","emphasis":true}],[{"text":"sh","emphasis":true},{"text":" の2文字で、一つの音を表します。"}]],[[{"text":"know","emphasis":true}],[{"text":"k","emphasis":true},{"text":" と書きますが、その音は発音しません。"}]]],"span":[7,11]},{"id":"chsounds-difference-b3","type":"explanation","runs":[{"text":"つまり、アルファベットを知ることは始まりにすぎません。英語を話したり、聞いて理解したりするには、"},{"text":"音","emphasis":true},{"text":" も知っていく必要があります。"}],"span":[13,13]}]},{"id":"sounds-reference","title":"どの英語の音を学ぶの？","blocks":[{"id":"chsounds-reference-b0","type":"explanation","runs":[{"text":"英語は世界中で話されていて、発音のしかたは一つではありません。アメリカ国内でも、地域や話す人によって音が違うことがあります。"}],"span":[3,3]},{"id":"chsounds-reference-b1","type":"explanation","runs":[{"text":"Articoでは、"},{"text":"一般米語（General American English）","emphasis":true},{"text":" を基準にします。アメリカで広く聞かれる発音の特徴をまとめたもので、学ぶときに一貫した目安になります。"}],"span":[5,5]},{"id":"chsounds-reference-b2","type":"explanation","runs":[{"text":"すべてのアメリカ人が同じ発音をするという意味でも、ほかのアクセントが間違いという意味でもありません。"},{"text":"学習を進めるために、一つの基準を選んでいる","emphasis":true},{"text":" のです。"}],"span":[7,7]}]},{"id":"sounds-ipa","title":"音は、どうやって書くの？","blocks":[{"id":"chsounds-ipa-b0","type":"explanation","runs":[{"text":"ふつうのアルファベットは、単語の "},{"text":"つづり","emphasis":true},{"text":" を教えてくれます。でも、それだけでは "},{"text":"発音","emphasis":true},{"text":" が分からないことがあります。"}],"span":[3,3]},{"id":"chsounds-ipa-b1","type":"explanation","runs":[{"text":"そこで使うのが、"},{"text":"IPA（国際音声記号）","emphasis":true},{"text":" です。IPAは、話し言葉の音を記号で表します。たとえば、"},{"text":"ship","emphasis":true},{"text":" の最初の音は "},{"text":"/ʃ/","emphasis":true},{"text":"、"},{"text":"thin","emphasis":true},{"text":" の最初の音は "},{"text":"/θ/","emphasis":true},{"text":" です。"},{"text":"/ /","emphasis":true},{"text":" は、つづりではなく音を示している印です。"}],"span":[5,5]},{"id":"chsounds-ipa-b2","type":"explanation","runs":[{"text":"どうして見慣れない記号があるの？","emphasis":true},{"text":" IPAには、ふだん使うラテン文字もありますが、ほかの文字体系から取り入れたり、音を表すために形を変えたりした記号もあります。英語の新しい文字を覚えるわけではありません。聞こえる音を書き表すための道具です。"}],"span":[7,7]},{"id":"chsounds-ipa-b3","type":"explanation","runs":[{"text":"たとえば "},{"text":"ship","emphasis":true},{"text":"、"},{"text":"sugar","emphasis":true},{"text":"、"},{"text":"machine","emphasis":true},{"text":" にある "},{"text":"/ʃ/","emphasis":true},{"text":" は、つづりが違っても同じ音です。アクセントによって同じ単語の発音が違うときも、IPAで表せます。"}],"span":[9,9]},{"id":"chsounds-ipa-b4","type":"explanation","runs":[{"text":"最初から全部の記号を覚えなくても大丈夫です。IPAを、音を見つけるための "},{"text":"地図","emphasis":true},{"text":" だと思ってください。"}],"span":[11,11]}]},{"id":"sounds-listen","title":"これから出会う英語の音","blocks":[{"id":"chsounds-listen-b0","type":"explanation","runs":[{"text":"Articoでは、一般米語の主な音を "},{"text":"子音・母音","emphasis":true},{"text":" の二つの表で紹介します。二重母音も「母音」に入っています。母音の下には、あまり使われない音の表もあります。"}],"span":[3,3]},{"id":"chsounds-listen-b1","type":"explanation","runs":[{"text":"この表には、"},{"text":"子音24項目・母音15項目・珍しい音2項目","emphasis":true},{"text":" の、合計 "},{"text":"41項目","emphasis":true},{"text":" があります。これは学習用の一覧で、アメリカ人全員が必ず41種類の独立した音を使うという意味ではありません。アクセントや辞書によって、音の分け方が少し変わることもあります。"}],"span":[5,5]},{"id":"chsounds-listen-b2","type":"explanation","runs":[{"text":"青いスピーカー","emphasis":true},{"text":" を押すと最初の単語、各例の単語を押すとその単語の音声が流れます。"},{"text":"緑色の文字","emphasis":true},{"text":" は、そのIPAの音を表すつづりです。"}],"span":[7,7]}]},{"id":"sounds-routine","title":"聞いて、気づいて、試してみよう","blocks":[{"id":"chsounds-routine-b0","type":"explanation","runs":[{"text":"今日、すべての音を覚える必要はありません。まず一つの単語を聞き、声に出してみましょう。それから、似た音の単語を聞き比べます。"}],"span":[3,3]},{"id":"chsounds-routine-b1","type":"explanation","runs":[{"text":"たとえば "},{"text":"seat と sit","emphasis":true},{"text":"、"},{"text":"thin と this","emphasis":true},{"text":"。小さな音の違いに注目してください。"}],"span":[5,5]},{"id":"chsounds-routine-b2","type":"explanation","runs":[{"text":"ここで出会う音が、これからの学習の土台になります。次第に、"},{"text":"音節・強勢・リズム・つながった話し言葉","emphasis":true},{"text":" も学んでいきます。"}],"span":[7,7]},{"id":"chsounds-routine-b3","type":"explanation","runs":[{"text":"まずは、英語の音に少しずつ慣れていきましょう。","emphasis":true}],"span":[9,9]}]}],"practice":[{"id":"chsounds-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"IPAの記号を一つ選びます。"}]},{"number":2,"runs":[{"text":"例の単語を聞き、同じように声に出します。"}]},{"number":3,"runs":[{"text":"似た音の単語を聞き比べます。"}]},{"number":4,"runs":[{"text":"必要なときに、何度でも戻って練習しましょう。"}]}],"span":[3,6]}]},"tongue-intro":{"title":"早口言葉を使う理由","subtitle":"練習する音を一つ選び、短いまとまりから口の動きを確かめ、その動きを普通のフレーズへつなげる。","sections":[{"id":"tongue-purpose","title":"難しい動きを、短い言葉で取り出す","blocks":[{"id":"chtongue-purpose-b0","type":"explanation","runs":[{"text":"早口言葉には、似ている音や切り替えにくい音が近くに並びます。同じ言葉を使えば、内容を考え直す負担を減らし、舌、唇、顎、息の動きへ注意を向けられます。"}],"span":[3,3]},{"id":"chtongue-purpose-b1","type":"explanation","runs":[{"text":"ぼやけた文を速く言うより、短い部分をはっきり言うところから始めます。ここでの練習は、聞き取りや会話を支えるものです。早口言葉を言えることだけで、会話の力を測るわけではありません。"}],"span":[5,5]}]},{"id":"tongue-contrasts","title":"耳と口で、違いに気づく","blocks":[{"id":"chtongue-contrasts-b0","type":"explanation","runs":[{"text":"第一言語でよく使う音の区別と、英語で使う区別は、同じとは限りません。そのため、最初は似て聞こえたり、同じ動きで言いたくなったりすることがあります。苦手な音は、人によって違います。"}],"span":[3,3]},{"id":"chtongue-contrasts-b1","type":"table","header":[[{"text":"英語の対"}],[{"text":"この練習で確かめること"}]],"rows":[[[{"text":"right / light","emphasis":true}],[{"text":"初めのRとLを分けます。rightには「右・正しい」など、lightには「光・明るい・軽い」などの意味があります。"}]],[[{"text":"road / load","emphasis":true}],[{"text":"舌の動きを比べます。roadは道路、loadは荷物や積む量などを指します。"}]],[[{"text":"rice / lice","emphasis":true}],[{"text":"急いで言う前に音を分けます。riceは米、liceはlouseの複数形で、シラミを指します。"}]]],"span":[5,9]},{"id":"chtongue-contrasts-b2","type":"explanation","runs":[{"text":"このほか、SとSH、THとF、語尾、続く子音、リズムも扱います。一度に全部を直そうとせず、今練習する違いを一つ選びましょう。"}],"span":[11,11]}]},{"id":"tongue-collection","title":"それぞれの句には、練習する理由がある","blocks":[{"id":"chtongue-collection-b0","type":"explanation","runs":[{"text":"下の英語は、既存の練習句と同じものです。日本語は内容をつかむための助けです。音声のカタカナ表記として読まないでください。"}],"span":[3,3]},{"id":"chtongue-collection-b1","type":"explanation","runs":[{"text":"句の意味を理解し、録音がある場合は聞いて、練習する音へ注意を向けます。Practiceでは、短い部分からつなげられます。"}],"span":[5,5]},{"id":"chtongue-collection-b2","type":"explanation","runs":[{"text":"音の違いを確かめる","emphasis":true}],"span":[7,7]},{"type":"twister","id":"red-lorry","blocks":[{"id":"chred-lorry-b0","type":"explanation","runs":[{"text":"01 RとLの切り替え","emphasis":true}],"span":[3,3]},{"id":"chred-lorry-b1","type":"explanation","runs":[{"text":"Red lorry, yellow lorry.","emphasis":true}],"span":[5,5]},{"id":"chred-lorry-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 赤いトラック、黄色いトラック。"}],"span":[7,7]},{"id":"chred-lorry-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" Lでは、舌先を上の前歯のすぐ後ろの盛り上がりへ触れさせます。アメリカ英語のRでは、日本語のラ行のように、そこを舌先で短くたたく動きにしないようにします。Rの舌の形には複数の作り方があるので、「必ず舌を巻く」とは決めません。"}],"span":[9,9]},{"id":"chred-lorry-b4","type":"explanation","runs":[{"text":"lorryは主にイギリス英語で使う語です。この定番の練習句は残しますが、アメリカ英語の日常語としてはtruckを使う場面が多くあります。"}],"span":[11,11]},{"id":"chred-lorry-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chred-lorry-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"lorry","emphasis":true}]},{"number":null,"runs":[{"text":"yellow lorry","emphasis":true}]},{"number":null,"runs":[{"text":"lorry, yellow lorry","emphasis":true}]},{"number":null,"runs":[{"text":"Red lorry, yellow lorry.","emphasis":true}]}],"span":[15,18]},{"id":"chred-lorry-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[20,20]},{"id":"chred-lorry-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"I really like it.","emphasis":true},{"text":" — とても気に入っています。"}]},{"number":null,"runs":[{"text":"Turn left at the light.","emphasis":true},{"text":" — 信号のところを左へ曲がってください。"}]}],"span":[22,23]}]},{"type":"twister","id":"seashells","blocks":[{"id":"chseashells-b0","type":"explanation","runs":[{"text":"02 SとSHの切り替え","emphasis":true}],"span":[3,3]},{"id":"chseashells-b1","type":"explanation","runs":[{"text":"She sells seashells by the seashore.","emphasis":true}],"span":[5,5]},{"id":"chseashells-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 彼女は海辺で貝殻を売っています。"}],"span":[7,7]},{"id":"chseashells-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" S /s/では、細い隙間を通る息に注意します。SH /ʃ/では、舌を少し後ろへ動かし、唇も少し丸めて比べます。同じ音へまとめず、変わるところを短く試しましょう。"}],"span":[9,9]},{"id":"chseashells-b4","type":"explanation","runs":[{"text":"sellsとshellsの違いを確かめます。単語の終わりの音も、お手本と比べます。"}],"span":[11,11]},{"id":"chseashells-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chseashells-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"shells","emphasis":true}]},{"number":null,"runs":[{"text":"seashells","emphasis":true}]},{"number":null,"runs":[{"text":"sells seashells","emphasis":true}]},{"number":null,"runs":[{"text":"She sells seashells","emphasis":true}]},{"number":null,"runs":[{"text":"She sells seashells by the seashore.","emphasis":true}]}],"span":[15,19]},{"id":"chseashells-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chseashells-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"She said so.","emphasis":true},{"text":" — 彼女はそう言いました。"}]},{"number":null,"runs":[{"text":"Show me the shop.","emphasis":true},{"text":" — その店を見せてください。"}]}],"span":[23,24]}]},{"type":"twister","id":"free-throws","blocks":[{"id":"chfree-throws-b0","type":"explanation","runs":[{"text":"03 THとFの切り替え","emphasis":true}],"span":[3,3]},{"id":"chfree-throws-b1","type":"explanation","runs":[{"text":"Three free throws.","emphasis":true}],"span":[5,5]},{"id":"chfree-throws-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" フリースロー三本。"}],"span":[7,7]},{"id":"chfree-throws-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" ここでのTH /θ/は、舌先を前歯の間、または上の前歯の裏側へ軽く近づけ、息を通します。F /f/は、下唇と上の前歯を軽く近づけて息を通します。舌で作る音と、唇で作る音を分けます。"}],"span":[9,9]},{"id":"chfree-throws-b4","type":"explanation","runs":[{"text":"free throwsは、バスケットボールのフリースローを指します。THとFだけでなく、続くRへ移るところもゆっくり確かめます。"}],"span":[11,11]},{"id":"chfree-throws-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chfree-throws-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"throws","emphasis":true}]},{"number":null,"runs":[{"text":"free throws","emphasis":true}]},{"number":null,"runs":[{"text":"three free throws.","emphasis":true}]}],"span":[15,17]},{"id":"chfree-throws-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[19,19]},{"id":"chfree-throws-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Three friends.","emphasis":true},{"text":" — 友人が三人。"}]},{"number":null,"runs":[{"text":"Feel the difference.","emphasis":true},{"text":" — 違いを感じてみてください。"}]}],"span":[21,22]},{"id":"chfree-throws-b9","type":"explanation","runs":[{"text":"子音と語尾を確かめる","emphasis":true}],"span":[24,24]}]},{"type":"twister","id":"peter-piper","blocks":[{"id":"chpeter-piper-b0","type":"explanation","runs":[{"text":"04 Pと、余分な母音を足さない語尾","emphasis":true}],"span":[3,3]},{"id":"chpeter-piper-b1","type":"explanation","runs":[{"text":"Peter Piper picked a peck of pickled peppers.","emphasis":true}],"span":[5,5]},{"id":"chpeter-piper-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" ピーター・パイパーが、漬けた唐辛子を一ます分取りました。"}],"span":[7,7]},{"id":"chpeter-piper-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" P /p/では、唇を閉じてから開きます。必要以上に息を吹かず、単語の後ろへ余分な母音を加えないようにします。peppersから少しずつ前へ伸ばしてみます。"}],"span":[9,9]},{"id":"chpeter-piper-b4","type":"explanation","runs":[{"text":"peckは量の単位です。この文は、Pの並びを練習するための言葉遊びです。量や内容を、日常の買い物の定型句として暗記する必要はありません。"}],"span":[11,11]},{"id":"chpeter-piper-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chpeter-piper-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"peppers","emphasis":true}]},{"number":null,"runs":[{"text":"pickled peppers","emphasis":true}]},{"number":null,"runs":[{"text":"a peck of pickled peppers","emphasis":true}]},{"number":null,"runs":[{"text":"picked a peck of pickled peppers","emphasis":true}]},{"number":null,"runs":[{"text":"Peter Piper picked a peck of pickled peppers.","emphasis":true}]}],"span":[15,19]},{"id":"chpeter-piper-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chpeter-piper-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Pick a paper.","emphasis":true},{"text":" — 紙を選んでください。paperが何を指すかは場面で変わります。"}]},{"number":null,"runs":[{"text":"Please pass the pepper.","emphasis":true},{"text":" — こしょうを取ってください。"}]}],"span":[23,24]}]},{"type":"twister","id":"big-black-bug","blocks":[{"id":"chbig-black-bug-b0","type":"explanation","runs":[{"text":"05 Bと単語の終わり","emphasis":true}],"span":[3,3]},{"id":"chbig-black-bug-b1","type":"explanation","runs":[{"text":"A big black bug bit a big black bear.","emphasis":true}],"span":[5,5]},{"id":"chbig-black-bug-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 大きな黒い虫が、大きな黒い熊をかみました。"}],"span":[7,7]},{"id":"chbig-black-bug-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" B /b/の唇の開閉と、単語の終わりへ注意を向けます。big、black、bugを一つずつ確かめ、語尾へ母音を足さずにつなげます。"}],"span":[9,9]},{"id":"chbig-black-bug-b4","type":"explanation","runs":[{"text":"語尾をはっきりさせることは、すべての子音を強く破裂させることではありません。閉じたまま終わる音もあります。まずお手本の終わり方を比べます。"}],"span":[11,11]},{"id":"chbig-black-bug-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chbig-black-bug-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"bug","emphasis":true}]},{"number":null,"runs":[{"text":"black bug","emphasis":true}]},{"number":null,"runs":[{"text":"big black bug","emphasis":true}]},{"number":null,"runs":[{"text":"a big black bug","emphasis":true}]},{"number":null,"runs":[{"text":"A big black bug bit a big black bear.","emphasis":true}]}],"span":[15,19]},{"id":"chbig-black-bug-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chbig-black-bug-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"A big blue bag.","emphasis":true},{"text":" — 大きな青いかばん。"}]},{"number":null,"runs":[{"text":"Bob bought a book.","emphasis":true},{"text":" — ボブは本を買いました。"}]}],"span":[23,24]}]},{"type":"twister","id":"two-witches","blocks":[{"id":"chtwo-witches-b0","type":"explanation","runs":[{"text":"06 WとCHを、長い文でも保つ","emphasis":true}],"span":[3,3]},{"id":"chtwo-witches-b1","type":"explanation","runs":[{"text":"If two witches were watching two watches, which witch would watch which watch?","emphasis":true}],"span":[5,5]},{"id":"chtwo-witches-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 二人の魔女が二つの時計を見ているとしたら、どの魔女がどの時計を見るのでしょうか。"}],"span":[7,7]},{"id":"chtwo-witches-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" W /w/では唇を丸め、次の母音へ動かします。CH /tʃ/では、いったん息を止めたあと、短い摩擦音へつなげます。witchとwatch、whichの切り替えを確かめます。"}],"span":[9,9]},{"id":"chtwo-witches-b4","type":"explanation","runs":[{"text":"長い文なので、内容を一度理解してから短いまとまりに分けます。最後まで一息で速く言うことが目標ではありません。"}],"span":[11,11]},{"id":"chtwo-witches-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chtwo-witches-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"watches","emphasis":true}]},{"number":null,"runs":[{"text":"two watches","emphasis":true}]},{"number":null,"runs":[{"text":"watch which watch","emphasis":true}]},{"number":null,"runs":[{"text":"which witch would watch which watch","emphasis":true}]},{"number":null,"runs":[{"text":"If two witches were watching two watches, which witch would watch which watch?","emphasis":true}]}],"span":[15,19]},{"id":"chtwo-witches-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chtwo-witches-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Which way?","emphasis":true},{"text":" — どちらの道ですか。"}]},{"number":null,"runs":[{"text":"Watch this.","emphasis":true},{"text":" — これを見てください。"}]}],"span":[23,24]},{"id":"chtwo-witches-b9","type":"explanation","runs":[{"text":"子音を、余分な母音なしでつなげる","emphasis":true}],"span":[26,26]}]},{"type":"twister","id":"ice-cream","blocks":[{"id":"chice-cream-b0","type":"explanation","runs":[{"text":"07 SCRの子音をつなげる","emphasis":true}],"span":[3,3]},{"id":"chice-cream-b1","type":"explanation","runs":[{"text":"I scream, you scream, we all scream for ice cream.","emphasis":true}],"span":[5,5]},{"id":"chice-cream-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 私も、あなたも、みんなアイスクリームを求めて叫びます。"}],"span":[7,7]},{"id":"chice-cream-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" screamの初めは /s/、/k/、/ɹ/ が続きます。Sの息のあとにKの閉鎖を作り、余分な母音を挟まずRへ移ります。"}],"span":[9,9]},{"id":"chice-cream-b4","type":"explanation","runs":[{"text":"I screamとice creamの音の近さを使った言葉遊びです。ここでは、特にscreamの子音のつながりを練習します。"}],"span":[11,11]},{"id":"chice-cream-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chice-cream-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"scream","emphasis":true}]},{"number":null,"runs":[{"text":"all scream","emphasis":true}]},{"number":null,"runs":[{"text":"we all scream","emphasis":true}]},{"number":null,"runs":[{"text":"you scream, we all scream","emphasis":true}]},{"number":null,"runs":[{"text":"I scream, you scream, we all scream for ice cream.","emphasis":true}]}],"span":[15,19]},{"id":"chice-cream-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chice-cream-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"The screen is bright.","emphasis":true},{"text":" — 画面は明るいです。"}]},{"number":null,"runs":[{"text":"Scratch the surface.","emphasis":true},{"text":" — 表面をひっかいてください。"}]}],"span":[23,24]}]},{"type":"twister","id":"slippery-snails","blocks":[{"id":"chslippery-snails-b0","type":"explanation","runs":[{"text":"08 SLとSNをつなげる","emphasis":true}],"span":[3,3]},{"id":"chslippery-snails-b1","type":"explanation","runs":[{"text":"Six slippery snails slid slowly seaward.","emphasis":true}],"span":[5,5]},{"id":"chslippery-snails-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" ぬるぬるした六匹のカタツムリが、ゆっくり海の方へ滑っていきました。"}],"span":[7,7]},{"id":"chslippery-snails-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" Sのあと、母音を加えずLまたはNへ移ります。snails、slippery snailsのように短い部分から始め、音が混ざったら長さを戻します。"}],"span":[9,9]},{"id":"chslippery-snails-b4","type":"explanation","runs":[{"text":"意味は場面を想像するための助けです。少し変わった内容を、日常の決まり文句として覚える必要はありません。"}],"span":[11,11]},{"id":"chslippery-snails-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chslippery-snails-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"snails","emphasis":true}]},{"number":null,"runs":[{"text":"slippery snails","emphasis":true}]},{"number":null,"runs":[{"text":"six slippery snails","emphasis":true}]},{"number":null,"runs":[{"text":"Six slippery snails slid slowly","emphasis":true}]},{"number":null,"runs":[{"text":"Six slippery snails slid slowly seaward.","emphasis":true}]}],"span":[15,19]},{"id":"chslippery-snails-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chslippery-snails-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Sleep slowly.","emphasis":true},{"text":" — 「ゆっくり眠ってください」と読める言葉遊び的な句です。自然な日常の勧め方として覚えるための例ではありません。"}]},{"number":null,"runs":[{"text":"Snow is falling.","emphasis":true},{"text":" — 雪が降っています。"}]}],"span":[23,24]}]},{"type":"twister","id":"fresh-flesh","blocks":[{"id":"chfresh-flesh-b0","type":"explanation","runs":[{"text":"09 FRとFLの切り替え","emphasis":true}],"span":[3,3]},{"id":"chfresh-flesh-b1","type":"explanation","runs":[{"text":"Freshly fried fresh flesh.","emphasis":true}],"span":[5,5]},{"id":"chfresh-flesh-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 揚げたばかりの、新鮮な肉。"}],"span":[7,7]},{"id":"chfresh-flesh-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" Fの息のあと、Rへ移るときは舌先で上の歯ぐきを短くたたかず、Lへ移るときは舌先の接触を確かめます。間へ母音を足さず、freshとfleshを比べます。"}],"span":[9,9]},{"id":"chfresh-flesh-b4","type":"explanation","runs":[{"text":"fleshは体の肉を表す語で、この句は音を並べた練習用です。普通の料理の注文に、そのまま使うための句ではありません。"}],"span":[11,11]},{"id":"chfresh-flesh-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chfresh-flesh-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"flesh","emphasis":true}]},{"number":null,"runs":[{"text":"fresh flesh","emphasis":true}]},{"number":null,"runs":[{"text":"fried fresh flesh","emphasis":true}]},{"number":null,"runs":[{"text":"Freshly fried fresh flesh.","emphasis":true}]}],"span":[15,18]},{"id":"chfresh-flesh-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[20,20]},{"id":"chfresh-flesh-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Fresh flowers.","emphasis":true},{"text":" — 新鮮な花。たとえば、傷んでいない、摘んだばかりの花です。"}]},{"number":null,"runs":[{"text":"A friendly place.","emphasis":true},{"text":" — 親しみやすい場所。"}]}],"span":[22,23]},{"id":"chfresh-flesh-b9","type":"explanation","runs":[{"text":"強弱と母音の変化を確かめる","emphasis":true}],"span":[25,25]}]},{"type":"twister","id":"betty-botter","blocks":[{"id":"chbetty-botter-b0","type":"explanation","runs":[{"text":"10 母音の変化と強弱","emphasis":true}],"span":[3,3]},{"id":"chbetty-botter-b1","type":"explanation","runs":[{"text":"Betty Botter bought some butter.","emphasis":true}],"span":[5,5]},{"id":"chbetty-botter-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" ベティ・ボッターは、バターを少し買いました。"}],"span":[7,7]},{"id":"chbetty-botter-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" 子音だけでなく、名前、bought、butterの母音の変化を聞きます。意味の中心になる語をやや強くし、その間の短い語を軽くつなげます。"}],"span":[9,9]},{"id":"chbetty-botter-b4","type":"explanation","runs":[{"text":"アメリカ英語では、Tの音も位置によって変わります。つづりのTをいつも同じ強さで破裂させるのではなく、お手本の流れを確かめます。"}],"span":[11,11]},{"id":"chbetty-botter-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chbetty-botter-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"butter","emphasis":true}]},{"number":null,"runs":[{"text":"some butter","emphasis":true}]},{"number":null,"runs":[{"text":"bought some butter","emphasis":true}]},{"number":null,"runs":[{"text":"Betty Botter bought some butter.","emphasis":true}]}],"span":[15,18]},{"id":"chbetty-botter-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[20,20]},{"id":"chbetty-botter-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Better butter.","emphasis":true},{"text":" — もっとよいバター。"}]},{"number":null,"runs":[{"text":"Betty bought it.","emphasis":true},{"text":" — ベティはそれを買いました。"}]}],"span":[22,23]}]},{"type":"twister","id":"woodchuck","blocks":[{"id":"chwoodchuck-b0","type":"explanation","runs":[{"text":"11 繰り返す音と、文の強弱","emphasis":true}],"span":[3,3]},{"id":"chwoodchuck-b1","type":"explanation","runs":[{"text":"How much wood would a woodchuck chuck if a woodchuck could chuck wood?","emphasis":true}],"span":[5,5]},{"id":"chwoodchuck-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" もしウッドチャックが木を投げられるなら、どれくらい投げるでしょうか。"}],"span":[7,7]},{"id":"chwoodchuck-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" 長い文でも、意味の中心になる語を目印にします。短いつなぎの語をすべて同じ強さにせず、聞こえる強弱を比べます。"}],"span":[9,9]},{"id":"chwoodchuck-b4","type":"explanation","runs":[{"text":"woodchuckは動物の名前、ここでのchuckは「投げる」です。仮定を使った言葉遊びで、動物についての事実を説明する文ではありません。"}],"span":[11,11]},{"id":"chwoodchuck-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chwoodchuck-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"wood","emphasis":true}]},{"number":null,"runs":[{"text":"chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"could chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"a woodchuck could chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"if a woodchuck could chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"How much wood would a woodchuck chuck if a woodchuck could chuck wood?","emphasis":true}]}],"span":[15,20]},{"id":"chwoodchuck-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[22,22]},{"id":"chwoodchuck-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"What would you choose?","emphasis":true},{"text":" — 何を選びますか。／何を選びたいですか。"}]},{"number":null,"runs":[{"text":"How much could it cost?","emphasis":true},{"text":" — どれくらい費用がかかるでしょうか。"}]}],"span":[24,25]}]},{"type":"twister","id":"unique-new-york","blocks":[{"id":"chunique-new-york-b0","type":"explanation","runs":[{"text":"12 KからNへ移る、単語の境目","emphasis":true}],"span":[3,3]},{"id":"chunique-new-york-b1","type":"explanation","runs":[{"text":"Unique New York.","emphasis":true}],"span":[5,5]},{"id":"chunique-new-york-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 独特なニューヨーク。"}],"span":[7,7]},{"id":"chunique-new-york-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" uniqueの最後のKの閉鎖から、newのNへ移ります。間に余分な母音を挟まないようにします。Kを強く大きく破裂させる必要はありません。"}],"span":[9,9]},{"id":"chunique-new-york-b4","type":"explanation","runs":[{"text":"uniqueは「ほかにない、独特な」という意味です。この短い句では、単語の境目で口の動きをつなげます。"}],"span":[11,11]},{"id":"chunique-new-york-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chunique-new-york-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"York","emphasis":true}]},{"number":null,"runs":[{"text":"New York","emphasis":true}]},{"number":null,"runs":[{"text":"Unique New York.","emphasis":true}]}],"span":[15,17]},{"id":"chunique-new-york-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[19,19]},{"id":"chunique-new-york-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"A unique name.","emphasis":true},{"text":" — 独特な名前。"}]},{"number":null,"runs":[{"text":"New York at night.","emphasis":true},{"text":" — 夜のニューヨーク。"}]}],"span":[21,22]}]}]},{"id":"tongue-transfer","title":"普通のフレーズへ戻す","blocks":[{"id":"chtongue-transfer-b0","type":"explanation","runs":[{"text":"何百もの早口言葉を集める必要はありません。役立つ動きをいくつか練習し、それを普通のフレーズでも使ってみます。"}],"span":[3,3]},{"id":"chtongue-transfer-b1","type":"explanation","runs":[{"text":"たとえば、RとLを練習したあとに "},{"text":"I really like it.","emphasis":true},{"text":" を言います。「とても気に入っています」と伝える、ごく普通の場面へ音を戻す練習です。"}],"span":[5,5]}]}],"practice":[{"id":"chtongue-intro-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"今気になる音を含む句を一つ選びます。"}]},{"number":2,"runs":[{"text":"意味と、練習する口の動きを確認します。"}]},{"number":3,"runs":[{"text":"録音がある場合は、短い部分を聞き終えてからまねします。"}]},{"number":4,"runs":[{"text":"はっきり言える範囲で繰り返し、前の部分を少し足します。"}]},{"number":5,"runs":[{"text":"混ざってきたら、速さか長さを戻します。"}]},{"number":6,"runs":[{"text":"最後に、同じ動きを普通のフレーズでも試します。"}]}],"span":[3,8]},{"id":"chtongue-intro-practice-b1","type":"explanation","runs":[{"text":"長い文を初めから連続シャドーイングする必要はありません。短いリピートに慣れ、意味と音の流れがつかめてから、音声を少し遅れて追う練習も試せます。"}],"span":[10,10]},{"id":"chtongue-intro-practice-b2","type":"explanation","runs":[{"text":"既存の録音は練習用のサンプルです。これから作るコース全体の音声と同じ声・同じアクセントで統一済みとは扱いません。文字の解説だけでも、実際の録音の発音やタイミングを確認したことにはなりません。"}],"span":[12,12]}]},"lr":{"title":"LとRを、短い文でつなげる","subtitle":"LとRに注意しながら、三つの短い部分を、一つの文へつなげる。","sections":[{"id":"lr-notice","title":"まず、文が何を伝えているか","blocks":[{"id":"chlr-notice-b0","type":"explanation","runs":[{"text":"Lily really likes\nred roses.","emphasis":true}],"span":[3,4]},{"id":"chlr-notice-b1","type":"explanation","runs":[{"text":"リリーは赤いバラがとても好きです。reallyが、好きだという気持ちを強めています。単語を全部同じ強さで読むのではなく、文の意味も思い浮かべます。"}],"span":[6,6]},{"id":"chlr-notice-b2","type":"explanation","runs":[{"text":"L /l/では、舌先と、上の前歯の後ろの盛り上がりとの接触を確かめます。アメリカ英語のR /ɹ/では、日本語のラ行のように、同じ場所を短くたたく動きにしないようにします。Rの形は一種類ではないので、「必ず舌先を強く巻く」という指示にはしません。"}],"span":[8,8]},{"id":"chlr-notice-b3","type":"explanation","runs":[{"text":"まず、違いを感じ取れるゆっくりした速度で試します。"}],"span":[10,10]}]},{"id":"lr-parts","title":"三つに分けて、つなげる","blocks":[{"id":"chlr-parts-b0","type":"table","header":[[{"text":"英語のまとまり"}],[{"text":"意味と、練習すること"}]],"rows":[[[{"text":"Lily","emphasis":true}],[{"text":"名前のリリー。Lでの舌先の接触に注意します。"}]],[[{"text":"really likes","emphasis":true}],[{"text":"「とても好き」。RからLへ移るところで、余分な母音を挟まないようにします。"}]],[[{"text":"red roses","emphasis":true}],[{"text":"「赤いバラ」。Rの音と、語の終わりまでを確かめます。rosesの最後は、無条件に/s/へ置き換えず、お手本の音と比べます。"}]]],"span":[3,7]},{"id":"chlr-parts-b1","type":"explanation","runs":[{"text":"一つずつはっきり言い、二つ、三つとつなげます。短く区切る練習をしたあとも、文全体では不必要に単語を切り離さないようにします。"}],"span":[9,9]}]},{"id":"lr-everyday","title":"自分が使える文へ戻す","blocks":[{"id":"chlr-everyday-b0","type":"explanation","runs":[{"text":"I really like roses.","emphasis":true}],"span":[3,3]},{"id":"chlr-everyday-b1","type":"explanation","runs":[{"text":"「バラがとても好きです」と、自分の好みを伝えます。同じLとRの動きを、普通の内容で試せます。"}],"span":[5,5]}]}],"practice":[{"id":"chlr-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"Lily","emphasis":true},{"text":"、"},{"text":"really likes","emphasis":true},{"text":"、"},{"text":"red roses","emphasis":true},{"text":" のうち、今練習したい部分を選びます。"}]},{"number":2,"runs":[{"text":"意味を確かめ、声に出して言います。"}]},{"number":3,"runs":[{"text":"文字を隠し、思い出して言います。必要なら、すぐ表示へ戻します。"}]},{"number":4,"runs":[{"text":"一部分に慣れたら、前後をつなげます。"}]},{"number":5,"runs":[{"text":"文全体を言い、最後に "},{"text":"I really like roses.","emphasis":true},{"text":" でも試します。"}]}],"span":[3,7]},{"id":"chlr-practice-b1","type":"explanation","runs":[{"text":"このLilyの文には、現在、コース用の承認済み録音が付いていません。音声がない状態での音読を、シャドーイングとは呼びません。お手本を聞いて練習したい場合は、前のレッスンにある既存の録音例を使えます。"}],"span":[9,9]},{"id":"chlr-practice-b2","type":"explanation","runs":[{"text":"次の章:","emphasis":true},{"text":" Social FluencyのCH01 — 挨拶。"}],"span":[11,11]}]}}
++{"orientation":{"title":"英語で、何を話したい？","subtitle":"Souへ。まずは、英語で話してみたい場面を一つ見つけよう。","sections":[{"id":"orientation-language","title":"誰と、どんな話がしたい？","blocks":[{"id":"chorientation-language-b0","type":"explanation","runs":[{"text":"友だちに今日あったことを話す。旅先で出会った人に質問する。北海道の好きな場所を紹介する。英語でできるようになったら、どれが一番うれしい？"}],"span":[3,3]}]},{"id":"orientation-english","title":"英語でできること","blocks":[{"id":"chorientation-english-b0","type":"explanation","runs":[{"text":"英語を学ぶかどうかは、自分で決めていい。英語を使えると、旅先で話せる人が増えたり、仕事や住む場所の選択肢が広がったりする。英語でも、ふだんの自分らしく話せるようになろう。"}],"span":[3,3]}]},{"id":"orientation-answer","title":"自分の理由から始めよう","blocks":[{"id":"chorientation-answer-b0","type":"explanation","runs":[{"text":"「英語で、＿＿と＿＿について話したい。」","emphasis":true},{"text":" まずは日本語で空欄を埋めてみよう。最初の練習を、そこから一緒に決めよう。"}],"span":[3,3]}]}],"practice":[{"id":"chorientation-practice-b0","type":"explanation","runs":[{"text":"4つの短い質問に答えて、英語を使いたい場面を考えてみよう。"}],"span":[3,3]}]},"how-it-works":{"title":"一緒に練習する方法","subtitle":"短い表現を、声に出して使う流れを知ろう。","sections":[{"id":"how-philosophy","title":"場面で覚える","blocks":[{"id":"chhow-philosophy-b0","type":"explanation","runs":[{"text":"待ち合わせに遅れたら "},{"text":"Sorry I’m late.","emphasis":true},{"text":"。電話に出られなかったら "},{"text":"Sorry I missed your call.","emphasis":true},{"text":"。まずは場面と一緒に聞いてまねする。それから、自分が言いたいことに合わせて言い換えてみよう。文法は、気になったところから一緒に見ていこう。"}],"span":[3,3]}]},{"id":"how-start-line","title":"どこから始める？","blocks":[{"id":"chhow-start-line-b0","type":"explanation","runs":[{"text":"アルファベットに慣れていたら、"},{"text":"英語の音","emphasis":true},{"text":"や"},{"text":"早口言葉","emphasis":true},{"text":"から始めて大丈夫。早口言葉は、ゆっくり口を動かす短いウォームアップにしよう。最初の日常会話は、仕事のあとにも使えるあいさつから。"}],"span":[3,3]}]},{"id":"how-two-by-two","title":"Study と Practice","blocks":[{"id":"chhow-two-by-two-b0","type":"explanation","runs":[{"text":"Study（学習）","emphasis":true},{"text":"では、どんな場面で、どんな言い方をするか見る。"}],"span":[3,3]},{"id":"chhow-two-by-two-b1","type":"explanation","runs":[{"text":"Practice（練習）","emphasis":true},{"text":"では、声に出してまねしたあと、例を見ずに自分のことを話す。"},{"text":"How was your day?","emphasis":true},{"text":" と聞かれたら、今日あったことを一つ答えて、相手にも聞き返してみよう。"}],"span":[5,5]}]},{"id":"how-chapter-loop","title":"次に話す日まで","blocks":[{"id":"chhow-chapter-loop-b0","type":"explanation","runs":[{"text":"仕事のあとや夜ごはんのあと、できそうな日に"},{"text":"５分だけ","emphasis":true},{"text":"。短いお手本を聞いて、一文をまねして、最後は自分の言葉で答える。次の通話で、似た質問をやってみよう。"}],"span":[3,3]}]}],"practice":[{"id":"chhow-it-works-practice-b0","type":"explanation","runs":[{"text":"続けられそうな時間を選んでみよう。最初は５分からでも大丈夫。"}],"span":[3,3]}]},"letters":{"title":"アルファベット","subtitle":"26文字の大文字と小文字を見分け、名前を聞いて言い、紙に書いて試す。","sections":[{"id":"letters-start","title":"英語の、いちばん最初の場所へようこそ","blocks":[{"id":"chletters-start-b0","type":"explanation","runs":[{"text":"英語で書く言葉は、たった"},{"text":"26文字","emphasis":true},{"text":"からできています。これだけです。それぞれに大文字と小文字、2つの形があります。"}],"span":[3,3]},{"id":"chletters-start-b1","type":"explanation","runs":[{"text":"この文字は、最初からイギリスにあったわけではありません。長い時間をかけて受け継がれてきました。英語のアルファベットはラテン文字をもとにしていて、その歴史はギリシャ文字やフェニキア文字にもつながります。今、あなたが書く一文字にも、何千年もの歴史があります。"}],"span":[5,5]},{"id":"chletters-start-b2","type":"explanation","runs":[{"text":"文字を、小さな"},{"text":"積み木","emphasis":true},{"text":"だと思ってみてください。一つずつは単純です。でも、組み合わせると、名前、冗談、歌、物語、想像の世界まで表せます。"}],"span":[7,7]},{"id":"chletters-start-b3","type":"explanation","runs":[{"text":"今日は、この26文字から始めます。形を見て、名前を聞いて、声に出してみましょう。少しずつなじんでくれば、その先の英語も学びやすくなります。"}],"span":[9,9]},{"id":"chletters-start-b4","type":"explanation","runs":[{"text":"まずは、全部の文字に会ってみましょう。","emphasis":true}],"span":[11,11]}]},{"id":"letters-board","title":"26文字を見てみよう","blocks":[{"id":"chletters-board-b0","type":"explanation","runs":[{"text":"文字には、"},{"text":"大文字（capital letters）","emphasis":true},{"text":"と"},{"text":"小文字（small letters）","emphasis":true},{"text":"があります。文字を押すと、端末の英語音声で名前を聞けます。"}],"span":[3,3]}],"widget":"alphabet"},{"id":"letters-try","title":"見る・言う・書く","blocks":[{"id":"chletters-try-b0","type":"explanation","runs":[{"text":"文字に会えたら、次は"},{"text":"3つのステップ","emphasis":true},{"text":"で試してみましょう。"}],"span":[3,3]},{"id":"chletters-try-b1","type":"explanation","runs":[{"text":"文字の"},{"text":"名前","emphasis":true},{"text":"と、単語の中での"},{"text":"音","emphasis":true},{"text":"は、必ずしも同じではありません。音の違いは、次のレッスンで少しずつ学びます。"}],"span":[5,5]},{"id":"chletters-try-b2","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"見る。","emphasis":true},{"text":" Super Simple ABCsの動画を再生し、AからZまで目で追います。"}]},{"number":2,"runs":[{"text":"言う。","emphasis":true},{"text":" もう一度聞いて、一緒に声に出します。動画を止めて、いくつかの文字を言ってみましょう。"}]},{"number":3,"runs":[{"text":"書く。","emphasis":true},{"text":" 紙に大文字と小文字をいくつか書きます。見本を見ずに、もう一度試します。"}]}],"span":[7,9]}],"video":["MgmIHtp-ZQM","The Alphabet Song | Lower Case Letters | Super Simple ABCs","Super Simple ABCs / Super Simple Songs",20]}],"practice":[{"id":"chletters-practice-b0","type":"explanation","runs":[{"text":"文字を一つ見て、まず自分で名前を言い、押して聞いてみましょう。そのあと大文字と小文字を紙に書きます。忘れた文字だけ、もう一度確認すれば十分です。"}],"span":[3,3]}]},"write":{"title":"アルファベットを書く","subtitle":"大文字と小文字の形を紙で確かめ、自分や身近な人の名前を書き、つづりを声に出す。","sections":[{"id":"write-start","title":"きれいさより、見分けられる形","blocks":[{"id":"chwrite-start-b0","type":"explanation","runs":[{"text":"聞いたり歌ったりすると、名前や順番に慣れます。書く練習では、線がどこから始まり、どちらへ動き、どんな形を作るかを、近くで見ます。"}],"span":[3,3]},{"id":"chwrite-start-b1","type":"explanation","runs":[{"text":"目標は、速く書くことでも、美しい字を競うことでもありません。自分や相手が見分けられる形にすることです。鉛筆、消しゴム、罫線のある紙を用意しましょう。なぞるための見本も役立ちます。"}],"span":[5,5]}]},{"id":"write-model","title":"見る、なぞる、自分で書く","blocks":[{"id":"chwrite-model-b0","type":"explanation","runs":[{"text":"見本の書き方を見たあと、紙で試します。数回なぞり、見ながら写し、最後に見ないで書いてみます。大文字と小文字の両方を扱います。"}],"span":[3,3]},{"id":"chwrite-model-b1","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"形を何回かなぞります。"}]},{"number":2,"runs":[{"text":"見ないで書き、見本と比べます。"}]},{"number":3,"runs":[{"text":"大文字と小文字を、対にして書きます。"}]},{"number":4,"runs":[{"text":"身近な単語にもつなげます。例は "},{"text":"A, a, apple","emphasis":true},{"text":" です。"}]}],"span":[5,8]},{"id":"chwrite-model-b2","type":"explanation","runs":[{"text":"アニメーション:","emphasis":true},{"text":" 下にある書き方ガイドで、文字と書き順を選べます。大文字と小文字を切り替え、１画ずつ確認しましょう。"}],"span":[10,10]}]},{"id":"write-names","title":"自分に関係のある名前を書く","blocks":[{"id":"chwrite-names-b0","type":"explanation","runs":[{"text":"まず自分の名前を書きます。英語で名前を書くときは、通常、各名前の初めを大文字にします。名前の順番は、言語や使う場面によって違うため、自分が使う形を確認しましょう。"}],"span":[3,3]},{"id":"chwrite-names-b1","type":"explanation","runs":[{"text":"次に、家族の名前をいくつかと、友人の名前を三〜五人分書きます。名前を言ったあと、一文字ずつつづりを言ってみてください。"}],"span":[5,5]},{"id":"chwrite-names-b2","type":"explanation","runs":[{"text":"名前は、自己紹介、予約、書類、アカウントなどで使います。ここで覚えた形は、すでに実際の用件に役立つものです。"}],"span":[7,7]}]},{"id":"write-materials","title":"道具と練習を、簡単にする","blocks":[{"id":"chwrite-materials-b0","type":"explanation","runs":[{"text":"鉛筆なら、修正しやすくなります。罫線や初心者向けの見本があると、大きさや位置を比べやすくなります。キーボードで打つことと、紙で形を書くことは、ここでは別の練習です。"}],"span":[3,3]},{"id":"chwrite-materials-b1","type":"explanation","runs":[{"text":"最初は、普通の活字体を練習します。文字をつなげる筆記体は、必要なら後で学べます。最初からできなければいけないものではありません。"}],"span":[5,5]},{"id":"chwrite-materials-b2","type":"explanation","runs":[{"text":"期限を決めて急ぐより、短い時間で戻り、見分けられる形を目指しましょう。"}],"span":[7,7]},{"id":"chwrite-materials-b3","type":"explanation","runs":[{"text":"印刷用ワークシート:","emphasis":true},{"text":" 「Practice」で、A〜Zの一覧、１文字ずつのなぞり書き、単語を書くシートを選べます。A4用紙に100%の大きさで印刷してください。"}],"span":[9,9]}]}],"practice":[{"id":"chwrite-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"自分の名前を書き、初めの大文字を確かめます。"}]},{"number":2,"runs":[{"text":"家族の名前をいくつか書きます。"}]},{"number":3,"runs":[{"text":"友人の名前を三〜五人分書きます。"}]},{"number":4,"runs":[{"text":"それぞれの名前を言い、一文字ずつつづりを言います。"}]}],"span":[3,6]},{"id":"chwrite-practice-b1","type":"explanation","runs":[{"text":"もう一度試したい文字があれば、一つメモしましょう。ウェブのPracticeにあるメモ欄は任意です。書く練習そのものは、紙で行います。"}],"span":[8,8]}]},"sounds":{"title":"文字と音","subtitle":"26文字と英語の音の違いを理解し、一般米語の主な音をIPAで見たり聞いたりする。","sections":[{"id":"sounds-difference","title":"文字と音は、同じではない","blocks":[{"id":"chsounds-difference-b0","type":"explanation","runs":[{"text":"英語には "},{"text":"26文字","emphasis":true},{"text":" があります。文字は単語を書くために使います。でも、話すときに使うのは "},{"text":"音","emphasis":true},{"text":" です。英語には、文字の数よりも多くの音があります。"}],"span":[3,3]},{"id":"chsounds-difference-b1","type":"explanation","runs":[{"text":"一つの文字が、いつも同じ音になるとは限りません。二つの文字が、一つの音を表すこともあります。"}],"span":[5,5]},{"id":"chsounds-difference-b2","type":"table","header":[[{"text":"単語"}],[{"text":"何が起こっている？"}]],"rows":[[[{"text":"cat と city","emphasis":true}],[{"text":"同じ "},{"text":"c","emphasis":true},{"text":" でも、違う音になります。"}]],[[{"text":"ship","emphasis":true}],[{"text":"sh","emphasis":true},{"text":" の2文字で、一つの音を表します。"}]],[[{"text":"know","emphasis":true}],[{"text":"k","emphasis":true},{"text":" と書きますが、その音は発音しません。"}]]],"span":[7,11]},{"id":"chsounds-difference-b3","type":"explanation","runs":[{"text":"つまり、アルファベットを知ることは始まりにすぎません。英語を話したり、聞いて理解したりするには、"},{"text":"音","emphasis":true},{"text":" も知っていく必要があります。"}],"span":[13,13]}]},{"id":"sounds-reference","title":"どの英語の音を学ぶの？","blocks":[{"id":"chsounds-reference-b0","type":"explanation","runs":[{"text":"英語は世界中で話されていて、発音のしかたは一つではありません。アメリカ国内でも、地域や話す人によって音が違うことがあります。"}],"span":[3,3]},{"id":"chsounds-reference-b1","type":"explanation","runs":[{"text":"ここでは、"},{"text":"一般米語（General American English）","emphasis":true},{"text":" を基準にします。アメリカで広く聞かれる発音の特徴をまとめたもので、学ぶときに一貫した目安になります。"}],"span":[5,5]},{"id":"chsounds-reference-b2","type":"explanation","runs":[{"text":"すべてのアメリカ人が同じ発音をするという意味でも、ほかのアクセントが間違いという意味でもありません。"},{"text":"学習を進めるために、一つの基準を選んでいる","emphasis":true},{"text":" のです。"}],"span":[7,7]}]},{"id":"sounds-ipa","title":"音は、どうやって書くの？","blocks":[{"id":"chsounds-ipa-b0","type":"explanation","runs":[{"text":"ふつうのアルファベットは、単語の "},{"text":"つづり","emphasis":true},{"text":" を教えてくれます。でも、それだけでは "},{"text":"発音","emphasis":true},{"text":" が分からないことがあります。"}],"span":[3,3]},{"id":"chsounds-ipa-b1","type":"explanation","runs":[{"text":"そこで使うのが、"},{"text":"IPA（国際音声記号）","emphasis":true},{"text":" です。IPAは、話し言葉の音を記号で表します。たとえば、"},{"text":"ship","emphasis":true},{"text":" の最初の音は "},{"text":"/ʃ/","emphasis":true},{"text":"、"},{"text":"thin","emphasis":true},{"text":" の最初の音は "},{"text":"/θ/","emphasis":true},{"text":" です。"},{"text":"/ /","emphasis":true},{"text":" は、つづりではなく音を示している印です。"}],"span":[5,5]},{"id":"chsounds-ipa-b2","type":"explanation","runs":[{"text":"どうして見慣れない記号があるの？","emphasis":true},{"text":" IPAには、ふだん使うラテン文字もありますが、ほかの文字体系から取り入れたり、音を表すために形を変えたりした記号もあります。英語の新しい文字を覚えるわけではありません。聞こえる音を書き表すための道具です。"}],"span":[7,7]},{"id":"chsounds-ipa-b3","type":"explanation","runs":[{"text":"たとえば "},{"text":"ship","emphasis":true},{"text":"、"},{"text":"sugar","emphasis":true},{"text":"、"},{"text":"machine","emphasis":true},{"text":" にある "},{"text":"/ʃ/","emphasis":true},{"text":" は、つづりが違っても同じ音です。アクセントによって同じ単語の発音が違うときも、IPAで表せます。"}],"span":[9,9]},{"id":"chsounds-ipa-b4","type":"explanation","runs":[{"text":"最初から全部の記号を覚えなくても大丈夫です。IPAを、音を見つけるための "},{"text":"地図","emphasis":true},{"text":" だと思ってください。"}],"span":[11,11]}]},{"id":"sounds-listen","title":"これから出会う英語の音","blocks":[{"id":"chsounds-listen-b0","type":"explanation","runs":[{"text":"Articoでは、一般米語の主な音を "},{"text":"子音・母音","emphasis":true},{"text":" の二つの表で紹介します。二重母音も「母音」に入っています。母音の下には、あまり使われない音の表もあります。"}],"span":[3,3]},{"id":"chsounds-listen-b1","type":"explanation","runs":[{"text":"この表には、"},{"text":"子音24項目・母音15項目・珍しい音2項目","emphasis":true},{"text":" の、合計 "},{"text":"41項目","emphasis":true},{"text":" があります。これは学習用の一覧で、アメリカ人全員が必ず41種類の独立した音を使うという意味ではありません。アクセントや辞書によって、音の分け方が少し変わることもあります。"}],"span":[5,5]},{"id":"chsounds-listen-b2","type":"explanation","runs":[{"text":"青いスピーカー","emphasis":true},{"text":" を押すと最初の単語、各例の単語を押すとその単語の音声が流れます。"},{"text":"緑色の文字","emphasis":true},{"text":" は、そのIPAの音を表すつづりです。"}],"span":[7,7]}]},{"id":"sounds-routine","title":"聞いて、気づいて、試してみよう","blocks":[{"id":"chsounds-routine-b0","type":"explanation","runs":[{"text":"今日、すべての音を覚える必要はありません。まず一つの単語を聞き、声に出してみましょう。それから、似た音の単語を聞き比べます。"}],"span":[3,3]},{"id":"chsounds-routine-b1","type":"explanation","runs":[{"text":"たとえば "},{"text":"seat と sit","emphasis":true},{"text":"、"},{"text":"thin と this","emphasis":true},{"text":"。小さな音の違いに注目してください。"}],"span":[5,5]},{"id":"chsounds-routine-b2","type":"explanation","runs":[{"text":"ここで出会う音が、これからの学習の土台になります。次第に、"},{"text":"音節・強勢・リズム・つながった話し言葉","emphasis":true},{"text":" も学んでいきます。"}],"span":[7,7]},{"id":"chsounds-routine-b3","type":"explanation","runs":[{"text":"まずは、英語の音に少しずつ慣れていきましょう。","emphasis":true}],"span":[9,9]}]}],"practice":[{"id":"chsounds-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"IPAの記号を一つ選びます。"}]},{"number":2,"runs":[{"text":"例の単語を聞き、同じように声に出します。"}]},{"number":3,"runs":[{"text":"似た音の単語を聞き比べます。"}]},{"number":4,"runs":[{"text":"必要なときに、何度でも戻って練習しましょう。"}]}],"span":[3,6]}]},"tongue-intro":{"title":"早口言葉を使う理由","subtitle":"練習する音を一つ選び、短いまとまりから口の動きを確かめ、その動きを普通のフレーズへつなげる。","sections":[{"id":"tongue-purpose","title":"難しい動きを、短い言葉で取り出す","blocks":[{"id":"chtongue-purpose-b0","type":"explanation","runs":[{"text":"早口言葉には、似ている音や切り替えにくい音が近くに並びます。同じ言葉を使えば、内容を考え直す負担を減らし、舌、唇、顎、息の動きへ注意を向けられます。"}],"span":[3,3]},{"id":"chtongue-purpose-b1","type":"explanation","runs":[{"text":"ぼやけた文を速く言うより、短い部分をはっきり言うところから始めます。ここでの練習は、聞き取りや会話を支えるものです。早口言葉を言えることだけで、会話の力を測るわけではありません。"}],"span":[5,5]}]},{"id":"tongue-contrasts","title":"耳と口で、違いに気づく","blocks":[{"id":"chtongue-contrasts-b0","type":"explanation","runs":[{"text":"第一言語でよく使う音の区別と、英語で使う区別は、同じとは限りません。そのため、最初は似て聞こえたり、同じ動きで言いたくなったりすることがあります。苦手な音は、人によって違います。"}],"span":[3,3]},{"id":"chtongue-contrasts-b1","type":"table","header":[[{"text":"英語の対"}],[{"text":"この練習で確かめること"}]],"rows":[[[{"text":"right / light","emphasis":true}],[{"text":"初めのRとLを分けます。rightには「右・正しい」など、lightには「光・明るい・軽い」などの意味があります。"}]],[[{"text":"road / load","emphasis":true}],[{"text":"舌の動きを比べます。roadは道路、loadは荷物や積む量などを指します。"}]],[[{"text":"rice / lice","emphasis":true}],[{"text":"急いで言う前に音を分けます。riceは米、liceはlouseの複数形で、シラミを指します。"}]]],"span":[5,9]},{"id":"chtongue-contrasts-b2","type":"explanation","runs":[{"text":"このほか、SとSH、THとF、語尾、続く子音、リズムも扱います。一度に全部を直そうとせず、今練習する違いを一つ選びましょう。"}],"span":[11,11]}]},{"id":"tongue-collection","title":"それぞれの句には、練習する理由がある","blocks":[{"id":"chtongue-collection-b0","type":"explanation","runs":[{"text":"下の英語は、既存の練習句と同じものです。日本語は内容をつかむための助けです。音声のカタカナ表記として読まないでください。"}],"span":[3,3]},{"id":"chtongue-collection-b1","type":"explanation","runs":[{"text":"句の意味を理解し、録音がある場合は聞いて、練習する音へ注意を向けます。Practiceでは、短い部分からつなげられます。"}],"span":[5,5]},{"id":"chtongue-collection-b2","type":"explanation","runs":[{"text":"音の違いを確かめる","emphasis":true}],"span":[7,7]},{"type":"twister","id":"red-lorry","blocks":[{"id":"chred-lorry-b0","type":"explanation","runs":[{"text":"01 RとLの切り替え","emphasis":true}],"span":[3,3]},{"id":"chred-lorry-b1","type":"explanation","runs":[{"text":"Red lorry, yellow lorry.","emphasis":true}],"span":[5,5]},{"id":"chred-lorry-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 赤いトラック、黄色いトラック。"}],"span":[7,7]},{"id":"chred-lorry-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" Lでは、舌先を上の前歯のすぐ後ろの盛り上がりへ触れさせます。アメリカ英語のRでは、日本語のラ行のように、そこを舌先で短くたたく動きにしないようにします。Rの舌の形には複数の作り方があるので、「必ず舌を巻く」とは決めません。"}],"span":[9,9]},{"id":"chred-lorry-b4","type":"explanation","runs":[{"text":"lorryは主にイギリス英語で使う語です。この定番の練習句は残しますが、アメリカ英語の日常語としてはtruckを使う場面が多くあります。"}],"span":[11,11]},{"id":"chred-lorry-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chred-lorry-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"lorry","emphasis":true}]},{"number":null,"runs":[{"text":"yellow lorry","emphasis":true}]},{"number":null,"runs":[{"text":"lorry, yellow lorry","emphasis":true}]},{"number":null,"runs":[{"text":"Red lorry, yellow lorry.","emphasis":true}]}],"span":[15,18]},{"id":"chred-lorry-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[20,20]},{"id":"chred-lorry-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"I really like it.","emphasis":true},{"text":" — とても気に入っています。"}]},{"number":null,"runs":[{"text":"Turn left at the light.","emphasis":true},{"text":" — 信号のところを左へ曲がってください。"}]}],"span":[22,23]}]},{"type":"twister","id":"seashells","blocks":[{"id":"chseashells-b0","type":"explanation","runs":[{"text":"02 SとSHの切り替え","emphasis":true}],"span":[3,3]},{"id":"chseashells-b1","type":"explanation","runs":[{"text":"She sells seashells by the seashore.","emphasis":true}],"span":[5,5]},{"id":"chseashells-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 彼女は海辺で貝殻を売っています。"}],"span":[7,7]},{"id":"chseashells-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" S /s/では、細い隙間を通る息に注意します。SH /ʃ/では、舌を少し後ろへ動かし、唇も少し丸めて比べます。同じ音へまとめず、変わるところを短く試しましょう。"}],"span":[9,9]},{"id":"chseashells-b4","type":"explanation","runs":[{"text":"sellsとshellsの違いを確かめます。単語の終わりの音も、お手本と比べます。"}],"span":[11,11]},{"id":"chseashells-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chseashells-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"shells","emphasis":true}]},{"number":null,"runs":[{"text":"seashells","emphasis":true}]},{"number":null,"runs":[{"text":"sells seashells","emphasis":true}]},{"number":null,"runs":[{"text":"She sells seashells","emphasis":true}]},{"number":null,"runs":[{"text":"She sells seashells by the seashore.","emphasis":true}]}],"span":[15,19]},{"id":"chseashells-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chseashells-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"She said so.","emphasis":true},{"text":" — 彼女はそう言いました。"}]},{"number":null,"runs":[{"text":"Show me the shop.","emphasis":true},{"text":" — その店を見せてください。"}]}],"span":[23,24]}]},{"type":"twister","id":"free-throws","blocks":[{"id":"chfree-throws-b0","type":"explanation","runs":[{"text":"03 THとFの切り替え","emphasis":true}],"span":[3,3]},{"id":"chfree-throws-b1","type":"explanation","runs":[{"text":"Three free throws.","emphasis":true}],"span":[5,5]},{"id":"chfree-throws-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" フリースロー三本。"}],"span":[7,7]},{"id":"chfree-throws-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" ここでのTH /θ/は、舌先を前歯の間、または上の前歯の裏側へ軽く近づけ、息を通します。F /f/は、下唇と上の前歯を軽く近づけて息を通します。舌で作る音と、唇で作る音を分けます。"}],"span":[9,9]},{"id":"chfree-throws-b4","type":"explanation","runs":[{"text":"free throwsは、バスケットボールのフリースローを指します。THとFだけでなく、続くRへ移るところもゆっくり確かめます。"}],"span":[11,11]},{"id":"chfree-throws-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chfree-throws-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"throws","emphasis":true}]},{"number":null,"runs":[{"text":"free throws","emphasis":true}]},{"number":null,"runs":[{"text":"three free throws.","emphasis":true}]}],"span":[15,17]},{"id":"chfree-throws-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[19,19]},{"id":"chfree-throws-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Three friends.","emphasis":true},{"text":" — 友人が三人。"}]},{"number":null,"runs":[{"text":"Feel the difference.","emphasis":true},{"text":" — 違いを感じてみてください。"}]}],"span":[21,22]},{"id":"chfree-throws-b9","type":"explanation","runs":[{"text":"子音と語尾を確かめる","emphasis":true}],"span":[24,24]}]},{"type":"twister","id":"peter-piper","blocks":[{"id":"chpeter-piper-b0","type":"explanation","runs":[{"text":"04 Pと、余分な母音を足さない語尾","emphasis":true}],"span":[3,3]},{"id":"chpeter-piper-b1","type":"explanation","runs":[{"text":"Peter Piper picked a peck of pickled peppers.","emphasis":true}],"span":[5,5]},{"id":"chpeter-piper-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" ピーター・パイパーが、漬けた唐辛子を一ます分取りました。"}],"span":[7,7]},{"id":"chpeter-piper-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" P /p/では、唇を閉じてから開きます。必要以上に息を吹かず、単語の後ろへ余分な母音を加えないようにします。peppersから少しずつ前へ伸ばしてみます。"}],"span":[9,9]},{"id":"chpeter-piper-b4","type":"explanation","runs":[{"text":"peckは量の単位です。この文は、Pの並びを練習するための言葉遊びです。量や内容を、日常の買い物の定型句として暗記する必要はありません。"}],"span":[11,11]},{"id":"chpeter-piper-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chpeter-piper-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"peppers","emphasis":true}]},{"number":null,"runs":[{"text":"pickled peppers","emphasis":true}]},{"number":null,"runs":[{"text":"a peck of pickled peppers","emphasis":true}]},{"number":null,"runs":[{"text":"picked a peck of pickled peppers","emphasis":true}]},{"number":null,"runs":[{"text":"Peter Piper picked a peck of pickled peppers.","emphasis":true}]}],"span":[15,19]},{"id":"chpeter-piper-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chpeter-piper-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Pick a paper.","emphasis":true},{"text":" — 紙を選んでください。paperが何を指すかは場面で変わります。"}]},{"number":null,"runs":[{"text":"Please pass the pepper.","emphasis":true},{"text":" — こしょうを取ってください。"}]}],"span":[23,24]}]},{"type":"twister","id":"big-black-bug","blocks":[{"id":"chbig-black-bug-b0","type":"explanation","runs":[{"text":"05 Bと単語の終わり","emphasis":true}],"span":[3,3]},{"id":"chbig-black-bug-b1","type":"explanation","runs":[{"text":"A big black bug bit a big black bear.","emphasis":true}],"span":[5,5]},{"id":"chbig-black-bug-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 大きな黒い虫が、大きな黒い熊をかみました。"}],"span":[7,7]},{"id":"chbig-black-bug-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" B /b/の唇の開閉と、単語の終わりへ注意を向けます。big、black、bugを一つずつ確かめ、語尾へ母音を足さずにつなげます。"}],"span":[9,9]},{"id":"chbig-black-bug-b4","type":"explanation","runs":[{"text":"語尾をはっきりさせることは、すべての子音を強く破裂させることではありません。閉じたまま終わる音もあります。まずお手本の終わり方を比べます。"}],"span":[11,11]},{"id":"chbig-black-bug-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chbig-black-bug-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"bug","emphasis":true}]},{"number":null,"runs":[{"text":"black bug","emphasis":true}]},{"number":null,"runs":[{"text":"big black bug","emphasis":true}]},{"number":null,"runs":[{"text":"a big black bug","emphasis":true}]},{"number":null,"runs":[{"text":"A big black bug bit a big black bear.","emphasis":true}]}],"span":[15,19]},{"id":"chbig-black-bug-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chbig-black-bug-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"A big blue bag.","emphasis":true},{"text":" — 大きな青いかばん。"}]},{"number":null,"runs":[{"text":"Bob bought a book.","emphasis":true},{"text":" — ボブは本を買いました。"}]}],"span":[23,24]}]},{"type":"twister","id":"two-witches","blocks":[{"id":"chtwo-witches-b0","type":"explanation","runs":[{"text":"06 WとCHを、長い文でも保つ","emphasis":true}],"span":[3,3]},{"id":"chtwo-witches-b1","type":"explanation","runs":[{"text":"If two witches were watching two watches, which witch would watch which watch?","emphasis":true}],"span":[5,5]},{"id":"chtwo-witches-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 二人の魔女が二つの時計を見ているとしたら、どの魔女がどの時計を見るのでしょうか。"}],"span":[7,7]},{"id":"chtwo-witches-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" W /w/では唇を丸め、次の母音へ動かします。CH /tʃ/では、いったん息を止めたあと、短い摩擦音へつなげます。witchとwatch、whichの切り替えを確かめます。"}],"span":[9,9]},{"id":"chtwo-witches-b4","type":"explanation","runs":[{"text":"長い文なので、内容を一度理解してから短いまとまりに分けます。最後まで一息で速く言うことが目標ではありません。"}],"span":[11,11]},{"id":"chtwo-witches-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chtwo-witches-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"watches","emphasis":true}]},{"number":null,"runs":[{"text":"two watches","emphasis":true}]},{"number":null,"runs":[{"text":"watch which watch","emphasis":true}]},{"number":null,"runs":[{"text":"which witch would watch which watch","emphasis":true}]},{"number":null,"runs":[{"text":"If two witches were watching two watches, which witch would watch which watch?","emphasis":true}]}],"span":[15,19]},{"id":"chtwo-witches-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chtwo-witches-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Which way?","emphasis":true},{"text":" — どちらの道ですか。"}]},{"number":null,"runs":[{"text":"Watch this.","emphasis":true},{"text":" — これを見てください。"}]}],"span":[23,24]},{"id":"chtwo-witches-b9","type":"explanation","runs":[{"text":"子音を、余分な母音なしでつなげる","emphasis":true}],"span":[26,26]}]},{"type":"twister","id":"ice-cream","blocks":[{"id":"chice-cream-b0","type":"explanation","runs":[{"text":"07 SCRの子音をつなげる","emphasis":true}],"span":[3,3]},{"id":"chice-cream-b1","type":"explanation","runs":[{"text":"I scream, you scream, we all scream for ice cream.","emphasis":true}],"span":[5,5]},{"id":"chice-cream-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 私も、あなたも、みんなアイスクリームを求めて叫びます。"}],"span":[7,7]},{"id":"chice-cream-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" screamの初めは /s/、/k/、/ɹ/ が続きます。Sの息のあとにKの閉鎖を作り、余分な母音を挟まずRへ移ります。"}],"span":[9,9]},{"id":"chice-cream-b4","type":"explanation","runs":[{"text":"I screamとice creamの音の近さを使った言葉遊びです。ここでは、特にscreamの子音のつながりを練習します。"}],"span":[11,11]},{"id":"chice-cream-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chice-cream-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"scream","emphasis":true}]},{"number":null,"runs":[{"text":"all scream","emphasis":true}]},{"number":null,"runs":[{"text":"we all scream","emphasis":true}]},{"number":null,"runs":[{"text":"you scream, we all scream","emphasis":true}]},{"number":null,"runs":[{"text":"I scream, you scream, we all scream for ice cream.","emphasis":true}]}],"span":[15,19]},{"id":"chice-cream-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chice-cream-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"The screen is bright.","emphasis":true},{"text":" — 画面は明るいです。"}]},{"number":null,"runs":[{"text":"Scratch the surface.","emphasis":true},{"text":" — 表面をひっかいてください。"}]}],"span":[23,24]}]},{"type":"twister","id":"slippery-snails","blocks":[{"id":"chslippery-snails-b0","type":"explanation","runs":[{"text":"08 SLとSNをつなげる","emphasis":true}],"span":[3,3]},{"id":"chslippery-snails-b1","type":"explanation","runs":[{"text":"Six slippery snails slid slowly seaward.","emphasis":true}],"span":[5,5]},{"id":"chslippery-snails-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" ぬるぬるした六匹のカタツムリが、ゆっくり海の方へ滑っていきました。"}],"span":[7,7]},{"id":"chslippery-snails-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" Sのあと、母音を加えずLまたはNへ移ります。snails、slippery snailsのように短い部分から始め、音が混ざったら長さを戻します。"}],"span":[9,9]},{"id":"chslippery-snails-b4","type":"explanation","runs":[{"text":"意味は場面を想像するための助けです。少し変わった内容を、日常の決まり文句として覚える必要はありません。"}],"span":[11,11]},{"id":"chslippery-snails-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chslippery-snails-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"snails","emphasis":true}]},{"number":null,"runs":[{"text":"slippery snails","emphasis":true}]},{"number":null,"runs":[{"text":"six slippery snails","emphasis":true}]},{"number":null,"runs":[{"text":"Six slippery snails slid slowly","emphasis":true}]},{"number":null,"runs":[{"text":"Six slippery snails slid slowly seaward.","emphasis":true}]}],"span":[15,19]},{"id":"chslippery-snails-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[21,21]},{"id":"chslippery-snails-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Sleep slowly.","emphasis":true},{"text":" — 「ゆっくり眠ってください」と読める言葉遊び的な句です。自然な日常の勧め方として覚えるための例ではありません。"}]},{"number":null,"runs":[{"text":"Snow is falling.","emphasis":true},{"text":" — 雪が降っています。"}]}],"span":[23,24]}]},{"type":"twister","id":"fresh-flesh","blocks":[{"id":"chfresh-flesh-b0","type":"explanation","runs":[{"text":"09 FRとFLの切り替え","emphasis":true}],"span":[3,3]},{"id":"chfresh-flesh-b1","type":"explanation","runs":[{"text":"Freshly fried fresh flesh.","emphasis":true}],"span":[5,5]},{"id":"chfresh-flesh-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 揚げたばかりの、新鮮な肉。"}],"span":[7,7]},{"id":"chfresh-flesh-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" Fの息のあと、Rへ移るときは舌先で上の歯ぐきを短くたたかず、Lへ移るときは舌先の接触を確かめます。間へ母音を足さず、freshとfleshを比べます。"}],"span":[9,9]},{"id":"chfresh-flesh-b4","type":"explanation","runs":[{"text":"fleshは体の肉を表す語で、この句は音を並べた練習用です。普通の料理の注文に、そのまま使うための句ではありません。"}],"span":[11,11]},{"id":"chfresh-flesh-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chfresh-flesh-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"flesh","emphasis":true}]},{"number":null,"runs":[{"text":"fresh flesh","emphasis":true}]},{"number":null,"runs":[{"text":"fried fresh flesh","emphasis":true}]},{"number":null,"runs":[{"text":"Freshly fried fresh flesh.","emphasis":true}]}],"span":[15,18]},{"id":"chfresh-flesh-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[20,20]},{"id":"chfresh-flesh-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Fresh flowers.","emphasis":true},{"text":" — 新鮮な花。たとえば、傷んでいない、摘んだばかりの花です。"}]},{"number":null,"runs":[{"text":"A friendly place.","emphasis":true},{"text":" — 親しみやすい場所。"}]}],"span":[22,23]},{"id":"chfresh-flesh-b9","type":"explanation","runs":[{"text":"強弱と母音の変化を確かめる","emphasis":true}],"span":[25,25]}]},{"type":"twister","id":"betty-botter","blocks":[{"id":"chbetty-botter-b0","type":"explanation","runs":[{"text":"10 母音の変化と強弱","emphasis":true}],"span":[3,3]},{"id":"chbetty-botter-b1","type":"explanation","runs":[{"text":"Betty Botter bought some butter.","emphasis":true}],"span":[5,5]},{"id":"chbetty-botter-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" ベティ・ボッターは、バターを少し買いました。"}],"span":[7,7]},{"id":"chbetty-botter-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" 子音だけでなく、名前、bought、butterの母音の変化を聞きます。意味の中心になる語をやや強くし、その間の短い語を軽くつなげます。"}],"span":[9,9]},{"id":"chbetty-botter-b4","type":"explanation","runs":[{"text":"アメリカ英語では、Tの音も位置によって変わります。つづりのTをいつも同じ強さで破裂させるのではなく、お手本の流れを確かめます。"}],"span":[11,11]},{"id":"chbetty-botter-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chbetty-botter-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"butter","emphasis":true}]},{"number":null,"runs":[{"text":"some butter","emphasis":true}]},{"number":null,"runs":[{"text":"bought some butter","emphasis":true}]},{"number":null,"runs":[{"text":"Betty Botter bought some butter.","emphasis":true}]}],"span":[15,18]},{"id":"chbetty-botter-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[20,20]},{"id":"chbetty-botter-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"Better butter.","emphasis":true},{"text":" — もっとよいバター。"}]},{"number":null,"runs":[{"text":"Betty bought it.","emphasis":true},{"text":" — ベティはそれを買いました。"}]}],"span":[22,23]}]},{"type":"twister","id":"woodchuck","blocks":[{"id":"chwoodchuck-b0","type":"explanation","runs":[{"text":"11 繰り返す音と、文の強弱","emphasis":true}],"span":[3,3]},{"id":"chwoodchuck-b1","type":"explanation","runs":[{"text":"How much wood would a woodchuck chuck if a woodchuck could chuck wood?","emphasis":true}],"span":[5,5]},{"id":"chwoodchuck-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" もしウッドチャックが木を投げられるなら、どれくらい投げるでしょうか。"}],"span":[7,7]},{"id":"chwoodchuck-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" 長い文でも、意味の中心になる語を目印にします。短いつなぎの語をすべて同じ強さにせず、聞こえる強弱を比べます。"}],"span":[9,9]},{"id":"chwoodchuck-b4","type":"explanation","runs":[{"text":"woodchuckは動物の名前、ここでのchuckは「投げる」です。仮定を使った言葉遊びで、動物についての事実を説明する文ではありません。"}],"span":[11,11]},{"id":"chwoodchuck-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chwoodchuck-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"wood","emphasis":true}]},{"number":null,"runs":[{"text":"chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"could chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"a woodchuck could chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"if a woodchuck could chuck wood","emphasis":true}]},{"number":null,"runs":[{"text":"How much wood would a woodchuck chuck if a woodchuck could chuck wood?","emphasis":true}]}],"span":[15,20]},{"id":"chwoodchuck-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[22,22]},{"id":"chwoodchuck-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"What would you choose?","emphasis":true},{"text":" — 何を選びますか。／何を選びたいですか。"}]},{"number":null,"runs":[{"text":"How much could it cost?","emphasis":true},{"text":" — どれくらい費用がかかるでしょうか。"}]}],"span":[24,25]}]},{"type":"twister","id":"unique-new-york","blocks":[{"id":"chunique-new-york-b0","type":"explanation","runs":[{"text":"12 KからNへ移る、単語の境目","emphasis":true}],"span":[3,3]},{"id":"chunique-new-york-b1","type":"explanation","runs":[{"text":"Unique New York.","emphasis":true}],"span":[5,5]},{"id":"chunique-new-york-b2","type":"explanation","runs":[{"text":"意味:","emphasis":true},{"text":" 独特なニューヨーク。"}],"span":[7,7]},{"id":"chunique-new-york-b3","type":"explanation","runs":[{"text":"口と耳の目印:","emphasis":true},{"text":" uniqueの最後のKの閉鎖から、newのNへ移ります。間に余分な母音を挟まないようにします。Kを強く大きく破裂させる必要はありません。"}],"span":[9,9]},{"id":"chunique-new-york-b4","type":"explanation","runs":[{"text":"uniqueは「ほかにない、独特な」という意味です。この短い句では、単語の境目で口の動きをつなげます。"}],"span":[11,11]},{"id":"chunique-new-york-b5","type":"explanation","runs":[{"text":"短い部分からつなげる:","emphasis":true}],"span":[13,13]},{"id":"chunique-new-york-b6","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"York","emphasis":true}]},{"number":null,"runs":[{"text":"New York","emphasis":true}]},{"number":null,"runs":[{"text":"Unique New York.","emphasis":true}]}],"span":[15,17]},{"id":"chunique-new-york-b7","type":"explanation","runs":[{"text":"別の短い句でも比べる:","emphasis":true}],"span":[19,19]},{"id":"chunique-new-york-b8","type":"list","ordered":false,"items":[{"number":null,"runs":[{"text":"A unique name.","emphasis":true},{"text":" — 独特な名前。"}]},{"number":null,"runs":[{"text":"New York at night.","emphasis":true},{"text":" — 夜のニューヨーク。"}]}],"span":[21,22]}]}]},{"id":"tongue-transfer","title":"普通のフレーズへ戻す","blocks":[{"id":"chtongue-transfer-b0","type":"explanation","runs":[{"text":"何百もの早口言葉を集める必要はありません。役立つ動きをいくつか練習し、それを普通のフレーズでも使ってみます。"}],"span":[3,3]},{"id":"chtongue-transfer-b1","type":"explanation","runs":[{"text":"たとえば、RとLを練習したあとに "},{"text":"I really like it.","emphasis":true},{"text":" を言います。「とても気に入っています」と伝える、ごく普通の場面へ音を戻す練習です。"}],"span":[5,5]}]}],"practice":[{"id":"chtongue-intro-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"今気になる音を含む句を一つ選びます。"}]},{"number":2,"runs":[{"text":"意味と、練習する口の動きを確認します。"}]},{"number":3,"runs":[{"text":"録音がある場合は、短い部分を聞き終えてからまねします。"}]},{"number":4,"runs":[{"text":"はっきり言える範囲で繰り返し、前の部分を少し足します。"}]},{"number":5,"runs":[{"text":"混ざってきたら、速さか長さを戻します。"}]},{"number":6,"runs":[{"text":"最後に、同じ動きを普通のフレーズでも試します。"}]}],"span":[3,8]},{"id":"chtongue-intro-practice-b1","type":"explanation","runs":[{"text":"長い文を初めから連続シャドーイングする必要はありません。短いリピートに慣れ、意味と音の流れがつかめてから、音声を少し遅れて追う練習も試せます。"}],"span":[10,10]},{"id":"chtongue-intro-practice-b2","type":"explanation","runs":[{"text":"既存の録音は練習用のサンプルです。これから作るコース全体の音声と同じ声・同じアクセントで統一済みとは扱いません。文字の解説だけでも、実際の録音の発音やタイミングを確認したことにはなりません。"}],"span":[12,12]}]},"lr":{"title":"LとRを、短い文でつなげる","subtitle":"LとRに注意しながら、三つの短い部分を、一つの文へつなげる。","sections":[{"id":"lr-notice","title":"まず、文が何を伝えているか","blocks":[{"id":"chlr-notice-b0","type":"explanation","runs":[{"text":"Lily really likes\nred roses.","emphasis":true}],"span":[3,4]},{"id":"chlr-notice-b1","type":"explanation","runs":[{"text":"リリーは赤いバラがとても好きです。reallyが、好きだという気持ちを強めています。単語を全部同じ強さで読むのではなく、文の意味も思い浮かべます。"}],"span":[6,6]},{"id":"chlr-notice-b2","type":"explanation","runs":[{"text":"L /l/では、舌先と、上の前歯の後ろの盛り上がりとの接触を確かめます。アメリカ英語のR /ɹ/では、日本語のラ行のように、同じ場所を短くたたく動きにしないようにします。Rの形は一種類ではないので、「必ず舌先を強く巻く」という指示にはしません。"}],"span":[8,8]},{"id":"chlr-notice-b3","type":"explanation","runs":[{"text":"まず、違いを感じ取れるゆっくりした速度で試します。"}],"span":[10,10]}]},{"id":"lr-parts","title":"三つに分けて、つなげる","blocks":[{"id":"chlr-parts-b0","type":"table","header":[[{"text":"英語のまとまり"}],[{"text":"意味と、練習すること"}]],"rows":[[[{"text":"Lily","emphasis":true}],[{"text":"名前のリリー。Lでの舌先の接触に注意します。"}]],[[{"text":"really likes","emphasis":true}],[{"text":"「とても好き」。RからLへ移るところで、余分な母音を挟まないようにします。"}]],[[{"text":"red roses","emphasis":true}],[{"text":"「赤いバラ」。Rの音と、語の終わりまでを確かめます。rosesの最後は、無条件に/s/へ置き換えず、お手本の音と比べます。"}]]],"span":[3,7]},{"id":"chlr-parts-b1","type":"explanation","runs":[{"text":"一つずつはっきり言い、二つ、三つとつなげます。短く区切る練習をしたあとも、文全体では不必要に単語を切り離さないようにします。"}],"span":[9,9]}]},{"id":"lr-everyday","title":"自分が使える文へ戻す","blocks":[{"id":"chlr-everyday-b0","type":"explanation","runs":[{"text":"I really like roses.","emphasis":true}],"span":[3,3]},{"id":"chlr-everyday-b1","type":"explanation","runs":[{"text":"「バラがとても好きです」と、自分の好みを伝えます。同じLとRの動きを、普通の内容で試せます。"}],"span":[5,5]}]}],"practice":[{"id":"chlr-practice-b0","type":"list","ordered":true,"items":[{"number":1,"runs":[{"text":"Lily","emphasis":true},{"text":"、"},{"text":"really likes","emphasis":true},{"text":"、"},{"text":"red roses","emphasis":true},{"text":" のうち、今練習したい部分を選びます。"}]},{"number":2,"runs":[{"text":"意味を確かめ、声に出して言います。"}]},{"number":3,"runs":[{"text":"文字を隠し、思い出して言います。必要なら、すぐ表示へ戻します。"}]},{"number":4,"runs":[{"text":"一部分に慣れたら、前後をつなげます。"}]},{"number":5,"runs":[{"text":"文全体を言い、最後に "},{"text":"I really like roses.","emphasis":true},{"text":" でも試します。"}]}],"span":[3,7]},{"id":"chlr-practice-b1","type":"explanation","runs":[{"text":"このLilyの文には、現在、コース用の承認済み録音が付いていません。音声がない状態での音読を、シャドーイングとは呼びません。お手本を聞いて練習したい場合は、前のレッスンにある既存の録音例を使えます。"}],"span":[9,9]},{"id":"chlr-practice-b2","type":"explanation","runs":[{"text":"次の章:","emphasis":true},{"text":" Social FluencyのCH01 — 挨拶。"}],"span":[11,11]}]}}
+diff --git a/src/web/ArticoApp.jsx b/src/web/ArticoApp.jsx
+index a4d19b4..e013216 100644
+--- a/src/web/ArticoApp.jsx
++++ b/src/web/ArticoApp.jsx
+@@ -1,49 +1 @@
+-import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react'
+-import { useLanguage } from './Language'
+-import { shouldShowLanding } from './learning'
+-import Landing from './Landing'
+-import './english-shell.css'
+-
+-const LearningApp = lazy(() => import('./ArticoWeb'))
+-
+-function readEntry() {
+-  return { landing: shouldShowLanding(window.location.hash) }
+-}
+-
+-// A bookmarked Home URL should still introduce the public landing page on a
+-// fresh visit. In-app navigation to #/home remains unchanged.
+-function readInitialEntry() {
+-  const initialPath = window.location.hash.slice(1).split('?')[0].replace(/\/$/, '')
+-  if (initialPath === '/home') {
+-    window.history.replaceState(
+-      window.history.state,
+-      '',
+-      `${window.location.pathname}${window.location.search}#/landing`,
+-    )
+-  }
+-  return readEntry()
+-}
+-
+-export default function ArticoApp() {
+-  const [entry, setEntry] = useState(readInitialEntry)
+-  const { t } = useLanguage()
+-  useEffect(() => {
+-    const change = () => setEntry(readEntry())
+-    window.addEventListener('hashchange', change)
+-    window.addEventListener('popstate', change)
+-    return () => {
+-      window.removeEventListener('hashchange', change)
+-      window.removeEventListener('popstate', change)
+-    }
+-  }, [])
+-  useLayoutEffect(() => {
+-    // The landing page uses document scrolling; lessons keep their own viewport.
+-    window.scrollTo({ top: 0, behavior: 'instant' })
+-  }, [entry.landing])
+-  if (entry.landing) return <Landing />
+-  return (
+-    <Suspense fallback={<div className="aw-landing al-loading" role="status">{t('Loading your lesson…')}</div>}>
+-      <LearningApp />
+-    </Suspense>
+-  )
+-}
++export { default } from './ArticoWeb'
+diff --git a/src/web/ArticoWeb.jsx b/src/web/ArticoWeb.jsx
+index c49260e..069d9e3 100644
+--- a/src/web/ArticoWeb.jsx
++++ b/src/web/ArticoWeb.jsx
+@@ -1,37 +1,30 @@
+-import { applicationTrack } from './applicationTracks'
+-import { applicationMode, applicationPath } from './applicationNavigation'
+-import { breadcrumbItems } from './breadcrumbPaths'
+ import Breadcrumbs from './Breadcrumbs.jsx'
+ import { LanguageSelector, useLanguage } from './Language'
+ import { Component, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
+-import { Button, Icon, IconButton, Modal } from './components'
++import { Button, Icon } from './components'
+ import { chapterById, foundationSteps } from './content'
+-import { loadLearning, parseRoute, STORAGE_KEY, toggleSaved, visit } from './learning'
++import { loadLearning, parseCourseRoute, STORAGE_KEY, toggleSaved, visit } from './learning'
+ import './english-shell.css'
+ import { getLearningStage, learningStages } from './pathway'
+ import { isStaleAssetFailure, shouldRefreshStaleAssets } from './routeRecovery.js'
+ 
+-// Route-level chunks: old devices do not parse Home, Progress and the course
+-// directory when opening a vocabulary lesson directly.
+-const Home = lazy(() => import('./Home'))
+-const Progress = lazy(() => import('./Progress'))
+-const Courses = lazy(() => import('./Library').then(mod => ({ default: mod.Courses })))
+-const PracticeLibrary = lazy(() => import('./Library').then(mod => ({ default: mod.PracticeLibrary })))
+-const Saved = lazy(() => import('./Library').then(mod => ({ default: mod.Saved })))
+-
++const Saved = lazy(() => import('./Library').then(module => ({ default: module.Saved })))
+ const Foundation = lazy(() => import('./Foundation'))
+-const Application = lazy(() => import('./Application'))
+ const Vocabulary = lazy(() => import('./Vocabulary'))
+ const ChapterLesson = lazy(() => import('./ChapterLesson'))
+ const HumorLesson = lazy(() => import('./HumorLesson'))
+ const GreetingsLesson = lazy(() => import('./GreetingsLesson'))
+ const IntroductionsLesson = lazy(() => import('./IntroductionsLesson'))
++const orientationPath = learningStages[0].start
+ const destinations = [
+-  { id: 'home', label: 'Home', icon: 'home' },
+-  { id: 'courses', label: 'Learn', icon: 'book' },
+-  { id: 'progress', label: 'Progress', icon: 'progress' },
++  { id: 'orientation', path: orientationPath, label: 'Orientation', icon: 'next' },
++  { id: 'foundation', path: learningStages[1].start, label: 'Level Zero', icon: 'audio' },
++  { id: 'social', path: learningStages[2].start, label: 'Social Fluency', icon: 'book' },
++  { id: 'saved', path: '/saved', label: 'Saved phrases', icon: 'check' },
+ ]
+ 
++const readCourseRoute = () => parseCourseRoute(window.location.hash)
++
+ function readLearning() {
+   try {
+     return loadLearning(window.localStorage)
+@@ -40,13 +33,13 @@ function readLearning() {
+   }
+ }
+ function useRoute(beforeChange) {
+-  const [route, setRoute] = useState(() => parseRoute(window.location.hash))
++  const [route, setRoute] = useState(readCourseRoute)
+   const currentRoute = useRef(route)
+   const beforeChangeRef = useRef(beforeChange)
+   beforeChangeRef.current = beforeChange
+   useEffect(() => {
+     const change = () => {
+-      const next = parseRoute(window.location.hash)
++      const next = readCourseRoute()
+       if (next.path === currentRoute.current.path) return
+       beforeChangeRef.current(currentRoute.current)
+       currentRoute.current = next
+@@ -69,7 +62,7 @@ class LearningBoundary extends Component {
+   }
+   componentDidCatch(error, info) {
+     // Keep the real exception visible for debugging genuine render failures.
+-    console.error('Artico page error:', error, info?.componentStack ?? '')
++    console.error('Lesson error:', error, info?.componentStack ?? '')
+     if (!isStaleAssetFailure(error)) return
+     try {
+       const lastReload = window.sessionStorage.getItem(RELOAD_MARKER)
+@@ -86,9 +79,7 @@ class LearningBoundary extends Component {
+     if (this.state.failed)
+       return (
+         <div className="aw-page aw-empty">
+-          <h1>{this.props.t(this.state.staleAssets
+-            ? 'Artico was updated while this page was open.'
+-            : 'This page could not be loaded.')}</h1>
++          <h1>{this.state.staleAssets ? this.props.updated : this.props.t('This page could not be loaded.')}</h1>
+           {this.state.staleAssets && <p>{this.props.t('Reload to open the newest version. Your saved learning stays on this device.')}</p>}
+           <Button onClick={() => window.location.reload()}>{this.props.t(this.state.staleAssets ? 'Reload latest version' : 'Try again')}</Button>
+         </div>
+@@ -114,8 +105,6 @@ export default function ArticoWeb() {
+     viewport.scrollTo({ top: viewport.scrollTop, behavior: 'instant' })
+   })
+   const [learning, update] = useState(readLearning)
+-  const [storageAvailable, setStorageAvailable] = useState(true)
+-  const [modal, setModal] = useState(false)
+   const [toast, setToast] = useState('')
+   const contentRef = useRef(null)
+   const learningRef = useRef(learning)
+@@ -135,9 +124,8 @@ export default function ArticoWeb() {
+   useEffect(() => {
+     try {
+       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(learning))
+-      setStorageAvailable(true)
+     } catch {
+-      setStorageAvailable(false)
++      // Learning remains available in memory when browser storage is blocked.
+     }
+   }, [learning])
+   useLayoutEffect(() => {
+@@ -192,20 +180,18 @@ export default function ArticoWeb() {
+     return stopRestoring
+   }, [route.path])
+   useEffect(() => {
+-    if (route.page === 'application') {
+-      const location = breadcrumbItems(route, { language, t }).slice(2).map(item => item.label).join(' · ')
+-      document.title = `${location || (language === 'ja' ? '実践' : 'Application')} · Artico`
+-      return
+-    }
+     if (route.page === 'vocabulary') {
+       const lesson = route.topic ? (language === 'ja' ? `レッスン${Number(route.topic)} · ` : `Lesson ${Number(route.topic)} · `) : ''
+-      document.title = `${lesson}${language === 'ja' ? '語彙' : 'Vocabulary'} · Artico`
++      document.title = `${lesson}${language === 'ja' ? '語彙' : 'Vocabulary'} · English with Kavi`
++      return
++    }
++    if (route.page === 'saved') {
++      document.title = `${t('Saved phrases')} · English with Kavi`
+       return
+     }
+     const chapter = chapterById[route.id]
+     const foundation = foundationSteps.find((step) => step.id === route.id)
+-    const pageName = { home: 'Home', courses: 'Courses', practice: 'Practice', progress: 'Your progress', saved: 'Saved phrases' }[route.page]
+-    document.title = `${(language === 'ja' ? chapter?.ja : chapter?.title) ?? (language === 'ja' ? foundation?.ja : foundation?.en) ?? t(pageName ?? 'Courses')} · Artico`
++    document.title = `${(language === 'ja' ? chapter?.ja : chapter?.title) ?? (language === 'ja' ? foundation?.ja : foundation?.en) ?? t('Orientation')} · English with Kavi`
+   }, [route.path, language, t])
+   useEffect(() => () => clearTimeout(scrollTimer.current), [])
+   useEffect(() => {
+@@ -228,47 +214,10 @@ export default function ArticoWeb() {
+       180,
+     )
+   }
+-  const activeNav = route.page === 'vocabulary' ? 'courses' : route.page === 'application'
+-    ? 'courses'
+-    : route.page === 'foundation' && ['orientation', 'how-it-works'].includes(route.id)
+-    ? 'home'
+-    : ['lesson', 'foundation'].includes(route.page)
+-      ? 'courses'
+-      : ['saved', 'practice'].includes(route.page)
+-        ? 'progress'
+-        : route.page
+-  const chapterId = learning.last?.match(/\/lesson\/(\d+)/)?.[1]
+-  const lastChapter = chapterById[chapterId]
+-  const lastStage = getLearningStage(learning.last) ?? learningStages[0]
+-  const lastFoundation = foundationSteps.find((step) =>
+-    learning.last?.startsWith(`/foundation/${step.id}/`),
+-  )
+-  const applicationLocation = route.page === 'application' ? route : learning.last?.startsWith('/application/') ? parseRoute('#' + learning.last) : null
+-  const applicationCourse = applicationLocation?.page === 'application' ? applicationTrack(applicationLocation.id) : null
+-  const applicationTitle = applicationLocation?.exam === 'ielts' ? 'IELTS Academic' : applicationLocation?.exam === 'toeic' ? 'TOEIC Listening & Reading' : applicationCourse?.[language === 'ja' ? 'ja' : 'en']
+-  const applicationHome = applicationLocation?.id === 'tests' && !applicationLocation.exam ? '/application/tests' : applicationLocation && applicationPath(applicationLocation, applicationMode(applicationLocation), { home:true })
+-  const applicationItem = applicationLocation?.chapter || applicationLocation?.lesson || applicationLocation?.collection || applicationLocation?.category || applicationLocation?.area
+-  const applicationItemLabel = applicationItem && applicationItem !== 'home'
+-    ? applicationLocation?.chapter && /^\d+$/.test(applicationItem) ? t('Chapter {id}', { id:applicationItem })
+-      : /^\d/.test(applicationItem) ? (language === 'ja' ? 'レッスン ' : 'Lesson ') + applicationItem
+-      : applicationItem.charAt(0).toUpperCase() + applicationItem.slice(1).replace(/-/g,' ')
+-    : ''
++  const activeNav = getLearningStage(route.path)?.id ?? (route.page === 'vocabulary' ? 'social' : route.page)
+   let screen
+-  if (route.page === 'home') screen = <Home />
+-  else if (route.page === 'courses')
+-    screen = <Courses learning={learning} route={route} key={route.path} />
+-  else if (route.page === 'vocabulary')
+-    screen = <Suspense fallback={<div className="aw-page" role="status">{t('Loading the chapter…')}</div>}><Vocabulary route={route} /></Suspense>
+-  else if (route.page === 'application')
+-    screen = (
+-      <Suspense fallback={<div className="aw-page" role="status">{t('Loading the chapter…')}</div>}>
+-        <Application route={route} learning={learning} update={update} />
+-      </Suspense>
+-    )
+-  else if (route.page === 'practice') screen = <PracticeLibrary learning={learning} />
+-  else if (route.page === 'progress') screen = <Progress learning={learning} />
+-  else if (route.page === 'saved')
+-    screen = <Saved learning={learning} save={save} notify={notify} />
++  if (route.page === 'saved') screen = <Saved learning={learning} save={save} />
++  else if (route.page === 'vocabulary') screen = <Vocabulary route={route} />
+   else if (route.page === 'foundation')
+     screen = <Foundation key={route.path} route={route} learning={learning} update={update} />
+   else if (route.page === 'lesson') {
+@@ -296,8 +245,6 @@ export default function ArticoWeb() {
+         />
+       </Suspense>
+     )
+-  } else {
+-    screen = <Home />
+   }
+   return (
+     <div className="aw-app is-english-pilot" data-language={language}>
+@@ -310,14 +257,12 @@ export default function ArticoWeb() {
+         }}
+       > {t("Skip to content")} </a>
+       <aside className="aw-sidebar">
+-        <a className="aw-wordmark artico-wordmark" href="#/home" aria-label={t("Home")}>
+-          artico<span className="artico-wordmark-dot" aria-hidden="true">.</span>
+-        </a>
++        <a className="aw-wordmark sou-wordmark" href={`#${orientationPath}`}>English with Kavi</a>
+         <nav className="aw-destinations" aria-label={t("Main navigation")}>
+           {destinations.map((destination) => (
+             <a
+               key={destination.id}
+-              href={`#/${destination.id}`}
++              href={`#${destination.path}`}
+               className={activeNav === destination.id ? 'is-active' : ''}
+               aria-current={activeNav === destination.id ? 'page' : undefined}
+             >
+@@ -326,26 +271,11 @@ export default function ArticoWeb() {
+             </a>
+           ))}
+         </nav>
+-        <div className="aw-divider" />
+-        <p className="aw-my-course">{t("MY COURSE")}</p>
+-        <a className="aw-course-name" href={`#${applicationTitle ? applicationHome : lastStage.id === 'orientation' ? '/home' : lastStage.overview}`}>
+-          {applicationTitle || t(lastStage.title)}
+-        </a>
+-        <p className="aw-course-status">
+-          {applicationTitle
+-            ? applicationLocation.id === 'tests' && !applicationLocation.exam ? (language === 'ja' ? '試験を選ぶ' : 'Choose a test') : `${t(applicationMode(applicationLocation) === 'practice' ? 'Practice' : 'Study')}${applicationItemLabel ? ' · ' + applicationItemLabel : ''}`
+-            : lastChapter
+-            ? `${t('Chapter {id}', { id: lastChapter.id })} · ${learning.last.includes('/practice') ? t("Practice") : t("Study")}`
+-            : lastFoundation
+-              ? `${language === 'ja' ? lastFoundation.ja : lastFoundation.en} · ${/\/(practice|chunks|whole)(\/|$)/.test(learning.last) ? t("Practice") : t("Study")}`
+-              : t("Start at your own pace.")}
+-        </p>
+       </aside>
+       <div className="aw-main">
+         <header className="aw-topbar">
+-          <Breadcrumbs route={route} language={language} t={t} stageTitle={getLearningStage(route.path)?.title} foundationTitle={foundationSteps.find(step => step.id === route.id)?.[language === 'ja' ? 'ja' : 'en']} />
++          <Breadcrumbs lessonOnly route={route} language={language} t={t} stageTitle={getLearningStage(route.path)?.title} foundationTitle={foundationSteps.find(step => step.id === route.id)?.[language === 'ja' ? 'ja' : 'en']} />
+           <LanguageSelector />
+-          <IconButton name="user" label={t("Your guest profile")} onClick={() => setModal(true)} />
+         </header>
+         <main
+           ref={mainRef}
+@@ -355,14 +285,14 @@ export default function ArticoWeb() {
+           onScroll={recordScroll}
+         >
+           <div ref={contentRef}>
+-            <LearningBoundary key={route.exam === 'ielts' ? 'ielts' : route.path} t={t}><Suspense fallback={<div className="aw-page" role="status">{t('Loading your lesson…')}</div>}>{screen}</Suspense></LearningBoundary>
++            <LearningBoundary key={route.path} t={t} updated={language === 'ja' ? '新しいレッスンが公開されました。' : 'The course was updated while this page was open.'}><Suspense fallback={<div className="aw-page" role="status">{t('Loading your lesson…')}</div>}>{screen}</Suspense></LearningBoundary>
+           </div>
+         </main>
+         <nav className="aw-mobile-nav" aria-label={t("Mobile navigation")}>
+           {destinations.map((destination) => (
+             <a
+               key={destination.id}
+-              href={`#/${destination.id}`}
++              href={`#${destination.path}`}
+               className={activeNav === destination.id ? 'is-active' : ''}
+               aria-current={activeNav === destination.id ? 'page' : undefined}
+             >
+@@ -380,35 +310,6 @@ export default function ArticoWeb() {
+           </button>
+         </div>
+       )}
+-      {modal && (
+-        <Modal title={language === 'ja' ? 'あなたのプロフィール' : 'Your profile'} onClose={() => setModal(false)}>
+-          <div className="aw-profile-simple">
+-            <div className="aw-profile-account">
+-              <span className="aw-profile-avatar" aria-hidden="true"><Icon name="user" /></span>
+-              <div>
+-                <strong>{language === 'ja' ? 'ゲスト' : 'Guest'}</strong>
+-                <p>{storageAvailable
+-                  ? (language === 'ja' ? '学習内容は、この端末に保存されます。' : 'Your learning is saved on this device.')
+-                  : (language === 'ja' ? '保存できません。ブラウザを閉じると学習記録が失われる場合があります。' : 'Storage is unavailable. Progress may be lost when you close this tab.')}</p>
+-              </div>
+-            </div>
+-            <hr className="aw-profile-divider" />
+-            <LanguageSelector profile />
+-            <hr className="aw-profile-divider" />
+-            <section className="aw-profile-connect-section">
+-              <h3>{language === 'ja' ? '学習パートナーを探す' : 'Find a learning partner'}</h3>
+-              <p>{language === 'ja'
+-                ? 'Artico Connectで学習パートナーを探せます。別のログインが必要です。'
+-                : 'Meet other learners on Artico Connect. A separate login is required.'}</p>
+-              <a className="aw-profile-connect-link"
+-                href="https://artico-connect.discourse.group/c/fina-a-learning-partner/5"
+-                target="_blank" rel="noopener noreferrer">
+-                <span>Artico Connect</span><span aria-hidden="true">↗</span>
+-              </a>
+-            </section>
+-          </div>
+-        </Modal>
+-      )}
+     </div>
+   )
+ }
+diff --git a/src/web/Breadcrumbs.jsx b/src/web/Breadcrumbs.jsx
+index 3ad3872..d93139e 100644
+--- a/src/web/Breadcrumbs.jsx
++++ b/src/web/Breadcrumbs.jsx
+@@ -1,9 +1,10 @@
+ import { breadcrumbItems } from './breadcrumbPaths'
+ import './breadcrumbs.css'
+ 
+-export default function Breadcrumbs({ route, ...context }) {
++export default function Breadcrumbs({ route, lessonOnly, ...context }) {
++  const items = breadcrumbItems(route, context)
+   return <nav className="aw-breadcrumbs" aria-label={context.language === 'ja' ? '現在の位置' : 'Breadcrumb'}>
+-    <ol>{breadcrumbItems(route, context).map((item, index) => <li key={index}>
++    <ol>{(lessonOnly ? items.slice(-1) : items).map((item, index) => <li key={index}>
+       {index > 0 && <span className="aw-breadcrumb-separator" aria-hidden="true">/</span>}
+       {item.href ? <a href={item.href}>{item.label}</a> : <span aria-current="page">{item.label}</span>}
+     </li>)}</ol>
+diff --git a/src/web/HumorLesson.jsx b/src/web/HumorLesson.jsx
+index f3059a2..ce34a6c 100644
+--- a/src/web/HumorLesson.jsx
++++ b/src/web/HumorLesson.jsx
+@@ -78,7 +78,7 @@ function Meme({ data, ja }) {
+     <p className="hm-meme-caption" lang="en">{data.caption}</p>
+     <p className="hm-explain">{copy(data.insight,data.ja,ja)}</p>
+     <a href={data.source} target="_blank" rel="noopener noreferrer">{copy('About the original format','元のミームについて',ja)}</a>
+-    <small>{data.credit} · Original Artico teaching diagram, not a reproduction</small>
++    <small>{data.credit} · Original teaching diagram, not a reproduction</small>
+   </article>
+ }
+ 
+@@ -136,7 +136,7 @@ function Study({ja,onPractice}) {
+       <div className="hm-chat-grid">{chats.map(c=><Chat key={c.id} data={c} ja={ja}/>)}</div>
+       <h3 className="hm-subheading">{copy('Read the logic, not just the meme','ミームの形ではなく意味を読む',ja)}</h3>
+       <div className="hm-meme-grid">{memes.map(m=><Meme key={m.id} data={m} ja={ja}/>)}</div>
+-      <p className="hm-note">{copy('Original Artico diagrams explain familiar meme patterns without copying copyrighted comic panels, Pokémon characters or stock photographs.','ここでは著作権のある漫画・キャラクター・写真をコピーせず、Artico独自の図で仕組みを説明しています。',ja)}</p>
++      <p className="hm-note">{copy('Original diagrams explain familiar meme patterns without copying copyrighted comic panels, Pokémon characters or stock photographs.','ここでは著作権のある漫画・キャラクター・写真をコピーせず、オリジナルの図で仕組みを説明しています。',ja)}</p>
+     </section>
+     <section id="hm-watch" className="hm-section">
+       <p className="hm-kicker">06 / REAL ENGLISH</p><h2>{copy('Watch the moment, not just the joke.','冗談だけでなく、場面を見る',ja)}</h2><p>{copy('First enjoy the clip. Then notice the relationship, expectation, surprise, pause or response. Entertainment is scripted to amuse an audience; do not treat every character as a role model.','まず動画を楽しんでから、人間関係、予想、意外な展開、間、反応を観察します。コメディの人物の態度を、そのまま日常でまねる必要はありません。',ja)}</p>
+@@ -221,7 +221,7 @@ function Practice({ja,learning,update}) {
+     </div>}
+     {view==='open'&&<div className="hm-open"><p className="hm-kicker">MAKE IT YOURS</p><h2>{copy('Your words, your judgment.','自分の言葉で考えよう',ja)}</h2><p>{copy('Speak first if you like. Notes are optional. There is no automatic “funniness” score.','まず声に出しても構いません。メモは任意です。面白さの自動採点はありません。',ja)}</p>
+       {writingPrompts.map((p,i)=><article className="hm-open-task" key={p.id}><span className="hm-index">0{i+1}</span><h3>{copy(p.title,p.ja,ja)}</h3><p>{copy(p.prompt,p.promptJa,ja)}</p><details><summary>{copy('See a possible example','例を見る',ja)}</summary><p lang="en">{p.example}</p></details><label htmlFor={'hm-write-'+i}>{copy('Your notes (optional)','あなたのメモ（任意）',ja)}</label><textarea id={'hm-write-'+i} rows={3} maxLength={1800} value={notes[i<2?'application-humor-'+i:'ch34-note-o'+(i+1)]||''} onChange={e=>saveNotes(i,e.target.value)} placeholder={copy('Try a response in your own words…','自分の言葉で書いてみましょう…',ja)} /></article>)}
+-      <p className="hm-note">{copy('Notes are kept in your existing device-only Artico learning data. They are not sent for AI scoring.','メモは既存のArticoの端末内データとして保存されます。AI採点には送信されません。',ja)}</p>
++      <p className="hm-note">{copy('Notes are kept in your learning data on this device. They are not sent for AI scoring.','メモはこの端末の学習データとして保存されます。AI採点には送信されません。',ja)}</p>
+     </div>}
+   </div>
+ }
+diff --git a/src/web/LessonFooter.jsx b/src/web/LessonFooter.jsx
+index f16943d..78cac66 100644
+--- a/src/web/LessonFooter.jsx
++++ b/src/web/LessonFooter.jsx
+@@ -39,6 +39,7 @@ export default function LessonFooter({ route, practice, practicePath }) {
+       <nav className="ln-navigation" aria-label={t('Lesson navigation')}>
+         {['previous', 'next'].map((direction) => {
+           const path = navigation[direction]
++          if (path === '/home') return null
+           const title = destinationTitle(path)
+           const back = direction === 'previous'
+           const label = back
+diff --git a/src/web/Library.jsx b/src/web/Library.jsx
+index e9225d1..4fd9e15 100644
+--- a/src/web/Library.jsx
++++ b/src/web/Library.jsx
+@@ -243,7 +243,7 @@ export function Saved({ learning, save, notify }) {
+         <div className="aw-empty">
+           <h2>{t("No saved phrases yet.")}</h2>
+           <p>{t("Save a phrase during practice to keep it here.")}</p>
+-          <Button href="/courses?social">{t("Explore lessons")}</Button>
++          <Button href="/lesson/01/study">{t("Explore lessons")}</Button>
+         </div>
+       )}
+     </div>
+diff --git a/src/web/TongueTwisters.jsx b/src/web/TongueTwisters.jsx
+index cf22419..558a1f1 100644
+--- a/src/web/TongueTwisters.jsx
++++ b/src/web/TongueTwisters.jsx
+@@ -61,7 +61,7 @@ export function TongueTwisterStudy() {
+             <p>英語を話すとき、似た音が続くと急に言いにくくなることはありませんか？ たとえば <strong>right</strong> と <strong>light</strong>、<strong>three</strong> と <strong>free</strong>。一つずつなら言えても、続けると口がもつれることがあります。</p>
+             <p><strong>早口言葉（tongue twister）</strong>は、そんな言いにくい音をわざと並べた、ちょっとおかしな文です。いわば、話すための小さなウォームアップ。俳優や歌手、英語を学ぶ人も、はっきり話す練習に使います。</p>
+             <p><strong><mark className="tt-intro-highlight">大切なのは速さではなく、はっきり言うこと。</mark></strong> ゆっくり言って、どこでつまずくかを知り、もう一度試す。その繰り返しで、苦手な音のつなぎ方に少しずつ慣れていきます。そして、普段の会話でも試してみましょう。</p>
+-            <p>全部覚える必要はありません。Articoではいろいろな言いにくさを試せる <strong>24の早口言葉</strong>を選びました。ここでは全文を聞いてみましょう。短く分ける練習は <strong>Practice</strong> で。</p>
++            <p>全部覚える必要はありません。いろいろな言いにくさを試せる <strong>24の早口言葉</strong>を選びました。ここでは全文を聞いてみましょう。短く分ける練習は <strong>Practice</strong> で。</p>
+           </> : <>
+             <p>Ever find that English words become harder to say when similar sounds come one after another? Think of <strong>right</strong> and <strong>light</strong>, or <strong>three</strong> and <strong>free</strong>. They may be easy alone but tricky together.</p>
+             <p>A <strong>tongue twister</strong> is a playful line that puts difficult sounds close together. Think of it as a little warm-up for speaking. Actors, singers and language learners use them to practice speaking clearly.</p>
+diff --git a/src/web/Vocabulary.jsx b/src/web/Vocabulary.jsx
+index 6bc27ce..19d6c17 100644
+--- a/src/web/Vocabulary.jsx
++++ b/src/web/Vocabulary.jsx
+@@ -75,8 +75,8 @@ function LessonLink({ topic, japanese }) {
+ function VocabularyIndex({ japanese }) {
+   return (
+     <div className="aw-page vl-page">
+-      <a className="vl-back" href="#/courses?social">
+-        <span aria-hidden="true">←</span> {japanese ? '学習コースへ' : 'Back to Learn'}
++      <a className="vl-back" href="#/lesson/01/study">
++        <span aria-hidden="true">←</span> {japanese ? '日常会話のはじめへ' : 'Back to conversations'}
+       </a>
+       <header className="vl-heading">
+         <p className="vl-eyebrow">CHAPTER 98 · VOCABULARY</p>
+@@ -100,7 +100,6 @@ function VocabularyIndex({ japanese }) {
+       </section>
+       <nav className="vl-bottom-nav" aria-label={japanese ? '学習ナビゲーション' : 'Learning navigation'}>
+         <a href="#/lesson/97/study">← {japanese ? '第97課' : 'Chapter 97'}</a>
+-        <a href="#/progress">{japanese ? '進捗を見る' : 'My Progress'} →</a>
+       </nav>
+     </div>
+   )
+diff --git a/src/web/content.js b/src/web/content.js
+index dcb7ebe..ab0aed9 100644
+--- a/src/web/content.js
++++ b/src/web/content.js
+@@ -143,15 +143,15 @@ export const twister = {
+ export const foundationSteps = [
+   {
+     id: 'orientation',
+-    en: 'Why learn a language?',
++    en: 'What would you like to say in English?',
+     description: 'Find your reason to learn.',
+-    ja: '言葉と、学ぶ理由',
++    ja: '英語で、何を話したい？',
+   },
+   {
+     id: 'how-it-works',
+-    en: 'How Artico works',
++    en: 'How we’ll practise',
+     description: 'Understand Study, Practice, and your learning path.',
+-    ja: 'Articoの使い方',
++    ja: '一緒に練習する方法',
+   },
+   {
+     id: 'letters',
+diff --git a/src/web/english-shell.css b/src/web/english-shell.css
+index 5cc82d6..fe1611a 100644
+--- a/src/web/english-shell.css
++++ b/src/web/english-shell.css
+@@ -173,3 +173,27 @@
+   color: var(--brand);
+   border: 1px solid #d9e3f0;
+ }
++
++.is-english-pilot .sou-wordmark {
++  font-size: 20px;
++  line-height: 1.2;
++  letter-spacing: -0.02em;
++  white-space: normal;
++}
++
++@media (min-width: 761px) and (max-width: 1100px) {
++  .is-english-pilot .sou-wordmark {
++    font-size: 16px;
++    text-align: center;
++    width: 100%;
++  }
++}
++
++@media (max-width: 760px) {
++  .is-english-pilot .aw-mobile-nav a {
++    flex: 1;
++    min-width: 0;
++    padding-inline: 3px;
++    text-align: center;
++  }
++}
+diff --git a/src/web/learning.js b/src/web/learning.js
+index ffcec8d..18b833c 100644
+--- a/src/web/learning.js
++++ b/src/web/learning.js
+@@ -134,6 +134,13 @@ export function shouldShowLanding(hash) {
+   return path === '/landing' || path === ''
+ }
+ 
++export function parseCourseRoute(hash) {
++  const route = parseRoute(hash)
++  return ['foundation', 'lesson', 'vocabulary', 'saved'].includes(route.page)
++    ? route
++    : parseRoute('#/foundation/orientation/study')
++}
++
+ export function parseRoute(hash) {
+   let path
+   try {
+diff --git a/src/web/learning.test.js b/src/web/learning.test.js
+index c5d6352..fe543cd 100644
+--- a/src/web/learning.test.js
++++ b/src/web/learning.test.js
+@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs'
+ import {
+   emptyLearning,
+   loadLearning,
++  parseCourseRoute,
+   parseRoute,
+   sanitizeLearning,
+   shouldShowLanding,
+@@ -15,26 +16,12 @@ import { applicationTracks, applicationResponseKey } from './applicationTracks.j
+ import { publicChapterId, sourceChapterId, migrateLegacyLessonPath } from './chapterNumbers.js'
+ import { landingPageCopy } from './landingCopy.js'
+ 
+-test('the public URL always opens Landing before Home, without breaking direct lesson links', () => {
+-  const returning = visit(emptyLearning, '/lesson/02/practice/friend')
+-  for (const hash of ['', '#', '#/', '#/?ref=shared']) {
+-    assert.equal(shouldShowLanding(hash, emptyLearning), true)
+-    assert.equal(shouldShowLanding(hash, returning), true)
+-  }
+-  for (const hash of ['#/home', '#/courses?foundation', '#/lesson/02/practice/friend', '#course']) {
+-    assert.equal(shouldShowLanding(hash, emptyLearning), false)
+-    assert.equal(shouldShowLanding(hash, returning), false)
+-  }
+-  assert.equal(shouldShowLanding('#/landing', returning), true)
+-  assert.equal(shouldShowLanding('#/landing/', emptyLearning), true)
+-  assert.equal(shouldShowLanding('', loadLearning({ getItem: () => '{bad json' })), true)
+-  const landing = readFileSync(new URL('./Landing.jsx', import.meta.url), 'utf8')
+-  assert.match(landing, /className="al-header-start" href="#\/home">\{copy\.start\}/)
+-  assert.match(landing, /className="al-splash-cta" href="#\/home">\{copy\.start\}/)
+-  const app = readFileSync(new URL('./ArticoApp.jsx', import.meta.url), 'utf8')
+-  assert.match(app, /initialPath === '\/home'/)
+-  assert.match(app, /useState\(readInitialEntry\)/)
+-  assert.match(app, /window\.history\.replaceState\(/)
++test('the course opens Orientation and preserves direct lesson links', () => {
++  const start = '/foundation/orientation/study'
++  for (const hash of ['', '#/', '#/home', '#/landing', '#/courses', '#/progress', '#/application/tests/ielts', '#unknown'])
++    assert.equal(parseCourseRoute(hash).path, start, hash)
++  for (const path of [start, '/foundation/orientation/practice', '/foundation/letters/study', '/lesson/02/practice/friend', '/lesson/98/study', '/saved'])
++    assert.equal(parseCourseRoute('#' + path).path, path)
+ })
+ 
+ test('landing uses a full-height illustrated hero with a working blue entry and preserved philosophy', () => {
+@@ -405,23 +392,13 @@ test('Home is restored while lesson, Learn and Progress routes keep working', ()
+   assert.equal(visit(continued, '/home').last, continued.last)
+ })
+ 
+-test('Home has four functional starting points, including Application', () => {
++test('the course shell links to lessons and saved phrases without public navigation', () => {
+   const shell = readFileSync(new URL('./ArticoWeb.jsx', import.meta.url), 'utf8')
+-  const home = readFileSync(new URL('./Home.jsx', import.meta.url), 'utf8')
+-  const progress = readFileSync(new URL('./Progress.jsx', import.meta.url), 'utf8')
+-  const landing = readFileSync(new URL('./Landing.jsx', import.meta.url), 'utf8')
+-  assert.match(shell, /id: 'home', label: 'Home'/)
+-  assert.match(shell, /id: 'courses', label: 'Learn'/)
+-  assert.match(shell, /id: 'progress', label: 'Progress'/)
+-  assert.match(shell, /route.page === 'application'/)
+-  assert.match(shell, /<Application route=\{route\}/)
+-  assert.match(shell, /href="#\/home" aria-label=\{t\("Home"\)\}/)
+-  assert.match(progress, /aw-progress-resume/)
+-  assert.match(landing, /al-footer-logo artico-wordmark" href="#\/landing"/)
+-  assert.equal((home.match(/id:'(?:orientation|foundation|social|application)'/g) ?? []).length, 4)
+-  for(const href of ['#/foundation/orientation/study', '#/courses?foundation', '#/courses?social', '#/courses?application'])
+-    assert.ok(home.includes("href:'" + href + "'"), href)
+-  assert.doesNotMatch(home, /Unlock|lock-icon|disabled button/i)
++  assert.match(shell, /id: 'orientation', path: orientationPath/)
++  assert.match(shell, /id: 'foundation', path: learningStages/)
++  assert.match(shell, /id: 'social', path: learningStages/)
++  assert.match(shell, /id: 'saved', path: '\/saved'/)
++  assert.doesNotMatch(shell, /<Home|<Application|<Progress|Artico Connect/)
+ })
+ 
+ test('Learn keeps Foundations and Social Fluency and expands eight Application tracks', () => {
+diff --git a/src/web/lesson-navigation.css b/src/web/lesson-navigation.css
+index a176305..92dd03c 100644
+--- a/src/web/lesson-navigation.css
++++ b/src/web/lesson-navigation.css
+@@ -22,6 +22,7 @@
+   padding-block: 20px;
+ }
+ .ln-navigation a[rel='next'] {
++  grid-column: 2;
+   justify-content: flex-end;
+   text-align: right;
+ }
+diff --git a/src/web/pathway.js b/src/web/pathway.js
+index ea5f000..ab281f7 100644
+--- a/src/web/pathway.js
++++ b/src/web/pathway.js
+@@ -5,7 +5,7 @@ export const learningStages = [
+     ja: 'はじめに',
+     tone: 'lilac',
+     description: "Understand how you'll learn.",
+-    support: '学ぶ理由と、Articoの進め方を知る。',
++    support: '学ぶ理由と、練習の進め方を考える。',
+     topics: ['Your reason to learn', 'How Study & Practice work'],
+     lessonIds: ['orientation', 'how-it-works'],
+     count: '2 lessons',
+diff --git a/vite.config.js b/vite.config.js
+index f08eafe..17b207c 100644
+--- a/vite.config.js
++++ b/vite.config.js
+@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
+ import react from '@vitejs/plugin-react'
+ 
+ export default defineConfig({
+-  // GitHub Pages serves this project under /artico-web/; keep local dev at /.
+-  base: process.env.NODE_ENV === 'production' ? '/artico-web/' : '/',
++  base: './',
+   plugins: [react()],
+ })
