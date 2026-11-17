@@ -1,6 +1,5 @@
 import { useLanguage } from './Language'
-import Glyph from './Glyph'
-import { approvedAudio } from './components'
+import { PhrasePlaybackButton } from './components'
 import objects from './studyObjectArt.json'
 import { normalizeStudyText } from './socialStudyLayout'
 
@@ -50,15 +49,12 @@ export function vocabularyPictures(section, byId) {
 }
 
 export default function StudyVocabulary({ pictures, audioProps }) {
-  const { language, t } = useLanguage()
+  const { language } = useLanguage()
   return <ul className="ar-study-word-atlas" aria-label={language === 'ja' ? '絵で見る語彙' : 'Picture vocabulary'}>
     {pictures.map(({ en, item, file }) => <li key={en}>
       <img src={`${import.meta.env.BASE_URL}assets/course/${file}`} alt="" aria-hidden="true" width="180" height="150" loading="lazy" />
       <div className="ar-study-word-label"><strong lang="en">{en}</strong>
-        {item && approvedAudio[item.id] && <button className="ar-study-inline-audio" type="button"
-          onClick={() => audioProps.onPlay(item.id)} aria-label={t('Listen to: {phrase}', { phrase: en })}>
-          <Glyph name={audioProps.activeId === item.id && audioProps.audio.playing ? 'pause' : 'speaker'} size={14} />
-        </button>}
+        <PhrasePlaybackButton item={item ?? { id: "word:" + en, en }} {...audioProps} className="ar-study-inline-audio" size={14} />
       </div>
       {language === 'ja' && item?.ja && <small lang="ja">{item.ja}</small>}
     </li>)}

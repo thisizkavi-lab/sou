@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useLanguage } from './Language'
-import { approvedAudio } from './components'
+import Glyph from './Glyph'
 
 const art = (file) => `${import.meta.env.BASE_URL}assets/course/${file}`
 
@@ -15,7 +15,7 @@ export default function ReferencePhraseShelf({ ids = [], byId, audioProps, title
 
   function play(item, index) {
     setSelected(index)
-    if (approvedAudio[item.id]) audioProps.onPlay(item.id)
+    audioProps.onPlay(item.id, false, item.en)
   }
 
   if (!items.length) return null
@@ -37,7 +37,7 @@ export default function ReferencePhraseShelf({ ids = [], byId, audioProps, title
                 <span lang="en">{item.en}</span>
                 {language === 'ja' && item.ja && <small className="ar-translation-inline" lang="ja">{item.ja}</small>}
               </span>
-              {approvedAudio[item.id] && <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z M15 9a5 5 0 0 1 0 6 M18 6a9 9 0 0 1 0 12"/></svg>}
+              <Glyph name="speaker" size={16} />
             </button>
           ))}
         </div>

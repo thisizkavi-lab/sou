@@ -1,5 +1,7 @@
 import { useLanguage } from './Language'
 import { useEffect, useRef, useState } from 'react'
+import Glyph from './Glyph'
+import { speakKokoroSpeech, stopKokoroSpeech } from './kokoroSpeech'
 
 const icons = {
   home: 'e1438.svg',
@@ -206,49 +208,97 @@ export function Turn({ turn, index, compact = false, onSelect, selected, onListe
   )
 }
 
-// Social Fluency is recording-only. Add local audio asset paths by phrase ID.
-// Vocabulary uses Kokoro separately; lesson audio never triggers model inference.
+// Prefer a reviewed recording when present; lesson phrases can use Kokoro.
 export const approvedAudio = {}
+
 export function useAudio(notify) {
   const { t } = useLanguage()
-  const audioRef = useRef(null)
-  const currentId = useRef(null)
-  const [playing, setPlaying] = useState(false)
-  const stop = () => {
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
+  const current = useRef(null)
+  const [phase, setPhase] = useState('idle')
+
+  function cancel() {
+    const previous = current.current
+    current.current = null
+    if (previous?.recording) {
+      previous.recording.onended = null
+      previous.recording.onerror = null
+      previous.recording.pause()
+    } else if (previous) {
+      stopKokoroSpeech()
     }
-    setPlaying(false)
   }
-  useEffect(() => () => audioRef.current?.pause(), [])
-  const play = async (id, speed = 1, restart = false) => {
+
+  function stop() {
+    cancel()
+    setPhase('idle')
+  }
+
+  useEffect(() => cancel, [])
+
+  async function play(id, speed = 1, restart = false, text = '') {
     const source = approvedAudio[id]
-    if (!source) return // Recording has not been added; never synthesize it.
-    if (currentId.current === id && audioRef.current && !audioRef.current.paused && !restart) {
+    if (!source && !text.trim()) return
+    if (current.current?.id === id && !restart) {
       stop()
       return
     }
     stop()
-    const audio = new Audio(import.meta.env.BASE_URL + source)
-    audioRef.current = audio
-    currentId.current = id
-    audio.playbackRate = speed
-    audio.preservesPitch = true
-    audio.onended = () => setPlaying(false)
-    audio.onerror = () => {
-      setPlaying(false)
-      notify(t('The recording could not be loaded. Please try again.'))
+    const request = { id }
+    current.current = request
+    const playing = () => {
+      if (current.current === request) setPhase('playing')
     }
+    const finished = (error) => {
+      if (current.current !== request) return
+      current.current = null
+      setPhase('idle')
+      if (error) notify?.(t(error))
+    }
+
+    if (!source) {
+      await speakKokoroSpeech(text, {
+        rate: speed,
+        preferKokoro: true,
+        onLoading: () => {
+          if (current.current === request) setPhase('loading')
+        },
+        onStart: playing,
+        onCancel: () => finished(),
+        onEnd: () => finished(),
+        onError: () => finished('Speech could not play. Please try again.'),
+      })
+      return
+    }
+
+    const recording = new Audio(import.meta.env.BASE_URL + source)
+    request.recording = recording
+    recording.playbackRate = speed
+    recording.preservesPitch = true
+    recording.onended = () => finished()
+    recording.onerror = () => finished('The recording could not be loaded. Please try again.')
     try {
-      await audio.play()
-      if (audioRef.current === audio && !audio.paused) setPlaying(true)
+      await recording.play()
+      if (!recording.paused) playing()
     } catch {
-      setPlaying(false)
-      notify(t('The recording could not be played. Please try again.'))
+      finished('The recording could not be played. Please try again.')
     }
   }
-  return { playing, play, stop }
+
+  return { playing: phase === 'playing', loading: phase === 'loading', play, stop }
+}
+
+export function PhrasePlaybackButton({ item, audio, activeId, onPlay, className = 'ip-audio', size = 18 }) {
+  const { t } = useLanguage()
+  const loading = activeId === item.id && audio.loading
+  const playing = activeId === item.id && audio.playing
+  const title = t(loading ? 'Preparing audio…' : playing ? 'Stop audio' : 'Listen to this phrase')
+  return (
+    <button type="button" className={className} aria-busy={loading} title={title}
+      aria-label={t(loading || playing ? 'Stop: {phrase}' : 'Listen to: {phrase}', { phrase: item.en })}
+      onClick={() => onPlay(item.id, false, item.en)}>
+      <Glyph name={loading || playing ? 'pause' : 'speaker'} size={size} />
+    </button>
+  )
 }
 
 export function Player({ item, label, speed, setSpeed, next, audio }) {

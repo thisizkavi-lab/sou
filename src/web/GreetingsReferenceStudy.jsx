@@ -5,7 +5,6 @@ import { useLanguage } from './Language'
 
 // Chapter 01 study artwork follows the approved five-page Artico reference.
 // Seven original transparent Chapter 01 greeting illustrations.
-const hasAvailableRecordings = Object.keys(approvedAudio).length > 0
 
 /* Japanese supports meaning and register; spoken English stays dominant. */
 const jpPhrase = {
@@ -119,7 +118,6 @@ function PeopleScene({ kind = 'people', compact = false }) {
 }
 
 function PlaySymbol({ full = false }) {
-  if (!hasAvailableRecordings) return null
   return full ? <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>
     : <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 9a5 5 0 0 1 0 6"/><path d="M18 6a9 9 0 0 1 0 12"/></svg>
 }
@@ -129,7 +127,7 @@ function Conversation({ title, titleJa, lines, scene = 'people', note, compact =
   return <article className={'ar-card ar-conversation' + (compact ? ' ar-compact-conversation' : '')}>
     <div className="ar-conversation-heading">
       <p className="ar-overline">{title}{language === 'ja' && titleJa && <small lang="ja">{titleJa}</small>}</p>
-      {hasAvailableRecordings && <button type="button" className="ar-play" onClick={() => play(lines.map(l=>l.text))} aria-label={'Play '+title}><PlaySymbol full/></button>}
+      <button type="button" className="ar-play" onClick={() => play(lines.map(l=>l.text))} aria-label={'Play '+title}><PlaySymbol full/></button>
     </div>
     <div className="ar-conversation-content">
       <PeopleScene kind={scene} compact={compact}/>
@@ -174,7 +172,7 @@ export function PhraseShelf({ title, titleJa, options, scene = 'people', initial
       <div className="ar-speech-choices">
         {options.map((item,i)=><button key={item.id || item.text} type="button" className={'ar-speech' + (selected===i?' ar-selected':'')} aria-pressed={selected===i} onClick={()=>{setSelected(i);if(!clickToExplain)play(item.text, item)}}>
           <span className="ar-choice-content"><span lang="en">{item.text}</span>{!clickToExplain && language === 'ja' && (item.ja || jpPhrase[item.text]) && <small lang="ja">{item.ja || jpPhrase[item.text]}</small>}</span>
-          {!clickToExplain && (!item.id || approvedAudio[item.id]) && <PlaySymbol/>}
+          {!clickToExplain && <PlaySymbol/>}
           <span className="ar-tail" aria-hidden="true"/>
         </button>)}
       </div>
@@ -253,7 +251,7 @@ function CheckInFlow({ play }) {
   const neutral = ["I'm okay.",'Not great.'].map((text,i)=>({text,label:i===0?'Neutral or honest replies when things are difficult':null,breakBefore:i===0}))
   const back = ['How about you?','You?'].map((text,i)=>({text,label:i===0?'Return the question':null,extra:i===0?'Add after your answer':null}))
   return <article className="ar-card ar-flow-card">
-    <div className="ar-flow-header"><p className="ar-overline">{language === 'ja' ? '短い近況確認' : 'A SHORT CHECK-IN'}</p>{hasAvailableRecordings && <button className="ar-play" type="button" onClick={()=>play([selectedAsk,selected,selectedReturn])} aria-label="Play your check-in"><PlaySymbol full/></button>}</div>
+    <div className="ar-flow-header"><p className="ar-overline">{language === 'ja' ? '短い近況確認' : 'A SHORT CHECK-IN'}</p><button className="ar-play" type="button" onClick={()=>play([selectedAsk,selected,selectedReturn])} aria-label="Play your check-in"><PlaySymbol full/></button></div>
     <div className="ar-flow-layout">
       <div className="ar-flow-question-side">
         <div className="ar-flow-avatar"><Speaker name="Alex"/><b>Alex</b></div>
@@ -276,9 +274,9 @@ export default function GreetingsReferenceStudy({ audioProps, phrases = [] }) {
   const play = useCallback((texts) => {
     const lines = (Array.isArray(texts) ? texts : [texts]).filter(Boolean)
     if (!lines.length) return
-    const recorded = phrases.find(phrase => phrase.en === lines.join(' ') && approvedAudio[phrase.id])
-    if (recorded) audioProps?.onPlay(recorded.id)
-    // Otherwise leave the text selection in place until original audio is ready.
+    const spoken = lines.join(' ')
+    const recorded = phrases.find(phrase => phrase.en === spoken && approvedAudio[phrase.id])
+    audioProps?.onPlay(recorded?.id ?? 'greetings:' + spoken, false, spoken)
   }, [audioProps, phrases])
   return <div className="ip-reading ar-page ar-compact-study-notes">
     <section id="study-open" className="ar-section" aria-labelledby="ar-head-1">

@@ -1,6 +1,5 @@
 import { useLanguage } from './Language'
-import Glyph from './Glyph'
-import { approvedAudio } from './components'
+import { PhrasePlaybackButton } from './components'
 import { RichText } from './ContentBlocks'
 import { emphasizeNoteRuns } from './studyTextPresentation'
 import './chapter03-context.css'
@@ -304,26 +303,11 @@ function Highlight({ text, match }) {
 const portrait = (speaker) => `${import.meta.env.BASE_URL}assets/course/portrait-${speaker === 'A' ? '274641' : '284805'}.svg`
 
 function Speak({ lines, audioProps, kind = 'exchange' }) {
-  const { language } = useLanguage()
-  // Future clips should be registered by phrase ID in approvedAudio.
-  // Until then, no device-generated speech is used in Social Fluency.
-  const phrase = lines.join(' ')
-  const matchingId = Object.keys(audioProps?.byId ?? {}).find(id => audioProps.byId[id]?.en === phrase)
-  const ready = Boolean(matchingId && approvedAudio[matchingId])
-  return <button type="button" className={kind === 'word' ? 'ar-c03-sound' : `ar-c03-listen${kind === 'compact' ? ' ar-c03-listen-compact' : ''}`}
-    disabled={!ready}
-    onClick={() => { if (ready) audioProps?.onPlay?.(matchingId) }}
-    title={ready
-      ? (kind === 'word' ? (language === 'ja' ? '表現だけを聞く' : 'Hear the expression') : (language === 'ja' ? '会話を聞く' : 'Play the exchange'))
-      : (language === 'ja' ? '録音は準備中です' : 'Recording coming soon')}
-    aria-label={ready ? (kind === 'word' ? `Hear ${phrase}` : 'Play the exchange') : (language === 'ja' ? '録音は準備中です' : 'Recording coming soon')}>
-    {kind === 'word'
-      ? <Glyph name="speaker" size={18}/>
-      : <svg className="ar-c03-play-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M8 5.5v13l11-6.5z" fill="currentColor"/>
-        </svg>}
-
-  </button>
+  const en = lines.join(' ')
+  const match = Object.values(audioProps.byId).find((item) => item.en === en)
+  const item = match ?? { id: 'exchange:' + en, en }
+  const className = kind === 'word' ? 'ar-c03-sound' : `ar-c03-listen${kind === 'compact' ? ' ar-c03-listen-compact' : ''}`
+  return <PhrasePlaybackButton item={item} {...audioProps} className={className} size={18} />
 }
 
 function ChatTurn({ speaker, text, mark, japanese, language }) {

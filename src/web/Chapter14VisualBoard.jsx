@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useLanguage } from './Language'
 import Glyph from './Glyph'
 import './chapter14-visual.css'
@@ -90,20 +89,6 @@ function Figure({ kind = 'person', color = '#9264ad' }) {
         stroke={fill} strokeWidth="5.2" strokeLinecap="round" />
     </svg>
   )
-}
-
-function speakEnglish(word, onError) {
-  if (typeof window === 'undefined' || !window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') {
-    onError()
-    return
-  }
-  const speech = window.speechSynthesis
-  speech.cancel()
-  const utterance = new SpeechSynthesisUtterance(word.replace(/\s\/\s/g, ', '))
-  utterance.lang = 'en-US'
-  utterance.rate = 0.9
-  utterance.voice = speech.getVoices().find((voice) => /^en[-_]US$/i.test(voice.lang)) || null
-  try { speech.speak(utterance) } catch { onError() }
 }
 
 function Word({ en, ja, language, onSpeak, className = '', children }) {
@@ -256,22 +241,14 @@ function VocabularySections({ language, onSpeak }) {
   )
 }
 
-export default function Chapter14VisualBoard() {
+export default function Chapter14VisualBoard({ audioProps }) {
   const { language } = useLanguage()
-  const [speechError, setSpeechError] = useState(false)
-  useEffect(() => () => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.cancel()
-  }, [])
-  const speak = (word) => {
-    setSpeechError(false)
-    speakEnglish(word, () => setSpeechError(true))
-  }
+  const speak = (word) => audioProps.onPlay('family:' + word, false, word.replace(/\s\/\s/g, ', '))
   return (
     <div className="ar-f14-atlas">
       <FamilyTree language={language} onSpeak={speak} />
       <StepFamily language={language} onSpeak={speak} />
       <VocabularySections language={language} onSpeak={speak} />
-      {speechError && <p role="status" className="ar-f14-error">{language === 'ja' ? 'この端末では音声を利用できません。' : 'Audio is not available on this device.'}</p>}
     </div>
   )
 }

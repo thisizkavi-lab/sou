@@ -285,17 +285,15 @@ test('vocabulary pronunciation reads alternatives, never visual punctuation or e
   assert.equal(vocabularySpokenText('1/2'), 'one half')
   assert.equal(vocabularySpokenText('Hello!'), 'Hello!')
 })
-test('Social Fluency uses only owned recordings; Kokoro is confined to vocabulary', () => {
-  for (const name of ['components.jsx', 'LessonExperience.jsx', 'ReferencePhraseShelf.jsx', 'GreetingsReferenceStudy.jsx', 'Chapter03Context.jsx']) {
-    const source = readFileSync(new URL('./' + name, import.meta.url), 'utf8')
-    assert.ok(!source.includes('kokoroSpeech'), name + ' must not import Kokoro')
-    assert.ok(!source.includes('speakKokoroSpeech'), name + ' must not synthesize speech')
-  }
+test('lesson playback prefers reviewed audio and uses Kokoro for unrecorded study and practice phrases', () => {
   const socialAudio = readFileSync(new URL('./components.jsx', import.meta.url), 'utf8')
-  assert.match(socialAudio, /approvedAudio\[id\]/)
-  const speaker = readFileSync(new URL('./KokoroSpeakButton.jsx', import.meta.url), 'utf8')
-  assert.match(speaker, /vocabularySpokenText\(text\)/)
-  assert.match(speaker, /preferDevice/)
+  const lesson = readFileSync(new URL('./LessonExperience.jsx', import.meta.url), 'utf8')
+  const greetings = readFileSync(new URL('./GreetingsReferenceStudy.jsx', import.meta.url), 'utf8')
+  assert.ok(socialAudio.includes('approvedAudio[id]'))
+  assert.ok(socialAudio.includes('speakKokoroSpeech(text'))
+  assert.ok(socialAudio.includes('preferKokoro: true'))
+  assert.ok(lesson.includes('audioProps.onPlay(item.id, true, item.en)'))
+  assert.ok(greetings.includes("recorded?.id ?? 'greetings:' + spoken, false, spoken"))
 })
 
 test('tea remains a vocabulary word and Kokoro is the default playback', () => {

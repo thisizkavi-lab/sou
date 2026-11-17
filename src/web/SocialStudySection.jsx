@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useLanguage } from './Language'
 import { RichText } from './ContentBlocks'
-import { approvedAudio } from './components'
-import Glyph from './Glyph'
+import { PhrasePlaybackButton } from './components'
 import { normalizeStudyText, studyExpressions, studyIllustrations, vocabularyChapters, isStudyIntroduction } from './socialStudyLayout'
 import './social-study-layout.css'
 import { emphasizeNoteRuns } from './studyTextPresentation'
@@ -26,15 +25,12 @@ function StudyIllustration({ sectionId }) {
 }
 
 function StudyExpressions({ items, audioProps }) {
-  const { language, t } = useLanguage()
+  const { language } = useLanguage()
   if (!items.length) return null
   return <ul className="ar-study-expressions" aria-label={language === 'ja' ? '使える表現' : 'Useful expressions'}>
     {items.map((item) => <li key={item.id}>
       <div><span lang="en">{item.en}</span>{language === 'ja' && item.ja && <small lang="ja">{item.ja}</small>}</div>
-      {approvedAudio[item.id] && <button type="button" className="ar-study-inline-audio"
-        aria-label={t('Listen to: {phrase}', { phrase: item.en })} onClick={() => audioProps.onPlay(item.id)}>
-        <Glyph name={audioProps.activeId === item.id && audioProps.audio.playing ? 'pause' : 'speaker'} size={16} />
-      </button>}
+      <PhrasePlaybackButton item={item} {...audioProps} className="ar-study-inline-audio" size={16} />
     </li>)}
   </ul>
 }
@@ -42,7 +38,7 @@ function StudyExpressions({ items, audioProps }) {
 // The original source remains visible once, in its original reading order.
 // Targets are anchored in context instead of being repeated in a second cloud.
 function StudySourceBlock({ block, byId, anchors, audioProps, focusedId }) {
-  const { language, t } = useLanguage()
+  const { language } = useLanguage()
   const rendered = new Set()
   const items = (block.phraseIds ?? []).map((id) => byId[id]).filter(Boolean)
   const byText = new Map(items.map((item) => [normalizeStudyText(item.en), item]))
@@ -57,13 +53,7 @@ function StudySourceBlock({ block, byId, anchors, audioProps, focusedId }) {
         data-phrase-id={item.id} tabIndex={ownsAnchor ? -1 : undefined}
         className={`ar-study-target${item.id === focusedId ? ' is-focused' : ''}`}>
         {copy}
-        {approvedAudio[item.id] && (
-          <button type="button" className="ar-study-inline-audio"
-            aria-label={t(audioProps.activeId === item.id && audioProps.audio.playing ? 'Pause: {phrase}' : 'Listen to: {phrase}', { phrase: item.en })}
-            onClick={() => audioProps.onPlay(item.id)}>
-            <Glyph name={audioProps.activeId === item.id && audioProps.audio.playing ? 'pause' : 'speaker'} size={15} />
-          </button>
-        )}
+        <PhrasePlaybackButton item={item} {...audioProps} className="ar-study-inline-audio" size={15} />
       </span>
     )
   })

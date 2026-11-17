@@ -138,7 +138,7 @@ export default function Chapter01Illustrated({ block, byId, focusedId, onPlay })
           </div>
           <p className="ip-ch01-context" aria-live="polite">{selected.context}</p>
           <small className="ip-ch01-voice-note">
-            {approvedAudio[selected.id] ? 'Tap a bubble to hear its recording.' : 'Tap a bubble to hear a browser-generated English voice.'}
+            {approvedAudio[selected.id] ? 'Tap a bubble to hear its recording.' : 'Tap a bubble to hear the AI voice.'}
           </small>
         </div>
       </div>

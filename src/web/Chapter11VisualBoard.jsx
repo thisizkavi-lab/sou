@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useLanguage } from './Language'
 import './chapter11-visual.css'
 
@@ -673,29 +672,6 @@ const WEEKDAYS = [["Monday","月曜日"],["Tuesday","火曜日"],["Wednesday","�
 const MONTHS = [["January","1月"],["February","2月"],["March","3月"],["April","4月"],["May","5月"],["June","6月"],["July","7月"],["August","8月"],["September","9月"],["October","10月"],["November","11月"],["December","12月"]]
 const base = import.meta.env.BASE_URL
 
-function sayEnglish(phrase, onFailure) {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-    onFailure()
-    return
-  }
-  const speech = window.speechSynthesis
-  speech.cancel()
-  const utterance = new SpeechSynthesisUtterance(phrase)
-  utterance.lang = 'en-US'
-  utterance.rate = 0.9
-  utterance.pitch = 1
-  const voices = speech.getVoices()
-  const usVoice = voices.find((voice) => /^en[-_]US$/i.test(voice.lang) && voice.localService)
-    || voices.find((voice) => /^en[-_]US$/i.test(voice.lang))
-    || voices.find((voice) => /^en\b/i.test(voice.lang))
-  if (usVoice) utterance.voice = usVoice
-  try {
-    speech.speak(utterance)
-  } catch {
-    onFailure()
-  }
-}
-
 function WordRow({ title, words, language, onSpeak }) {
   return (
     <div className="ar-ch11-word-row">
@@ -714,18 +690,11 @@ function WordRow({ title, words, language, onSpeak }) {
   )
 }
 
-export default function Chapter11VisualBoard({ section, focusedId }) {
+export default function Chapter11VisualBoard({ section, focusedId, audioProps }) {
   const { language } = useLanguage()
-  const [error, setError] = useState('')
   const board = BOARDS[section.id]
-  useEffect(() => () => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel()
-  }, [])
   if (!board) return null
-  const speak = (word) => {
-    setError('')
-    sayEnglish(word, () => setError(language === 'ja' ? 'この端末では音声を再生できません。' : 'English speech is unavailable on this device.'))
-  }
+  const speak = (word) => audioProps.onPlay('time:' + word, false, word)
   return (
     <div className="ar-ch11-atlas">
       <div className={section.id === '11-study-5' ? 'ar-ch11-board ar-ch11-board-weather' : 'ar-ch11-board'} role="group" aria-label={board.alt}>
@@ -790,7 +759,6 @@ export default function Chapter11VisualBoard({ section, focusedId }) {
           </button>
         </div>
       )}
-      {error && <p className="ar-ch11-audio-error" role="status">{error}</p>}
       {focusedId && <span className="ar-ch11-screen-reader" aria-hidden="true">{focusedId}</span>}
     </div>
   )

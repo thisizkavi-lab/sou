@@ -1,6 +1,6 @@
 import { useLanguage } from './Language'
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { approvedAudio, useAudio } from './components'
+import { approvedAudio, useAudio, PhrasePlaybackButton as PhraseAudio } from './components'
 import Glyph from './Glyph'
 import LessonFooter from './LessonFooter'
 import ScenarioQuiz from './ScenarioQuiz'
@@ -63,27 +63,7 @@ const scrollTo = (id) =>
 
 export { default as Glyph } from './Glyph'
 
-export function PhraseAudio({ item, audio, activeId, onPlay }) {
-  const { t, language } = useLanguage()
-  const ready = Boolean(approvedAudio[item.id])
-  const playing = activeId === item.id && audio.playing
-  return (
-    <button
-      type="button"
-      className="ip-audio"
-      disabled={!ready}
-      title={ready ? t("Listen to this phrase") : t("Audio unavailable")}
-      aria-label={
-        ready
-          ? t(playing ? 'Pause: {phrase}' : 'Listen to: {phrase}', { phrase: item.en })
-          : t('Audio not yet available: {phrase}', { phrase: item.en })
-      }
-      onClick={() => onPlay(item.id)}
-    >
-      <Glyph name={playing ? 'pause' : 'speaker'} size={18} />
-    </button>
-  )
-}
+export { PhraseAudio }
 
 export function PhraseCard({ id, audioProps, conversation = false, focusedId }) {
   const { language } = useLanguage()
@@ -130,23 +110,21 @@ export function PhraseCard({ id, audioProps, conversation = false, focusedId }) 
 // A single play control belongs to the complete exchange, not each turn.
 function ConversationAudio({ block, audioProps }) {
   const { t } = useLanguage()
+  const { byId } = useLesson()
   const id = block.audioId ?? block.id ?? `dialogue-${block.phrases[0]}`
-  const ready = Boolean(approvedAudio[id])
-  const playing = ready && audioProps.activeId === id && audioProps.audio.playing
-  const listen = () => {
-    if (ready) audioProps.onPlay(id)
-  }
-  if (!ready) return null
+  const lines = block.phrases
+    .filter((id) => !block.replyAlternatives?.choices.slice(1).some((choice) => choice.id === id))
+    .map((id) => byId[id]?.en).filter(Boolean)
+  const spoken = lines.join(' ')
+  if (!spoken && !approvedAudio[id]) return null
+  const loading = audioProps.activeId === id && audioProps.audio.loading
+  const active = audioProps.activeId === id && (loading || audioProps.audio.playing)
   return (
-    <button
-      type="button"
-      className="ip-conversation-audio"
-      aria-label={playing ? t('Pause conversation audio') : t('Play full conversation')}
-      title={ready ? t('Listen to the full conversation') : t('Recording coming soon')}
-      onClick={listen}
-      disabled={!ready}
-    >
-      <Glyph name={playing ? 'pause' : 'play'} size={16} />
+    <button type="button" className="ip-conversation-audio" aria-busy={loading}
+      aria-label={t(active ? 'Stop audio' : 'Play full conversation')}
+      title={t(loading ? 'Preparing audio…' : active ? 'Stop audio' : 'Listen to the full conversation')}
+      onClick={() => audioProps.onPlay(id, false, spoken)}>
+      <Glyph name={active ? 'pause' : 'play'} size={16} />
     </button>
   )
 }
@@ -371,11 +349,11 @@ function Study({ audioProps, focusedId }) {
   const sharedLayout = usesSharedStudyLayout(lessonId)
   const studyAnchors = sharedLayout ? studyPhraseAnchors(studySections) : {}
   const playIllustratedPhrase = (item) => {
-    if (approvedAudio[item.id]) audioProps.onPlay(item.id)
+    audioProps.onPlay(item.id, false, item.en)
   }
   return (
     <div className={`ip-reading ar-shared-study ar-compact-study-notes${lessonId === '02' ? ' ar-ch02-study' : ''}${lessonId === '06' ? ' ar-ch06-pilot' : ''}${Number(lessonId) >= 4 ? ' ar-polished-study' : ''}`}>
-      {lessonId === '14' ? <Chapter14VisualBoard /> : studySections.map((section, index) => (
+      {lessonId === '14' ? <Chapter14VisualBoard audioProps={audioProps} /> : studySections.map((section, index) => (
         <section
           className={`ip-section${sharedLayout && isStudyIntroduction(section) ? ' ar-study-introduction' : ''}`}
           key={section.id}
@@ -392,7 +370,7 @@ function Study({ audioProps, focusedId }) {
                 renderConversation={(block) => <Conversation key={block.id} block={block} audioProps={audioProps} focusedId={focusedId} />}
                 renderDiagram={(block) => <Diagram key={block.diagram} type={block.diagram} />} />
             : lessonId === '11'
-            ? <Chapter11VisualBoard section={section} focusedId={focusedId} />
+            ? <Chapter11VisualBoard section={section} focusedId={focusedId} audioProps={audioProps} />
             : lessonId === '03'
             ? <Chapter03StudySection sectionIndex={index} audioProps={audioProps} />
             : lessonId === '04'
@@ -1070,7 +1048,8 @@ function PracticeSession({ set, change, audioProps, learning, save }) {
     audioProps.audio.stop()
     headingRef.current?.focus({ preventScroll: true })
   }, [item.id])
-  const ready = Boolean(approvedAudio[item.id])
+  const loading = audioProps.activeId === item.id && audioProps.audio.loading
+  const playing = audioProps.activeId === item.id && audioProps.audio.playing
   const saved = learning.saved.includes(item.id)
   const move = (direction) => {
     audioProps.audio.stop()
@@ -1146,24 +1125,21 @@ function PracticeSession({ set, change, audioProps, learning, save }) {
           <button
             type="button"
             className="ip-listen"
-            disabled={!ready}
-            onClick={() => audioProps.onPlay(item.id)}
+            aria-busy={loading}
+            onClick={() => audioProps.onPlay(item.id, false, item.en)}
           >
-            <Glyph name={audioProps.audio.playing ? 'pause' : 'play'} />
-            {audioProps.audio.playing ? t("Pause") : t("Listen")}
+            <Glyph name={loading || playing ? 'pause' : 'play'} />
+            {t(loading ? 'Preparing audio…' : playing ? 'Stop audio' : 'Listen')}
           </button>
           <button
             type="button"
             className="ip-secondary"
-            disabled={!ready}
-            onClick={() => audioProps.onPlay(item.id, true)}
+            onClick={() => audioProps.onPlay(item.id, true, item.en)}
           >
             <Glyph name="repeat" /> {t("Replay")} </button>
         </div>
         <p className="ip-audio-note">
-          {ready
-            ? t("Listen, then say it with the same rhythm.")
-            : t("Recording coming soon. You can read it aloud for now.")}
+          {t("Listen, then say it with the same rhythm.")}
         </p>
       </div>
       <fieldset className="ip-self-rating">
@@ -1238,9 +1214,9 @@ function Experience({ route, learning, update, save, notify }) {
     audio,
     activeId,
     byId: introductionById,
-    onPlay: (id, restart = false) => {
+    onPlay: (id, restart = false, text = practiceById[id]?.en ?? introductionById[id]?.en) => {
       setActiveId(id)
-      audio.play(id, 1, restart)
+      void audio.play(id, 1, restart, text)
     },
   }
   const rawFocus = introductionAliases[route.line] ?? route.line
@@ -1368,6 +1344,9 @@ function Experience({ route, learning, update, save, notify }) {
       ) : (
         <>{id === '01' ? <GreetingsReferenceStudy audioProps={audioProps} phrases={introductionPhrases} /> : <Study audioProps={audioProps} focusedId={focusedId} />}</>
       )}
+      {audio.loading && <div className="aw-toast" role="status">
+        {t('Preparing audio…')}
+      </div>}
       <LessonFooter route={route} practice={practice} />
     </div>
   )

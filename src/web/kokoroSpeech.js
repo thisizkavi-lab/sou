@@ -1,5 +1,5 @@
 // Artico's shared, local-first speech player.
-// Vocabulary uses Kokoro on click: GPU when supported, CPU/WASM otherwise.
+// Kokoro loads on an explicit play action: GPU when supported, CPU/WASM otherwise.
 // The device voice remains an explicit optional fallback.
 const MODULE_URL = 'https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/dist/kokoro.web.js'
 const MODEL_ID = 'onnx-community/Kokoro-82M-v1.0-ONNX'
@@ -115,7 +115,7 @@ async function loadKokoro() {
   return modelPromise
 }
 
-// Kokoro loads only after a vocabulary Play click; no background GPU probe
+// Kokoro loads only after a Play click; no background GPU probe
 // or model initialization happens when navigating through lessons.
 
 function cachePut(cache, limit, key, value) {
@@ -276,6 +276,7 @@ function fallbackSpeech(text, rate, callbacks) {
   if (!synth?.speak || !window.SpeechSynthesisUtterance) {
     useOfflineModel = true
     nativeMode = false
+    currentCallbacks = null
     void speakKokoroSpeech(text, { rate, forceModel: true, ...callbacks })
     return true
   }
