@@ -292,7 +292,7 @@ test('lesson playback prefers reviewed audio and uses Kokoro for unrecorded stud
   assert.ok(socialAudio.includes('approvedAudio[id]'))
   assert.ok(socialAudio.includes('speakKokoroSpeech(text'))
   assert.ok(socialAudio.includes('preferKokoro: true'))
-  assert.ok(lesson.includes('audioProps.onPlay(item.id, true, item.en)'))
+  assert.match(lesson, /audioProps\.onPlay\(item\.id, true, item\.en[,)]/)
   assert.ok(greetings.includes("recorded?.id ?? 'greetings:' + spoken, false, spoken"))
 })
 

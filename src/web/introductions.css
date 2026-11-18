@@ -830,6 +830,12 @@
 .ip-empty p {
   font-size: 14px;
 }
+.ip-page.is-shadowing {
+  padding-block-start: 8px;
+}
+.ip-practice-content {
+  scroll-margin-top: 82px;
+}
 .ip-session {
   max-width: 800px;
   margin: 9px auto 0;
@@ -871,7 +877,7 @@
   background: white;
   border: 1px solid var(--ip-border);
   border-radius: 18px;
-  padding: 19px 28px 28px;
+  padding: 12px clamp(16px, 3vw, 28px) 24px;
   box-shadow: 0 6px 24px #243d4a04;
   text-align: center;
 }
@@ -880,55 +886,72 @@
   justify-content: space-between;
   align-items: center;
   font-size: 12px;
-  color: #657478;
+  color: #64747a;
+  text-align: left;
+  gap: 16px;
 }
 .ip-page .ip-save {
   display: flex;
   align-items: center;
   gap: 7px;
   padding: 7px 0 7px 10px;
-  min-height: 40px;
+  min-height: 44px;
   font-size: 12px;
-  color: #697980;
+  color: #64747a;
+  white-space: nowrap;
 }
+.ip-page .ip-save:hover,
 .ip-page .ip-save.is-saved {
   color: var(--ip-blue);
 }
 .ip-save.is-saved svg {
   fill: #e5edff;
 }
-.ip-focus-context {
-  color: #637477;
-  max-width: 45ch;
-  font-size: 14px;
-  margin: 25px auto 16px !important;
+.ip-focus-main {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  row-gap: 8px;
+  min-height: 174px;
+  padding-block: 24px 12px;
+}
+.ip-page .ip-focus-context {
+  color: #64747a;
+  max-width: 50ch;
+  font-size: 13px;
+  margin: 0;
 }
 .ip-focus-phrase {
-  font-size: 32px;
-  line-height: 1.42;
-  font-weight: 500;
+  display: grid;
+  place-items: center;
+  width: min(100%, 640px);
+  margin: 0;
+  font-size: clamp(30px, 4.6vw, 48px);
+  line-height: 1.2;
+  font-weight: 600;
   letter-spacing: -0.025em;
-  max-width: 30ch;
-  min-height: 95px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto !important;
-  text-wrap: pretty;
+  text-wrap: balance;
 }
-.ip-focus-phrase.is-covered {
-  color: #879391;
-  font-family: 'Newsreader', Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
+.ip-focus-phrase > span {
+  grid-area: 1 / 1;
+}
+.ip-focus-phrase > [aria-hidden='true'] {
+  visibility: hidden;
+}
+.ip-memory-prompt {
+  color: #64747a;
+  font-size: clamp(18px, 3vw, 22px);
+  font-weight: 500;
+  letter-spacing: normal;
 }
 .ip-focus-art {
-  width: 140px;
-  height: 90px;
   object-fit: contain;
+  margin-bottom: 4px;
 }
-.ip-cover {
-  margin: 4px 0 14px;
+.ip-page .ip-cover {
+  padding-inline: 8px;
+  color: #64747a;
+  font-size: 12px;
 }
 .ip-session-audio {
   display: flex;
@@ -937,6 +960,62 @@
 }
 .ip-session-audio > button {
   min-width: 130px;
+}
+.ip-focus-controls {
+  display: inline-grid;
+  grid-template-columns: minmax(120px, auto) repeat(3, auto);
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid #e3e9ec;
+  border-radius: 14px;
+  background: #f5f7f8;
+}
+.ip-focus-controls .ip-listen,
+.ip-page .ip-playback-button {
+  min-height: 44px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 6px;
+  white-space: nowrap;
+}
+.ip-page .ip-playback-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #435960;
+}
+.ip-page .ip-playback-button:hover,
+.ip-session-speed:hover {
+  background: #e9eef1;
+}
+.ip-page .ip-session-loop[aria-pressed='true'] {
+  color: var(--ip-blue);
+  background: #e6eefc;
+  box-shadow: inset 0 0 0 1px #cfdbf6;
+}
+.ip-session-speed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding-inline-start: 8px;
+  border-radius: 9px;
+  color: #435960;
+  font-size: 13px;
+}
+.ip-session-speed select {
+  min-width: 62px;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }
 .ip-page .ip-audio-note {
   color: var(--ip-muted);
@@ -1345,15 +1424,19 @@
     margin-top: 3px;
   }
   .ip-focus-card {
-    padding: 15px 17px 23px;
+    padding-bottom: 18px;
   }
-  .ip-focus-phrase {
-    font-size: 25px;
-    min-height: 107px;
+  .ip-focus-main {
+    min-height: 153px;
+    padding-block: 20px 8px;
   }
-  .ip-focus-context {
-    font-size: 13px;
-    margin-top: 22px !important;
+  .ip-focus-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 296px);
+  }
+  .ip-focus-controls .ip-listen,
+  .ip-page .ip-playback-button {
+    padding-inline: 6px;
   }
   .ip-self-rating button {
     min-width: 0;

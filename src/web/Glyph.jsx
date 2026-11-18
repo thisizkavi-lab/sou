@@ -1,6 +1,7 @@
 export default function Glyph({ name, size = 20 }) {
   const paths = {
     play: <path d="m9 5 11 7-11 7Z" />,
+    stop: <rect x="6" y="6" width="12" height="12" rx="1" />,
     pause: (
       <>
         <path d="M8 5v14M16 5v14" />
@@ -20,6 +21,7 @@ export default function Glyph({ name, size = 20 }) {
         <path d="M20 9a8 8 0 0 0-14-3L3 9m0-6v6h6M4 15a8 8 0 0 0 14 3l3-3m0 6v-6h-6" />
       </>
     ),
+    loop: <path d="M20 7H6a3 3 0 0 0-3 3v1m17-4-3-3m3 3-3 3M4 17h14a3 3 0 0 0 3-3v-1M4 17l3 3m-3-3 3-3" />,
     search: (
       <>
         <circle cx="10.5" cy="10.5" r="6.5" />

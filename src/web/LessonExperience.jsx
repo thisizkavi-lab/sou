@@ -1042,15 +1042,20 @@ function PracticeSession({ set, change, audioProps, learning, save }) {
   const { practiceById: introductionById, sectionById, studyPath, id: chapterId } = useLesson()
   const item = introductionById[set.session.ids[set.session.index]]
   const [covered, setCovered] = useState(false)
+  const [speed, setSpeed] = useState(1)
+  const [looping, setLooping] = useState(false)
   const headingRef = useRef(null)
   useEffect(() => {
     setCovered(false)
     audioProps.audio.stop()
     headingRef.current?.focus({ preventScroll: true })
+    return () => audioProps.audio.stop()
   }, [item.id])
   const loading = audioProps.activeId === item.id && audioProps.audio.loading
   const playing = audioProps.activeId === item.id && audioProps.audio.playing
   const saved = learning.saved.includes(item.id)
+  const context = chapterId === '01' && language === 'ja' && item.contextJa ? item.contextJa : item.context
+  const translation = chapterId === '01' && language === 'ja' ? item.ja : null
   const move = (direction) => {
     audioProps.audio.stop()
     setCovered(false)
@@ -1091,56 +1096,81 @@ function PracticeSession({ set, change, audioProps, learning, save }) {
             type="button"
             className={`ip-save ${saved ? 'is-saved' : ''}`}
             aria-pressed={saved}
-            aria-label={`${saved ? t("Unsave") : t("Save")} phrase`}
+            aria-label={t('Save phrase')}
             onClick={() => save({ ...item, chapter: chapterId })}
           >
             <Glyph name="save" size={18} />
             <span>{saved ? t("Saved") : t("Save")}</span>
           </button>
         </div>
-        <p className="ip-focus-context" id="practice-phrase-context">{chapterId === '01' && language === 'ja' && item.contextJa ? item.contextJa : item.context}</p>
-        {chapterId === '01' && language === 'ja' && item.ja && <p className="ip-focus-translation" lang="ja">{item.ja}</p>}
-        {item.art && (
-          <img className="ip-focus-art" src={art(item.art)} width="140" height="110" alt="" />
-        )}
-        <h2
-          ref={headingRef}
-          tabIndex={-1}
-          lang={covered ? language : 'en'}
-          className={`ip-focus-phrase ${covered ? 'is-covered' : ''}`}
-          aria-live="polite"
-          aria-describedby="practice-phrase-context"
-        >
-          {covered ? t("Say it from memory.") : item.en}
-        </h2>
-        <button
-          type="button"
-          className="ip-text-button ip-cover"
-          aria-pressed={covered}
-          onClick={() => setCovered((value) => !value)}
-        >
-          {covered ? t("Show phrase") : t("Hide phrase")}
-        </button>
-        <div className="ip-session-audio">
+        <div className="ip-focus-main">
+          {item.art && <img className="ip-focus-art" src={art(item.art)} width="88" height="60" alt="" />}
+          <h2
+            id="practice-phrase"
+            ref={headingRef}
+            tabIndex={-1}
+            className="ip-focus-phrase"
+            aria-live="polite"
+            aria-describedby={context ? 'practice-phrase-context' : undefined}
+          >
+            <span lang="en" aria-hidden={covered || undefined}>{item.en}</span>
+            {covered && <span className="ip-memory-prompt">{t('Say it from memory.')}</span>}
+          </h2>
+          {context && <p className="ip-focus-context" id="practice-phrase-context">{context}</p>}
+          {translation && <p className="ip-focus-translation" lang="ja">{translation}</p>}
+          <button
+            type="button"
+            className="ip-text-button ip-cover"
+            aria-controls="practice-phrase"
+            onClick={() => setCovered((value) => !value)}
+          >
+            {covered ? t('Show phrase') : t('Hide phrase')}
+          </button>
+        </div>
+        <div className="ip-focus-controls" role="group" aria-label={t('Audio playback')}>
           <button
             type="button"
             className="ip-listen"
             aria-busy={loading}
-            onClick={() => audioProps.onPlay(item.id, false, item.en)}
+            onClick={() => audioProps.onPlay(item.id, false, item.en, { speed, loop: looping })}
           >
-            <Glyph name={loading || playing ? 'pause' : 'play'} />
-            {t(loading ? 'Preparing audio…' : playing ? 'Stop audio' : 'Listen')}
+            <Glyph name={loading || playing ? 'stop' : 'play'} size={17} />
+            {t(loading || playing ? 'Stop audio' : 'Listen')}
           </button>
           <button
             type="button"
-            className="ip-secondary"
-            onClick={() => audioProps.onPlay(item.id, true, item.en)}
+            className="ip-playback-button"
+            onClick={() => audioProps.onPlay(item.id, true, item.en, { speed, loop: looping })}
           >
-            <Glyph name="repeat" /> {t("Replay")} </button>
+            <Glyph name="repeat" size={17} /> {t('Replay')}
+          </button>
+          <button
+            type="button"
+            className="ip-playback-button ip-session-loop"
+            aria-pressed={looping}
+            onClick={() => {
+              const next = !looping
+              setLooping(next)
+              audioProps.audio.setLoop(next)
+            }}
+          >
+            <Glyph name="loop" size={17} /> {t('Loop')}
+          </button>
+          <label className="ip-session-speed">
+            <span>{t('Speed')}</span>
+            <select
+              aria-label={t('Playback speed')}
+              value={speed}
+              onChange={(event) => {
+                const next = Number(event.target.value)
+                setSpeed(next)
+                audioProps.audio.setSpeed(next)
+              }}
+            >
+              {[0.5, 0.75, 1, 1.25].map((rate) => <option key={rate} value={rate}>{rate}×</option>)}
+            </select>
+          </label>
         </div>
-        <p className="ip-audio-note">
-          {t("Listen, then say it with the same rhythm.")}
-        </p>
       </div>
       <fieldset className="ip-self-rating">
         <legend>{t("How does it feel to say?")}</legend>
@@ -1208,23 +1238,24 @@ function Experience({ route, learning, update, save, notify }) {
     index: legacyPhraseIds ? state.indices[`chapter-${id}`] : undefined,
   })
   const set = getPracticeSet(learning.practiceSets?.[id], catalog.items, legacySet(learning), catalog)
+  const shadowing = practice && set.session.active && !set.session.completed
   const [activeId, setActiveId] = useState(null)
   const audio = useAudio(notify)
   const audioProps = {
     audio,
     activeId,
     byId: introductionById,
-    onPlay: (id, restart = false, text = practiceById[id]?.en ?? introductionById[id]?.en) => {
+    onPlay: (id, restart = false, text = practiceById[id]?.en ?? introductionById[id]?.en, { speed = 1, loop = false } = {}) => {
       setActiveId(id)
-      void audio.play(id, 1, restart, text)
+      void audio.play(id, speed, restart, text, loop)
     },
   }
   const rawFocus = introductionAliases[route.line] ?? route.line
   const focusedId = practiceById[rawFocus]?.studyId ?? rawFocus
   const contentsRef = useRef(null)
-  const practiceStartRef = useRef(null)
   const wasActive = useRef(set.session.active)
   useEffect(() => {
+    if (shadowing) scrollTo('ip-practice-start')
     if (practice && set.session.active && set.session.completed)
       document.getElementById('practice-complete-heading')?.focus({ preventScroll: true })
     if (practice && wasActive.current && !set.session.active) {
@@ -1232,7 +1263,7 @@ function Experience({ route, learning, update, save, notify }) {
       document.getElementById('practice-entry-heading')?.focus({ preventScroll: true })
     }
     wasActive.current = set.session.active
-  }, [practice, set.session.active, set.session.completed])
+  }, [practice, set.session.active, set.session.completed, shadowing])
   const change = (transform) =>
     update((previous) => ({
       ...previous,
@@ -1273,11 +1304,10 @@ function Experience({ route, learning, update, save, notify }) {
       const round = startPractice(current, catalog.items, ids)
       return { ...round, selected: current.selected }
     })
-    scrollTo('ip-practice-start')
   }
   return (
-    <div className="ip-page" lang={language}>
-      <header className="ip-lesson-heading ip-lesson-heading-social">
+    <div className={`ip-page${shadowing ? ' is-shadowing' : ''}`} lang={language}>
+      <header className={shadowing ? 'ip-sr-only' : 'ip-lesson-heading ip-lesson-heading-social'}>
         <p className="ip-kicker">
           {eyebrow ?? (
             <> {t("SOCIAL FLUENCY")} <span>/</span> {t('CHAPTER {id}', { id: displayId ?? id })}
@@ -1325,7 +1355,6 @@ function Experience({ route, learning, update, save, notify }) {
       {practice ? (
         <div
           id="ip-practice-start"
-          ref={practiceStartRef}
           tabIndex={-1}
           className="ip-practice-content"
         >

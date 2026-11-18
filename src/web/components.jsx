@@ -220,6 +220,7 @@ export function useAudio(notify) {
   function cancel() {
     const previous = current.current
     current.current = null
+    clearTimeout(previous?.timer)
     if (previous?.recording) {
       previous.recording.onended = null
       previous.recording.onerror = null
@@ -236,7 +237,7 @@ export function useAudio(notify) {
 
   useEffect(() => cancel, [])
 
-  async function play(id, speed = 1, restart = false, text = '') {
+  async function play(id, speed = 1, restart = false, text = '', loop = false) {
     const source = approvedAudio[id]
     if (!source && !text.trim()) return
     if (current.current?.id === id && !restart) {
@@ -244,48 +245,76 @@ export function useAudio(notify) {
       return
     }
     stop()
-    const request = { id }
+    const request = { id, speed, text, loop, timer: null }
     current.current = request
     const playing = () => {
       if (current.current === request) setPhase('playing')
     }
-    const finished = (error) => {
+    const finished = (error, repeat = false) => {
       if (current.current !== request) return
+      if (!error && repeat && request.loop) {
+        setPhase('waiting')
+        request.timer = setTimeout(() => void start(), 900)
+        return
+      }
       current.current = null
       setPhase('idle')
       if (error) notify?.(t(error))
     }
 
-    if (!source) {
-      await speakKokoroSpeech(text, {
-        rate: speed,
-        preferKokoro: true,
-        onLoading: () => {
-          if (current.current === request) setPhase('loading')
-        },
-        onStart: playing,
-        onCancel: () => finished(),
-        onEnd: () => finished(),
-        onError: () => finished('Speech could not play. Please try again.'),
-      })
-      return
-    }
+    const start = async () => {
+      if (current.current !== request) return
+      request.timer = null
+      if (!source) {
+        await speakKokoroSpeech(text, {
+          rate: request.speed,
+          preferKokoro: true,
+          onLoading: () => {
+            if (current.current === request) setPhase('loading')
+          },
+          onStart: playing,
+          onCancel: () => finished(),
+          onEnd: () => finished(null, true),
+          onError: () => finished('Speech could not play. Please try again.'),
+        })
+        return
+      }
 
-    const recording = new Audio(import.meta.env.BASE_URL + source)
-    request.recording = recording
-    recording.playbackRate = speed
-    recording.preservesPitch = true
-    recording.onended = () => finished()
-    recording.onerror = () => finished('The recording could not be loaded. Please try again.')
-    try {
-      await recording.play()
-      if (!recording.paused) playing()
-    } catch {
-      finished('The recording could not be played. Please try again.')
+      const recording = new Audio(import.meta.env.BASE_URL + source)
+      request.recording = recording
+      recording.playbackRate = request.speed
+      recording.preservesPitch = true
+      recording.onended = () => finished(null, true)
+      recording.onerror = () => finished('The recording could not be loaded. Please try again.')
+      try {
+        await recording.play()
+        if (!recording.paused) playing()
+      } catch {
+        finished('The recording could not be played. Please try again.')
+      }
+    }
+    await start()
+  }
+
+  function setSpeed(speed) {
+    const request = current.current
+    if (!request) return
+    request.speed = speed
+    if (request.recording) request.recording.playbackRate = speed
+    else if (request.timer === null) {
+      // Generated speech restarts from the beginning at the selected speed.
+      void play(request.id, speed, true, request.text, request.loop)
     }
   }
 
-  return { playing: phase === 'playing', loading: phase === 'loading', play, stop }
+  function setLoop(loop) {
+    const request = current.current
+    if (!request) return
+    request.loop = loop
+    if (!loop && request.timer !== null) stop()
+  }
+
+  return { playing: phase === 'playing' || phase === 'waiting', loading: phase === 'loading', play, stop, setSpeed, setLoop }
 }
 
 export function PhrasePlaybackButton({ item, audio, activeId, onPlay, className = 'ip-audio', size = 18 }) {
